@@ -19,6 +19,7 @@ public class QuestMenuBar extends JMenuBar {
 
     private void initializeComponents() {
         fileMenu = new JMenu("Plik");
+        add(fileMenu);
 
 
 

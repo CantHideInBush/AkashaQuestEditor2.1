@@ -8,15 +8,19 @@ import java.awt.*;
 
 public class Application extends JPanel {
 
+    public static Application instance;
     public QuestSession session = new QuestSession();
+    public WelcomePanel welcomePanel;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("AkashaQuestEditor 2.1");
         frame.setJMenuBar(new QuestMenuBar());
-        Application application = new Application();
+        instance = new Application();
+        instance.initialize();
+        instance.initializeComponents();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationByPlatform(true);
-        frame.add(application);
+        frame.add(instance);
         frame.pack();
         frame.setVisible(true);
 
@@ -24,12 +28,16 @@ public class Application extends JPanel {
     }
 
     public Application() {
-        initialize();
+    }
+
+    private void initializeComponents() {
+        welcomePanel = new WelcomePanel();
+        add(welcomePanel);
     }
 
     private void initialize() {
         setPreferredSize(new Dimension(1110, 715));
-
+        setLayout(new FlowLayout(FlowLayout.LEFT));
     }
 
 
