@@ -1,5 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -33,13 +34,15 @@ public class WelcomePanel extends JPanel {
         add(textContainer);
 
         JTextField versionText = new JTextField();
-        versionText.setPreferredSize(new Dimension(getPreferredSize().width, 200));
+        versionText.setPreferredSize(new Dimension(400, 200));
         versionText.setBorder(new LineBorder(Color.RED, 1));
         versionText.setOpaque(false);
         versionText.setText("AkashaQuestEditor v.2.1.0 autorstwa Karwsz, używaj na własną odpowiedzialność");
         versionText.setForeground(Color.GRAY);
         versionText.setFont(versionText.getFont().deriveFont(17f));
         add(versionText);
+
     }
+
 
 }
