@@ -14,12 +14,11 @@ public class Application extends JPanel {
     public QuestSession session = new QuestSession();
     public WelcomePanel welcomePanel;
 
-
     public static void main(String[] args) {
         JFrame frame = new JFrame("AkashaQuestEditor 2.1");
         frame.setJMenuBar(new QuestMenuBar());
         instance = new Application();
-        instance.initialize();
+        instance.initialize(frame);
         instance.initializeComponents();
         setAkashaIcon(frame);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -39,7 +38,7 @@ public class Application extends JPanel {
         add(welcomePanel);
     }
 
-    private void initialize() {
+    private void initialize(JFrame frame) {
         setPreferredSize(new Dimension(1110, 715));
         setLayout(new FlowLayout(FlowLayout.LEFT));
     }
