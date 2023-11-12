@@ -3,7 +3,6 @@ package pl.canthideinbush.akashaquesteditor.app;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class WelcomePanel extends JPanel {
@@ -17,44 +16,30 @@ public class WelcomePanel extends JPanel {
     private void initialize() {
         setPreferredSize(new Dimension(Application.instance.getPreferredSize().width, Application.instance.getPreferredSize().height));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(new LineBorder(Color.RED, 1));
-
     }
 
     private void initializeComponents() {
-        JPanel textContainer = getTextContainer();
-        add(textContainer);
+        JPanel contentPanel = new JPanel();
+        contentPanel.setPreferredSize(new Dimension(getPreferredSize().width, 9999));
+        add(contentPanel);
 
-        JTextField versionText = new JTextField();
-        versionText.setPreferredSize(new Dimension(600, 200));
-        versionText.setBorder(new LineBorder(Color.RED, 1));
-        versionText.setOpaque(false);
-        versionText.setText("AkashaQuestEditor v.2.1.0 autorstwa Karwsz, używaj na własną odpowiedzialność");
-        versionText.setForeground(Color.GRAY);
-        versionText.setFont(versionText.getFont().deriveFont(17f));
-        TextComponents.disableSelection(versionText);
+        Component versionText = createVersionText();
         add(versionText);
-
     }
 
     @NotNull
-    private JPanel getTextContainer() {
-        JPanel textContainer = new JPanel();
-        textContainer.setBackground(Color.LIGHT_GRAY);
-        textContainer.setOpaque(true);
-        textContainer.setLayout(new FlowLayout(FlowLayout.LEFT));
-        textContainer.setPreferredSize(new Dimension(getPreferredSize().width, 9999));
-        textContainer.setBorder(new LineBorder(Color.RED, 1));
-        JTextArea jTextArea = new JTextArea();
-        jTextArea.setFont(jTextArea.getFont().deriveFont(25f));
-        jTextArea.setForeground(Color.DARK_GRAY);
-        jTextArea.setText("Utwórz sesję aby rozpocząć");
-        jTextArea.setVisible(true);
-        jTextArea.setOpaque(false);
-        TextComponents.disableSelection(jTextArea);
-        textContainer.add(jTextArea);
-        return textContainer;
+    private JTextField createVersionText() {
+        JTextField versionText = new JTextField();
+        versionText.setPreferredSize(new Dimension(600, 100));
+        versionText.setOpaque(false);
+        versionText.setText("AkashaQuestEditor v.2.1.0 autorstwa Karwsz - używasz na własną odpowiedzialność");
+        versionText.setBorder(null);
+        versionText.setForeground(Color.DARK_GRAY);
+        versionText.setFont(versionText.getFont().deriveFont(15f));
+        TextComponents.disableSelection(versionText);
+        return versionText;
     }
+
 
 
 }

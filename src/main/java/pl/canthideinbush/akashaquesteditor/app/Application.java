@@ -6,28 +6,46 @@ import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.IOException;
 
 public class Application extends JPanel {
 
     public static Application instance;
-    public QuestSession session = new QuestSession();
+    public QuestSessionContainer sessionContainer;
     public WelcomePanel welcomePanel;
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("AkashaQuestEditor 2.1");
-        frame.setJMenuBar(new QuestMenuBar());
-        instance = new Application();
-        instance.initialize(frame);
-        instance.initializeComponents();
-        setAkashaIcon(frame);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLocationByPlatform(true);
-        frame.add(instance);
-        frame.pack();
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("AkashaQuestEditor 2.1");
+            frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+            frame.setResizable(true);
+            frame.setJMenuBar(new QuestMenuBar());
+            instance = new Application();
+            instance.initialize();
+            instance.initializeComponents();
+            setAkashaIcon(frame);
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            frame.setLocationByPlatform(true);
+            frame.add(instance);
+            frame.pack();
+            frame.setVisible(true);
 
-        new Serialization();
+            frame.addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentResized(ComponentEvent e) {
+                    Dimension dimension = new Dimension(frame.getWidth() - 25, frame.getHeight() - 60);
+                    instance.setMinimumSize(dimension);
+                    instance.setPreferredSize(dimension);
+                    instance.setMaximumSize(dimension);
+                    instance.revalidate();
+                    instance.repaint();
+                }
+            });
+
+            new Serialization();
+        });
     }
 
     public Application() {
@@ -38,9 +56,10 @@ public class Application extends JPanel {
         add(welcomePanel);
     }
 
-    private void initialize(JFrame frame) {
+    private void initialize() {
+        setMinimumSize(new Dimension(655, 357));
         setPreferredSize(new Dimension(1110, 715));
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new GridLayout(1, 1));
     }
 
 
@@ -57,6 +76,23 @@ public class Application extends JPanel {
 
     public static void setAkashaIcon(JFrame frame) {
         frame.setIconImage(icon);
+    }
+
+    public void createNewSession() {
+        clean();
+
+        sessionContainer = new QuestSessionContainer(new QuestSession());
+        remove(welcomePanel);
+        sessionContainer.setVisible(true);
+        add(sessionContainer);
+        revalidate();
+        repaint();
+    }
+
+    public void clean() {
+        if (sessionContainer != null) {
+            remove(sessionContainer);
+        }
     }
 
 }
