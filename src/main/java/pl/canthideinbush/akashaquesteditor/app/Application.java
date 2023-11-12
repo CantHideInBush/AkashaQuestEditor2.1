@@ -15,6 +15,7 @@ public class Application extends JPanel {
     public static Application instance;
     public QuestSessionContainer sessionContainer;
     public WelcomePanel welcomePanel;
+    private Box footerSpacer;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -81,10 +82,18 @@ public class Application extends JPanel {
     public void createNewSession() {
         clean();
 
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         sessionContainer = new QuestSessionContainer(new QuestSession());
-        remove(welcomePanel);
         sessionContainer.setVisible(true);
         add(sessionContainer);
+
+        if (footerSpacer == null) {
+            footerSpacer = Box.createHorizontalBox();
+            footerSpacer.setPreferredSize(new Dimension(getWidth(), 10));
+        }
+        add(footerSpacer);
+
         revalidate();
         repaint();
     }
@@ -92,6 +101,12 @@ public class Application extends JPanel {
     public void clean() {
         if (sessionContainer != null) {
             remove(sessionContainer);
+        }
+        if (welcomePanel != null) {
+            remove(welcomePanel);
+        }
+        if (footerSpacer != null) {
+            remove(footerSpacer);
         }
     }
 
