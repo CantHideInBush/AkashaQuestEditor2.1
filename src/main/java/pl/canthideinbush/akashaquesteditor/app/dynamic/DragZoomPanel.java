@@ -59,14 +59,13 @@ public class DragZoomPanel extends JScrollPane {
                     int y = e.getLocationOnScreen().y - screenOrigin.y;
 
                     Point view = getViewport().getViewPosition();
-                    getViewport().setViewPosition(new Point(
+                    getViewport().setViewPosition(fixViewInBounds(new Point(
                             view.x - x,
                             view.y - y
                             )
-                    );
+                    ));
 
                     screenOrigin = e.getLocationOnScreen();
-                    component.repaint();
                 }
             }
 
@@ -80,6 +79,22 @@ public class DragZoomPanel extends JScrollPane {
         component.addMouseWheelListener(adapter);
     }
 
+    public Point fixViewInBounds(Point point) {
+        if (point.x < 0) {
+            point.x = 0;
+        }
+        if (point.y < 0) {
+            point.y = 0;
+        }
+        if (point.x > component.getWidth() - getWidth()) {
+            point.x = component.getWidth() - getWidth();
+        }
+        if (point.y > component.getHeight() - getHeight()) {
+            point.y = component.getHeight() - getHeight();
+        }
+
+        return point;
+    }
 
 
     private void initialize() {
