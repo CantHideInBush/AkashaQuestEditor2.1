@@ -13,6 +13,9 @@ public class DragZoomPanel extends JScrollPane {
 
     public DragZoomPanel(Component component) {
         super(component);
+        if (!(component instanceof Zoomable)) {
+            throw new IllegalArgumentException("Component must implement Zoomable interface!");
+        }
         this.component = component;
         initialize();
     }
@@ -47,7 +50,16 @@ public class DragZoomPanel extends JScrollPane {
 
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                super.mouseWheelMoved(e);
+                double rotation = e.getWheelRotation();
+                double currentZoom = ((Zoomable) component).getZoom();
+                if (rotation < 0) {
+                    currentZoom += 0.1;
+                }
+                else currentZoom -= 0.1;
+                currentZoom = Math.max(0.1, currentZoom);
+                currentZoom = Math.min(3, currentZoom);
+                ((Zoomable) component).setZoom(currentZoom);
+                component.repaint();
             }
 
             Point screenOrigin;

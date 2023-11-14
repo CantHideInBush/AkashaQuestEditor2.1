@@ -4,8 +4,11 @@ import pl.canthideinbush.akashaquesteditor.app.Application;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
-public class ConversationComposer extends JLayeredPane {
+public class ConversationComposer extends JLayeredPane implements Zoomable {
+
+    private double zoom = 1.0;
 
     public ConversationComposer() {
         initialize();
@@ -31,5 +34,28 @@ public class ConversationComposer extends JLayeredPane {
                 g2d.fillRect(w, h, 3, 3);
             }
         }
+    }
+
+    @Override
+    public void paint(Graphics g) {
+
+        Graphics2D g2d  = ((Graphics2D) g);
+
+        AffineTransform affineTransform = new AffineTransform();
+        affineTransform.scale(zoom, zoom);
+
+        g2d.setTransform(affineTransform);
+
+        super.paint(g);
+    }
+
+    @Override
+    public void setZoom(double zoom) {
+        this.zoom = zoom;
+    }
+
+    @Override
+    public double getZoom() {
+        return zoom;
     }
 }
