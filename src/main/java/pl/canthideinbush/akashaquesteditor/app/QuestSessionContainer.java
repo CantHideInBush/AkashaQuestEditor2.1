@@ -1,7 +1,7 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
-import pl.canthideinbush.akashaquesteditor.app.dynamic.ConversationComposer;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.DragZoomPanel;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ConversationComposer;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.DragZoomPanel;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.swing.*;
@@ -30,9 +30,13 @@ public class QuestSessionContainer extends JTabbedPane {
 
     private void initializeComponents() {
         conversationComposer.setOpaque(true);
-        DragZoomPanel conversationComposerPanel = new DragZoomPanel(conversationComposer);
         conversationComposer.setPreferredSize(new Dimension(9999, 9999));
         conversationComposer.setLocation(0, 0);
+
+
+
+        DragZoomPanel conversationComposerPanel = new DragZoomPanel(conversationComposer);
+
         conversationComposerPanel.configureComponent();
         conversationComposerPanel.setPreferredSize(getPreferredSize());
         addTab("Konwersacja", conversationComposerPanel);

@@ -1,4 +1,6 @@
-package pl.canthideinbush.akashaquesteditor.app.dynamic;
+package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
+
+import pl.canthideinbush.akashaquesteditor.app.dynamic.Zoomable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,9 +11,9 @@ import java.awt.event.MouseWheelEvent;
 public class DragZoomPanel extends JScrollPane {
 
 
-    private final Component component;
+    private final JLayeredPane component;
 
-    public DragZoomPanel(Component component) {
+    public DragZoomPanel(JLayeredPane component) {
         super(component);
         if (!(component instanceof Zoomable)) {
             throw new IllegalArgumentException("Component must implement Zoomable interface!");
@@ -35,7 +37,7 @@ public class DragZoomPanel extends JScrollPane {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
+                screenOrigin = null;
             }
 
             @Override
@@ -56,7 +58,7 @@ public class DragZoomPanel extends JScrollPane {
                     currentZoom += 0.1;
                 }
                 else currentZoom -= 0.1;
-                currentZoom = Math.max(0.1, currentZoom);
+                currentZoom = Math.max(0.5, currentZoom);
                 currentZoom = Math.min(3, currentZoom);
                 ((Zoomable) component).setZoom(currentZoom);
                 component.repaint();
@@ -86,9 +88,12 @@ public class DragZoomPanel extends JScrollPane {
                 super.mouseMoved(e);
             }
         };
+
         component.addMouseListener(adapter);
         component.addMouseMotionListener(adapter);
         component.addMouseWheelListener(adapter);
+
+        new ZoomedComponentEventProxy(component);
     }
 
     public Point fixViewInBounds(Point point) {

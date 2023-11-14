@@ -8,4 +8,8 @@ public interface Zoomable {
 
    double getZoom();
 
+   default Point convert(Point point) {
+      return new Point((int) (point.x / getZoom()), (int) (point.y / getZoom()));
+   }
+
 }
