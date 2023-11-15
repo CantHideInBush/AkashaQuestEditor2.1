@@ -1,16 +1,14 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
 
-import pl.canthideinbush.akashaquesteditor.app.Application;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.NPCBlock;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.Zoomable;
-import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.NPCBlock;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ConversationComposer extends JLayeredPane implements Zoomable {
 
@@ -29,23 +27,13 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
     }
 
     private void listenToEvents() {
+        ConversationComposer inst = this;
         MouseAdapter adapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.isShiftDown()) {
-                    NPCBlock npcBlock = new NPCBlock();
-                    npcBlock.setLocation(convert(e.getPoint()));
-                    npcBlock.setSize(200, 200);
-                    npcBlock.setBackground(Color.RED);
-                    npcBlock.setOpaque(true);
-                    npcBlock.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            npcBlock.setBackground(new Color(125, 125, ThreadLocalRandom.current().nextInt(0, 255)));
-                            repaint();
-                        }
-                    });
-                    add(npcBlock);
+                    ConversationBlock conversationBlock = new NPCBlock("Test");
+                    conversationBlock.centerIn(inst, convert(e.getPoint()));
                     repaint();
                 }
             }
@@ -61,6 +49,9 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
         super.paintComponent(g);
         Graphics2D g2d = ((Graphics2D) g);
 
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
         AffineTransform affineTransform = g2d.getTransform();
         affineTransform.scale(zoom, zoom);
         g2d.setTransform(affineTransform);
@@ -68,7 +59,6 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
 
         g2d.setColor(getBackground());
         g2d.fillRect(0, 0, getWidth(), getHeight());
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         for (int h = 10; h <= getHeight() - 10; h+= 40) {
             for (int w = 10; w <= getWidth() - 10; w+=40) {
                 g2d.setColor(new Color(73, 79, 85));
