@@ -12,6 +12,7 @@ public class DragZoomPanel extends JScrollPane {
 
 
     private final JLayeredPane component;
+    public ZoomedComponentEventProxy zoomedComponentEventProxy;
 
     public DragZoomPanel(JLayeredPane component) {
         super(component);
@@ -93,7 +94,7 @@ public class DragZoomPanel extends JScrollPane {
         component.addMouseMotionListener(adapter);
         component.addMouseWheelListener(adapter);
 
-        new ZoomedComponentEventProxy(component);
+        zoomedComponentEventProxy = new ZoomedComponentEventProxy(component);
     }
 
     public Point fixViewInBounds(Point point) {

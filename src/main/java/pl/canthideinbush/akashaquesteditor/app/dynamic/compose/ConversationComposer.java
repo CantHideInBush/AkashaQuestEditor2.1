@@ -1,5 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
 
+import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.Zoomable;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.NPCBlock;
@@ -27,13 +28,14 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
     }
 
     private void listenToEvents() {
-        ConversationComposer inst = this;
         MouseAdapter adapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.isShiftDown()) {
                     ConversationBlock conversationBlock = new NPCBlock("Test");
-                    conversationBlock.centerIn(inst, convert(e.getPoint()));
+                    conversationBlock.centerIn(convert(e.getPoint()));
+                    add(conversationBlock);
+                    Application.instance.sessionContainer.conversationComposerPanel.zoomedComponentEventProxy.registerDrag(conversationBlock);
                     repaint();
                 }
             }
@@ -67,6 +69,14 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
         }
     }
 
+    @Override
+    public void paintComponents(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+        super.paintComponents(g);
+    }
 
     @Override
     public void setZoom(double zoom) {

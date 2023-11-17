@@ -1,5 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.blocks;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -17,4 +18,5 @@ public class NPCBlock extends ConversationBlock {
     Collection<Class<? extends WorkspaceBlock<?>>> getAllowedOuts() {
         return Collections.singleton(PlayerBlock.class);
     }
+
 }

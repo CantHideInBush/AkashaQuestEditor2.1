@@ -10,6 +10,7 @@ import java.awt.*;
 public class QuestSessionContainer extends JTabbedPane {
 
     private final QuestSession session;
+    public DragZoomPanel conversationComposerPanel;
 
     public QuestSessionContainer(QuestSession session) {
         this.session = session;
@@ -35,7 +36,7 @@ public class QuestSessionContainer extends JTabbedPane {
 
 
 
-        DragZoomPanel conversationComposerPanel = new DragZoomPanel(conversationComposer);
+        conversationComposerPanel = new DragZoomPanel(conversationComposer);
 
         conversationComposerPanel.configureComponent();
         conversationComposerPanel.setPreferredSize(getPreferredSize());
