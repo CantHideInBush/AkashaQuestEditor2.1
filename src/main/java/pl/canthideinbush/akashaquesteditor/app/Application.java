@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
+import java.util.Locale;
 
 public class Application extends JPanel {
 
@@ -53,6 +54,7 @@ public class Application extends JPanel {
     }
 
     private void initializeComponents() {
+        JOptionPane.setDefaultLocale(new Locale("pl"));
         welcomePanel = new WelcomePanel();
         add(welcomePanel);
     }
@@ -65,7 +67,7 @@ public class Application extends JPanel {
 
 
 
-    static Image icon;
+    public static Image icon;
 
     static {
         try {

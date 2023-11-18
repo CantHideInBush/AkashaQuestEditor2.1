@@ -4,12 +4,16 @@ import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.Zoomable;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.NPCBlock;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.PlayerBlock;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.util.Arrays;
+import java.util.UUID;
 
 public class ConversationComposer extends JLayeredPane implements Zoomable {
 
@@ -32,7 +36,9 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.isShiftDown()) {
-                    ConversationBlock conversationBlock = new NPCBlock("Test");
+                    String name = Popups.createShortTextPopup("Utwórz nowy blok", "Wprowadź nazwę", "");
+                    if (name == null) return;
+                    ConversationBlock conversationBlock = e.getButton() == MouseEvent.BUTTON1 ? new NPCBlock(name) : new PlayerBlock(name);
                     conversationBlock.centerIn(convert(e.getPoint()));
                     add(conversationBlock);
                     Application.instance.sessionContainer.conversationComposerPanel.zoomedComponentEventProxy.registerDrag(conversationBlock);
@@ -86,5 +92,9 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
     @Override
     public double getZoom() {
         return zoom;
+    }
+
+    public ConversationBlock getConversationBlockByUUID(UUID uuid) {
+        return (ConversationBlock) Arrays.stream(getComponents()).filter(component -> component instanceof ConversationBlock && ((ConversationBlock) component).uuid.equals(uuid)).findAny().orElse(null);
     }
 }

@@ -1,0 +1,31 @@
+Animated icons used in this project are from:
+https://icons8.com/
+
+
+
+
+close.png:
+Nendra Wahyu
+https://www.flaticon.com/authors/nendra-wahyu
+
+
+
+add-button.png:
+Anggara
+https://www.flaticon.com/authors/anggara
+
+
+bqse.ico
+Mercilessly stolen from SkepsonSk
+
+Icons:
+- play.png
+- question-mark.png
+- exclamation-mark.png
+by Icons8
+
+boockcover
+
+bookmark.png
+Muhammad Usman
+https://www.flaticon.com/authors/muhammad-usman

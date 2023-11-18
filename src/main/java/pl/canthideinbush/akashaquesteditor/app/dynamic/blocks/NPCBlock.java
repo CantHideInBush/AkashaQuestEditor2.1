@@ -19,4 +19,18 @@ public class NPCBlock extends ConversationBlock {
         return Collections.singleton(PlayerBlock.class);
     }
 
+    @Override
+    protected void setLooks() {
+
+    }
+
+    @Override
+    String who() {
+        return "NPC";
+    }
+
+    @Override
+    protected Color defaultBorderColor() {
+        return Color.decode("#E54B4B");
+    }
 }

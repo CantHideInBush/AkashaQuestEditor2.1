@@ -10,6 +10,12 @@ public class PlayerBlock extends ConversationBlock {
     }
 
     @Override
+    protected void setLooks() {
+
+
+    }
+
+    @Override
     Collection<Class<? extends WorkspaceBlock<?>>> getAllowedIns() {
         return Collections.singleton(NPCBlock.class);
     }
@@ -19,5 +25,13 @@ public class PlayerBlock extends ConversationBlock {
         return Collections.singleton(NPCBlock.class);
     }
 
+    @Override
+    protected Color defaultBorderColor() {
+        return Color.decode("#3E8914");
+    }
 
+    @Override
+    String who() {
+        return "Gracz";
+    }
 }

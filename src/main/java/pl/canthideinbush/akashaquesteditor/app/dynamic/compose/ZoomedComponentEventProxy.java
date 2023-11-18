@@ -6,14 +6,13 @@ import pl.canthideinbush.akashaquesteditor.app.dynamic.Zoomable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 public class ZoomedComponentEventProxy extends JPanel {
 
     private final JLayeredPane intercepted;
-    private final HashMap<CenterAbleComponent, Component[]> registeredForDrag = new HashMap<>();
+    private final HashMap<CenterAbleComponent, List<Component>> registeredForDrag = new HashMap<>();
 
     public ZoomedComponentEventProxy(JLayeredPane intercepted) {
         if (!(intercepted instanceof Zoomable)) {
@@ -48,6 +47,7 @@ public class ZoomedComponentEventProxy extends JPanel {
                 Point point = e.getPoint();
                 Component component = getZoomComponentAt(point.x, point.y);
                 if (component != null) {
+                    e.setSource(component);
                     component.dispatchEvent(e);
                 }
             }
@@ -57,6 +57,7 @@ public class ZoomedComponentEventProxy extends JPanel {
                 Point point = e.getPoint();
                 Component component = getZoomComponentAt(point.x, point.y);
                 if (component != null) {
+                    e.setSource(component);
                     dragged = component;
                     component.dispatchEvent(e);
                 }
@@ -69,6 +70,7 @@ public class ZoomedComponentEventProxy extends JPanel {
                 Point point = e.getPoint();
                 Component component = getZoomComponentAt(point.x, point.y);
                 if (component != null) {
+                    e.setSource(component);
                     component.dispatchEvent(e);
                 }
             }
@@ -78,6 +80,7 @@ public class ZoomedComponentEventProxy extends JPanel {
                 Point point = e.getPoint();
                 Component component = getZoomComponentAt(point.x, point.y);
                 if (component != null) {
+                    e.setSource(component);
                     component.dispatchEvent(e);
                 }
             }
@@ -87,6 +90,7 @@ public class ZoomedComponentEventProxy extends JPanel {
                 Point point = e.getPoint();
                 Component component = getZoomComponentAt(point.x, point.y);
                 if (component != null) {
+                    e.setSource(component);
                     component.dispatchEvent(e);
                 }
             }
@@ -96,6 +100,7 @@ public class ZoomedComponentEventProxy extends JPanel {
                 Point point = e.getPoint();
                 Component component = getZoomComponentAt(point.x, point.y);
                 if (component != null) {
+                    e.setSource(component);
                     component.dispatchEvent(e);
                 }
             }
@@ -105,6 +110,7 @@ public class ZoomedComponentEventProxy extends JPanel {
                 Point point = e.getPoint();
                 Component component = dragged != null ? dragged : getZoomComponentAt(point.x, point.y);
                 if (component != null) {
+                    e.setSource(component);
                     if (dragged != null) {
                         CenterAbleComponent optional = getOptionalDragComponent(component);
                         if (optional != null) {
@@ -135,14 +141,14 @@ public class ZoomedComponentEventProxy extends JPanel {
                 if (component != null) {
                     if (active == null || !active.equals(component)) {
                         if (active != null) {
-                            active.dispatchEvent(new MouseEvent((Component) e.getSource(), MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), e.getModifiersEx(), e.getX(), e.getY(), e.getXOnScreen(), e.getYOnScreen(), e.getClickCount(), e.isPopupTrigger(), e.getButton()));
+                            active.dispatchEvent(new MouseEvent(active, MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), e.getModifiersEx(), e.getX(), e.getY(), e.getXOnScreen(), e.getYOnScreen(), e.getClickCount(), e.isPopupTrigger(), e.getButton()));
                         }
                         active = component;
-                        component.dispatchEvent(new MouseEvent((Component) e.getSource(), MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(), e.getModifiersEx(), e.getX(), e.getY(), e.getXOnScreen(), e.getYOnScreen(), e.getClickCount(), e.isPopupTrigger(), e.getButton()));
+                        component.dispatchEvent(new MouseEvent(component, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(), e.getModifiersEx(), e.getX(), e.getY(), e.getXOnScreen(), e.getYOnScreen(), e.getClickCount(), e.isPopupTrigger(), e.getButton()));
                     }
 
 
-
+                    e.setSource(component);
                     component.dispatchEvent(e);
                 }
             }
@@ -167,21 +173,38 @@ public class ZoomedComponentEventProxy extends JPanel {
         for (Component component : intercepted.getComponents()) {
             if (component.equals(this) || component.equals(intercepted)) continue;
             Point local = SwingUtilities.convertPoint(intercepted, x, y, component);
-            if (component.contains(local)) {
-                return component.getComponentAt(local);
+            if (!component.contains(local)) {
+                continue;
             }
+
+            Component child;
+            while (!(child = component.getComponentAt(local)).equals(component)) {
+                local = SwingUtilities.convertPoint(component, local, child);
+                component = child;
+            }
+
+            return component;
         }
         return intercepted;
     }
 
     public void registerDrag(CenterAbleComponent component) {
-        registeredForDrag.put(component, component.getContainer().getComponents());
+        registeredForDrag.put(component, getAllChildren(component.getContainer()));
+    }
+
+    private ArrayList<Component> getAllChildren(Container component) {
+        ArrayList<Component> list = new ArrayList<>();
+        for (Component child : component.getComponents()) {
+            if (child instanceof Container) list.addAll(getAllChildren((Container) child));
+            list.add(child);
+        }
+        return list;
     }
 
     public CenterAbleComponent getOptionalDragComponent(Component component) {
-        for (Map.Entry<CenterAbleComponent, Component[]> entry : registeredForDrag.entrySet()) {
+        for (Map.Entry<CenterAbleComponent, List<Component>> entry : registeredForDrag.entrySet()) {
             if (entry.getKey().equals(component)) return entry.getKey();
-            else if (Arrays.asList(entry.getValue()).contains(component)) {
+            else if (entry.getValue().contains(component)) {
                 return entry.getKey();
             }
         }
