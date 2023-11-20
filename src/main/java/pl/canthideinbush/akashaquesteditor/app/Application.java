@@ -17,14 +17,20 @@ public class Application extends JPanel {
     public QuestSessionContainer sessionContainer;
     public WelcomePanel welcomePanel;
     private Box footerSpacer;
+    public JFrame frame;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+            instance = new Application();
+
             JFrame frame = new JFrame("AkashaQuestEditor 2.1");
+            instance.frame = frame;
+
+
             frame.setLayout(new FlowLayout(FlowLayout.CENTER));
             frame.setResizable(true);
             frame.setJMenuBar(new QuestMenuBar());
-            instance = new Application();
+
             instance.initialize();
             instance.initializeComponents();
             setAkashaIcon(frame);

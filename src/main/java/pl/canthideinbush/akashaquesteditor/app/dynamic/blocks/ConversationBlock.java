@@ -64,6 +64,16 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
                 }
             }
         });
+
+        text.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    Popups.createLongTextPopup("Edytor wypowiedzi");
+                }
+            }
+        });
+
     }
 
     private void addHoverEffects() {
