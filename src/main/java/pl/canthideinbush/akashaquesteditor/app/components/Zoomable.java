@@ -1,4 +1,4 @@
-package pl.canthideinbush.akashaquesteditor.app.dynamic;
+package pl.canthideinbush.akashaquesteditor.app.components;
 
 import java.awt.*;
 

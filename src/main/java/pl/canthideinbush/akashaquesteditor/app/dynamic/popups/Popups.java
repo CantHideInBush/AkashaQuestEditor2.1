@@ -5,6 +5,8 @@ import pl.canthideinbush.akashaquesteditor.app.Application;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 
 public class Popups {
@@ -24,20 +26,30 @@ public class Popups {
 
         
         JTextPane pane = new JTextPane();
-        pane.setBorder(new LineBorder(dialog.getBackground(), 15));
+
+        pane.setBorder(BorderFactory.createCompoundBorder(new LineBorder(dialog.getBackground(), 15),
+                new EmptyBorder(5, 10, 5, 10)));
+
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 0.8;
         gbc.weighty = 1;
 
 
-        dialog.add(pane, gbc);
+        JScrollPane scrollPane = new JScrollPane(pane, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+
+        dialog.add(scrollPane, gbc);
 
         JPanel confirmPanel = new JPanel();
+        confirmPanel.setOpaque(true);
         gbc.weightx = 0.2;
 
         dialog.add(confirmPanel, gbc);
 
+        pane.setMinimumSize(pane.getSize());
+        pane.setPreferredSize(pane.getSize());
+        pane.setMaximumSize(pane.getSize());
 
         dialog.pack();
         dialog.setVisible(true);

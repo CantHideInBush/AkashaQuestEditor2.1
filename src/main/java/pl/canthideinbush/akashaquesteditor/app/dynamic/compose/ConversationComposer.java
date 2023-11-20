@@ -2,7 +2,7 @@ package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.Zoomable;
+import pl.canthideinbush.akashaquesteditor.app.components.Zoomable;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.NPCBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.PlayerBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;

@@ -1,7 +1,7 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
 
-import pl.canthideinbush.akashaquesteditor.app.dynamic.CenterAbleComponent;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.Zoomable;
+import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
+import pl.canthideinbush.akashaquesteditor.app.components.Zoomable;
 
 import javax.swing.*;
 import java.awt.*;

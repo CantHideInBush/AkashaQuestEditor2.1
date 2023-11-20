@@ -3,7 +3,7 @@ package pl.canthideinbush.akashaquesteditor.app.dynamic.blocks;
 import org.bukkit.configuration.ConfigurationSection;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.CenterAbleComponent;
+import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
 import pl.canthideinbush.akashaquesteditor.io.Load;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
