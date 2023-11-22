@@ -1,17 +1,15 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.popups;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
+import pl.canthideinbush.akashaquesteditor.app.components.WrapEditorKit;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
 import java.awt.*;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 
 public class Popups {
 
@@ -30,37 +28,18 @@ public class Popups {
 
         
         JTextPane pane = new JTextPane();
-        pane.setBorder(new LineBorder(dialog.getBackground(), 15));
-        pane.getDocument().addUndoableEditListener(new UndoableEditListener() {
-            @Override
-            public void undoableEditHappened(UndoableEditEvent e) {
-                System.out.println("Undoable");
-            }
-        });
+        pane.setEditorKit(new WrapEditorKit());
+        pane.setFont(pane.getFont().deriveFont(15f));
 
-        pane.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                System.out.println("insert");
-            }
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                System.out.println("remove");
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                System.out.println("changed");
-            }
-        });
+        pane.setBorder(new CompoundBorder(new LineBorder(dialog.getBackground(), 15), new EmptyBorder(5, 15, 5,15)));
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 0.8;
         gbc.weighty = 1;
 
 
-        JScrollPane scrollPane = new JScrollPane(pane, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollPane = new JScrollPane(pane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         dialog.add(scrollPane, gbc);
 
