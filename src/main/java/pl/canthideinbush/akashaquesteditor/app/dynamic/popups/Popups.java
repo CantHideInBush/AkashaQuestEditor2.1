@@ -3,6 +3,7 @@ package pl.canthideinbush.akashaquesteditor.app.dynamic.popups;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.WrapEditorKit;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -10,8 +11,21 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.geom.AffineTransform;
+import java.io.IOException;
 
 public class Popups {
+
+    static ImageIcon tick;
+    static ImageIcon close;
+
+    static {
+        tick = new ImageIcon(Popups.class.getResource("/assets/tick.gif"));
+        close = new ImageIcon(Popups.class.getResource("/assets/close.png"));
+    }
+
 
 
     public static String createShortTextPopup(String title, String message, String initial) {
@@ -19,13 +33,13 @@ public class Popups {
     }
 
 
+    static Dimension cachedSize = new Dimension(600, 450);
+
     public static void createLongTextPopup(String title) {
         JDialog dialog = templateDialog(title);
 
         dialog.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-
-
         
         JTextPane pane = new JTextPane();
         pane.setEditorKit(new WrapEditorKit());
@@ -46,21 +60,52 @@ public class Popups {
         JPanel confirmPanel = new JPanel();
         gbc.weightx = 0.2;
 
-        dialog.add(confirmPanel, gbc);
-        confirmPanel.setPreferredSize(confirmPanel.getSize());
-        confirmPanel.setMinimumSize(confirmPanel.getPreferredSize());
+        JPanel confirmButton = templateConfirmButton(new Dimension(48, 48));
 
+        confirmPanel.add(confirmButton);
+
+        dialog.add(confirmPanel, gbc);
+        dialog.setResizable(true);
         dialog.pack();
         dialog.setVisible(true);
     }
 
+    public static JPanel templateConfirmButton(Dimension size) {
+        JPanel confirm = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = ((Graphics2D) g);
+                AffineTransform transform = new AffineTransform();
+
+                g2d.setTransform(transform);
+
+
+                g2d.drawImage(tick.getImage(), 0, 0, this);
+
+            }
+
+        };
+        confirm.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3, true));
+        confirm.setPreferredSize(size);
+        return confirm;
+    }
+
     private static JDialog templateDialog(String title) {
         JDialog dialog = new JDialog(Application.instance.frame, title, true);
-        dialog.setPreferredSize(new Dimension(600, 450));
+        dialog.setPreferredSize(cachedSize);
         dialog.setIconImage(Application.icon);
-        dialog.setResizable(false);
+        dialog.setResizable(true);
         dialog.setLocationRelativeTo(Application.instance);
         dialog.setLocation(Application.instance.getWidth() / 2 - dialog.getWidth(), Application.instance.getHeight() / 2 - dialog.getHeight());
+
+        dialog.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                cachedSize = e.getComponent().getSize();
+            }
+        });
+
         return dialog;
 
     }
