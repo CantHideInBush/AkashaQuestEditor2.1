@@ -1,7 +1,5 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.animations;
 
-import javax.swing.*;
-
 public interface Animation {
 
     int interval();
@@ -12,6 +10,30 @@ public interface Animation {
 
     boolean progressAnimation();
 
+    Thread getAnimationThread();
 
+    void setAnimationThread(Thread thread);
+
+    default void start() {
+        if (getAnimationThread() != null) {
+            getAnimationThread().interrupt();
+            cancel();
+        }
+        Thread thread = new Thread(() -> {
+            while (true) {
+                if (!progressAnimation()) {
+                    return;
+                }
+                try {
+                    Thread.sleep(interval());
+                } catch (
+                        InterruptedException ignored) {
+
+                }
+            }
+        });
+        setAnimationThread(thread);
+        thread.start();
+    }
 
 }

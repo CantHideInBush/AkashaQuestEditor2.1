@@ -6,7 +6,7 @@ public class ResizeAnimation implements Animation {
 
     private final Component component;
     private final Dimension goal;
-    private final int duration;
+    private final double duration;
     private Dimension originalDimension;
     private int interval;
     private int xAdd;
@@ -23,9 +23,9 @@ public class ResizeAnimation implements Animation {
 
     private void setFields() {
         dimension = new Dimension(originalDimension);
-        interval = Math.abs(Math.max(goal.width - originalDimension.width, goal.height - originalDimension.height)) / duration;
-        xAdd = duration / interval * (goal.width - originalDimension.width);
-        yAdd = duration / interval * (goal.height - originalDimension.height);
+        interval = 1;
+        xAdd = Math.max(1, (int) (interval / duration * (goal.width - originalDimension.width)));
+        yAdd = Math.max(1, (int) (interval / duration * (goal.height - originalDimension.height)));
     }
 
     @Override
@@ -37,6 +37,7 @@ public class ResizeAnimation implements Animation {
     public void cancel() {
         dimension = new Dimension(originalDimension);
         component.setPreferredSize(originalDimension);
+        thread.interrupt();
     }
 
     @Override
@@ -50,7 +51,20 @@ public class ResizeAnimation implements Animation {
         dimension.height += yAdd;
 
         component.setPreferredSize(dimension);
+        component.getParent().repaint();
 
-        return false;
+        return true;
+    }
+
+    Thread thread;
+
+    @Override
+    public Thread getAnimationThread() {
+        return thread;
+    }
+
+    @Override
+    public void setAnimationThread(Thread thread) {
+        this.thread = thread;
     }
 }

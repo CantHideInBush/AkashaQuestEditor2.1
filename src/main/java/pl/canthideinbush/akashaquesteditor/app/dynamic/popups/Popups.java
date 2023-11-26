@@ -2,6 +2,7 @@ package pl.canthideinbush.akashaquesteditor.app.dynamic.popups;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.WrapEditorKit;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimation;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,6 +14,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.io.IOException;
 
@@ -62,6 +65,20 @@ public class Popups {
 
         JPanel confirmButton = templateConfirmButton(new Dimension(48, 48));
 
+        ResizeAnimation resizeAnimation = new ResizeAnimation(confirmButton, new Dimension(64, 64), 2000);
+
+        confirmButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                resizeAnimation.start();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                resizeAnimation.cancel();
+            }
+        });
+
         confirmPanel.add(confirmButton);
 
         dialog.add(confirmPanel, gbc);
@@ -86,6 +103,8 @@ public class Popups {
             }
 
         };
+
+
         confirm.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3, true));
         confirm.setPreferredSize(size);
         return confirm;
