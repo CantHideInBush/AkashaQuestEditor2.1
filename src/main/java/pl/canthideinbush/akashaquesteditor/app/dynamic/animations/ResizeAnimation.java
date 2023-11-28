@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class ResizeAnimation implements Animation {
 
-    private final Component component;
+    private final ResizeAnimationContainer component;
     private final Dimension goal;
     private final double duration;
     private final Point originalLocation;
@@ -15,7 +15,7 @@ public class ResizeAnimation implements Animation {
     private double width;
     private double height;
 
-    public ResizeAnimation(Component component, Dimension goal, int duration) {
+    public ResizeAnimation(ResizeAnimationContainer component, Dimension goal, int duration) {
         this.component = component;
         this.goal = goal;
         this.duration = duration;
@@ -27,7 +27,7 @@ public class ResizeAnimation implements Animation {
     private void setFields() {
         width = originalDimension.width;
         height = originalDimension.height;
-        interval = 1;
+        interval = 50;
         widthIncremental = (interval / duration * (goal.width - originalDimension.width));
         heightIncremental = (interval / duration * (goal.height - originalDimension.height));
     }
@@ -61,7 +61,7 @@ public class ResizeAnimation implements Animation {
         width += widthIncremental;
         height += heightIncremental;
         component.setSize(new Dimension((int) width, (int) height));
-        component.getParent().invalidate();
+        component.layoutComponents();
     }
 
     Thread thread;

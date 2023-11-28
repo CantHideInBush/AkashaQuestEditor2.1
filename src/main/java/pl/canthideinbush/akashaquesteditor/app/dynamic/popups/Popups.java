@@ -3,6 +3,7 @@ package pl.canthideinbush.akashaquesteditor.app.dynamic.popups;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.WrapEditorKit;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimation;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimationContainer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -63,7 +64,7 @@ public class Popups {
         JPanel confirmPanel = new JPanel();
         gbc.weightx = 0.2;
 
-        JPanel confirmButton = templateConfirmButton(new Dimension(48, 48));
+        ConfirmButton confirmButton = templateConfirmButton(new Dimension(48, 48));
 
         ResizeAnimation resizeAnimation = new ResizeAnimation(confirmButton, new Dimension(64, 64), 500);
 
@@ -80,8 +81,13 @@ public class Popups {
         });
 
 
-        confirmPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        confirmPanel.add(confirmButton);
+        JPanel confirmButtonContainer = new JPanel();
+        confirmButtonContainer.setPreferredSize(confirmButton.getPreferredSize());
+        confirmButtonContainer.setLayout(null);
+        confirmButton.setSize(confirmButton.getPreferredSize());
+        confirmButton.setLocation(0, 0);
+        confirmButtonContainer.add(confirmButton);
+        confirmPanel.add(confirmButtonContainer);
 
         dialog.add(confirmPanel, gbc);
         dialog.setResizable(true);
@@ -89,26 +95,10 @@ public class Popups {
         dialog.setVisible(true);
     }
 
-    public static JPanel templateConfirmButton(Dimension size) {
-        JPanel confirm = new JPanel(){
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = ((Graphics2D) g);
-                AffineTransform transform = new AffineTransform();
-
-                g2d.setTransform(transform);
-
-
-                g2d.drawImage(tick.getImage(), 0, 0, this);
-
-            }
-
-        };
-
-
-        confirm.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3, true));
+    public static ConfirmButton templateConfirmButton(Dimension size) {
+        ConfirmButton confirm = new ConfirmButton();
         confirm.setPreferredSize(size);
+
         return confirm;
     }
 
