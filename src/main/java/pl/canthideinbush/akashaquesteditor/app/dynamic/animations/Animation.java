@@ -8,7 +8,9 @@ public interface Animation {
 
     void complete();
 
-    boolean progressAnimation();
+    boolean isComplete();
+
+    void progressAnimation();
 
     Thread getAnimationThread();
 
@@ -21,9 +23,11 @@ public interface Animation {
         }
         Thread thread = new Thread(() -> {
             while (true) {
-                if (!progressAnimation()) {
+                if (isComplete()) {
+                    complete();
                     return;
                 }
+                else progressAnimation();
                 try {
                     Thread.sleep(interval());
                 } catch (

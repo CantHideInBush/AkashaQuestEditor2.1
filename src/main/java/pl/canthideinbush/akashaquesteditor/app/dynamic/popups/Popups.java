@@ -65,7 +65,7 @@ public class Popups {
 
         JPanel confirmButton = templateConfirmButton(new Dimension(48, 48));
 
-        ResizeAnimation resizeAnimation = new ResizeAnimation(confirmButton, new Dimension(64, 64), 2000);
+        ResizeAnimation resizeAnimation = new ResizeAnimation(confirmButton, new Dimension(64, 64), 500);
 
         confirmButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -79,6 +79,8 @@ public class Popups {
             }
         });
 
+
+        confirmPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         confirmPanel.add(confirmButton);
 
         dialog.add(confirmPanel, gbc);

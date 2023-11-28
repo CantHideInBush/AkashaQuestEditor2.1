@@ -7,25 +7,29 @@ public class ResizeAnimation implements Animation {
     private final Component component;
     private final Dimension goal;
     private final double duration;
-    private Dimension originalDimension;
+    private final Point originalLocation;
+    private final Dimension originalDimension;
     private int interval;
-    private int xAdd;
-    private int yAdd;
-    private Dimension dimension;
+    private double widthIncremental;
+    private double heightIncremental;
+    private double width;
+    private double height;
 
     public ResizeAnimation(Component component, Dimension goal, int duration) {
         this.component = component;
         this.goal = goal;
         this.duration = duration;
         originalDimension = component.getPreferredSize();
+        originalLocation = component.getLocation();
         setFields();
     }
 
     private void setFields() {
-        dimension = new Dimension(originalDimension);
+        width = originalDimension.width;
+        height = originalDimension.height;
         interval = 1;
-        xAdd = Math.max(1, (int) (interval / duration * (goal.width - originalDimension.width)));
-        yAdd = Math.max(1, (int) (interval / duration * (goal.height - originalDimension.height)));
+        widthIncremental = (interval / duration * (goal.width - originalDimension.width));
+        heightIncremental = (interval / duration * (goal.height - originalDimension.height));
     }
 
     @Override
@@ -35,8 +39,10 @@ public class ResizeAnimation implements Animation {
 
     @Override
     public void cancel() {
-        dimension = new Dimension(originalDimension);
-        component.setPreferredSize(originalDimension);
+        width = originalDimension.width;
+        height = originalDimension.height;
+
+        component.setSize(originalDimension);
         thread.interrupt();
     }
 
@@ -46,14 +52,16 @@ public class ResizeAnimation implements Animation {
     }
 
     @Override
-    public boolean progressAnimation() {
-        dimension.width += xAdd;
-        dimension.height += yAdd;
+    public boolean isComplete() {
+        return height >= goal.height && width >= goal.width;
+    }
 
-        component.setPreferredSize(dimension);
-        component.getParent().repaint();
-
-        return true;
+    @Override
+    public void progressAnimation() {
+        width += widthIncremental;
+        height += heightIncremental;
+        component.setSize(new Dimension((int) width, (int) height));
+        component.getParent().invalidate();
     }
 
     Thread thread;
