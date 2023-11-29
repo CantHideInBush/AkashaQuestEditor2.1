@@ -78,10 +78,11 @@ public class Popups {
     private static ResizeAnimationContainer createAnimatedConfirmButton() {
         ConfirmButton confirmButton = new ConfirmButton();
         confirmButton.setSize(42, 42);
-        confirmButton.setLocation(0, 0);
         ResizeAnimationContainer confirmButtonContainer = new ResizeAnimationContainer(confirmButton);
+
         ResizeAnimation resizeAnimation = new ResizeAnimation(confirmButtonContainer, new Dimension(50, 50), 200);
-        confirmButton.repaint();
+        confirmButton.setLocation(confirmButtonContainer.getPreferredSize().width / 2 - confirmButton.getWidth() / 2, confirmButtonContainer.getPreferredSize().height / 2 - confirmButton.getHeight() / 2);
+
         confirmButtonContainer.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {

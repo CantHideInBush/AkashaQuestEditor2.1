@@ -14,6 +14,8 @@ public class ConfirmButton extends JPanel {
     private final ImageIcon iconStatic;
     public boolean animated = false;
 
+    public boolean firstTick = true;
+
     public ConfirmButton() {
         icon = new ImageIcon(Popups.tick.getImage());
         iconStatic = new ImageIcon(Popups.tickStatic.getImage());
@@ -32,8 +34,12 @@ public class ConfirmButton extends JPanel {
         stretch.scale((double) getWidth() / icon.getIconWidth(), (double) getHeight() / icon.getIconHeight());
         g2d.setTransform(stretch);
 
+        if (firstTick) {
+            g2d.drawImage(icon.getImage(), 0, 0, this);
+            firstTick = false;
+        }
+        else g2d.drawImage(animated ? icon.getImage() : iconStatic.getImage(), 0, 0, this);
 
-        g2d.drawImage(animated ? icon.getImage() : iconStatic.getImage(), 0, 0, this);
         g2d.dispose();
     }
 
