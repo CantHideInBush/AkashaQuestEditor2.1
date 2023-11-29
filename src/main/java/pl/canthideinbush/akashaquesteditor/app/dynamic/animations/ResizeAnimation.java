@@ -4,24 +4,43 @@ import java.awt.*;
 
 public class ResizeAnimation implements Animation {
 
-    private final ResizeAnimationContainer component;
-    private final Dimension goal;
+    private final Component component;
+    public final Dimension goal;
+    private final ResizeAnimationContainer container;
+    private boolean complete;
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
     private final double duration;
-    private final Point originalLocation;
-    private final Dimension originalDimension;
+    public final Dimension originalDimension;
     private int interval;
     private double widthIncremental;
     private double heightIncremental;
-    private double width;
-    private double height;
+    public double width;
+    public double height;
+    private boolean cancelled;
 
-    public ResizeAnimation(ResizeAnimationContainer component, Dimension goal, int duration) {
-        this.component = component;
+    public ResizeAnimation(ResizeAnimationContainer container, Dimension goal, int duration) {
+        this.container = container;
+        this.component = container.getResizeComponent();
         this.goal = goal;
         this.duration = duration;
-        originalDimension = component.getPreferredSize();
-        originalLocation = component.getLocation();
+        originalDimension = new Dimension(component.getSize());
         setFields();
+        initializeContainer();
+    }
+
+    private void initializeContainer() {
+        container.setPreferredSize(goal);
+        container.setResizeAnimation(this);
     }
 
     private void setFields() {
@@ -38,30 +57,47 @@ public class ResizeAnimation implements Animation {
     }
 
     @Override
-    public void cancel() {
+    public boolean isComplete() {
+        return complete;
+    }
+
+    @Override
+    public void setComplete(boolean b) {
+        complete = b;
+    }
+
+    @Override
+    public void revert() {
         width = originalDimension.width;
         height = originalDimension.height;
 
+
         component.setSize(originalDimension);
-        thread.interrupt();
+        component.setLocation(container.getWidth() / 2 - component.getWidth() / 2, container.getHeight() / 2 - component.getHeight() / 2);
     }
 
     @Override
-    public void complete() {
-        component.setPreferredSize(goal);
+    public void complete(boolean reverse) {
+        component.setSize(reverse ? originalDimension : goal);
     }
 
     @Override
-    public boolean isComplete() {
-        return height >= goal.height && width >= goal.width;
+    public boolean isComplete(boolean reverse) {
+        return reverse ? height <= originalDimension.height && width <= originalDimension.width : height >= goal.height && width >= goal.width;
     }
 
     @Override
-    public void progressAnimation() {
-        width += widthIncremental;
-        height += heightIncremental;
+    public void progressAnimation(boolean reverse) {
+        if (!reverse) {
+            width += widthIncremental;
+            height += heightIncremental;
+        }
+        else {
+            width -= widthIncremental;
+            height -= heightIncremental;
+        }
         component.setSize(new Dimension((int) width, (int) height));
-        component.layoutComponents();
+        component.setLocation(container.getWidth() / 2 - component.getWidth() / 2, container.getHeight() / 2 - component.getHeight() / 2);
     }
 
     Thread thread;

@@ -1,32 +1,31 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.popups;
 
+import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.WrapEditorKit;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimation;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimationContainer;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
-import java.io.IOException;
 
 public class Popups {
 
     static ImageIcon tick;
     static ImageIcon close;
 
+    static ImageIcon tickStatic;
+
     static {
         tick = new ImageIcon(Popups.class.getResource("/assets/tick.gif"));
+        tickStatic = new ImageIcon(Popups.class.getResource("/assets/tick-static.png"));
         close = new ImageIcon(Popups.class.getResource("/assets/close.png"));
     }
 
@@ -64,30 +63,10 @@ public class Popups {
         JPanel confirmPanel = new JPanel();
         gbc.weightx = 0.2;
 
-        ConfirmButton confirmButton = templateConfirmButton(new Dimension(48, 48));
+        ResizeAnimationContainer confirmButtonContainer = createAnimatedConfirmButton();
 
-        ResizeAnimation resizeAnimation = new ResizeAnimation(confirmButton, new Dimension(64, 64), 500);
-
-        confirmButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                resizeAnimation.start();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                resizeAnimation.cancel();
-            }
-        });
-
-
-        JPanel confirmButtonContainer = new JPanel();
-        confirmButtonContainer.setPreferredSize(confirmButton.getPreferredSize());
-        confirmButtonContainer.setLayout(null);
-        confirmButton.setSize(confirmButton.getPreferredSize());
-        confirmButton.setLocation(0, 0);
-        confirmButtonContainer.add(confirmButton);
         confirmPanel.add(confirmButtonContainer);
+
 
         dialog.add(confirmPanel, gbc);
         dialog.setResizable(true);
@@ -95,11 +74,29 @@ public class Popups {
         dialog.setVisible(true);
     }
 
-    public static ConfirmButton templateConfirmButton(Dimension size) {
-        ConfirmButton confirm = new ConfirmButton();
-        confirm.setPreferredSize(size);
+    @NotNull
+    private static ResizeAnimationContainer createAnimatedConfirmButton() {
+        ConfirmButton confirmButton = new ConfirmButton();
+        confirmButton.setSize(42, 42);
+        confirmButton.setLocation(0, 0);
+        ResizeAnimationContainer confirmButtonContainer = new ResizeAnimationContainer(confirmButton);
+        ResizeAnimation resizeAnimation = new ResizeAnimation(confirmButtonContainer, new Dimension(50, 50), 200);
+        confirmButton.repaint();
+        confirmButtonContainer.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                resizeAnimation.start(false);
+                confirmButton.animated = true;
+            }
 
-        return confirm;
+            @Override
+            public void mouseExited(MouseEvent e) {
+                resizeAnimation.start(true);
+                confirmButton.animated = false;
+
+            }
+        });
+        return confirmButtonContainer;
     }
 
     private static JDialog templateDialog(String title) {

@@ -4,40 +4,53 @@ public interface Animation {
 
     int interval();
 
-    void cancel();
+    void revert();
 
-    void complete();
+    void complete(boolean reverse);
 
-    boolean isComplete();
+    boolean isComplete(boolean reverse);
 
-    void progressAnimation();
+    void progressAnimation(boolean reverse);
 
     Thread getAnimationThread();
 
     void setAnimationThread(Thread thread);
 
-    default void start() {
+    default void start(boolean reverse) {
         if (getAnimationThread() != null) {
             getAnimationThread().interrupt();
-            cancel();
         }
+        setCancelled(false);
         Thread thread = new Thread(() -> {
-            while (true) {
-                if (isComplete()) {
-                    complete();
-                    return;
+            setComplete(false);
+            boolean interrupted = false;
+            while (!interrupted) {
+                if (isCancelled()) {
+                    break;
                 }
-                else progressAnimation();
+                if (isComplete(reverse)) {
+                    complete(reverse);
+                    break;
+                }
+                else progressAnimation(reverse);
                 try {
                     Thread.sleep(interval());
                 } catch (
                         InterruptedException ignored) {
-
+                    interrupted = true;
                 }
             }
+            setComplete(true);
         });
         setAnimationThread(thread);
         thread.start();
     }
+
+    void setCancelled(boolean cancelled);
+    boolean isCancelled();
+
+    boolean isComplete();
+
+    void setComplete(boolean b);
 
 }
