@@ -69,7 +69,9 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    Popups.createLongTextPopup("Edytor wypowiedzi");
+                    Popups.createLongTextPopup("Edytor wypowiedzi", text.getText(), (string) -> {
+                        text.setText(string);
+                    });
                 }
             }
         });
