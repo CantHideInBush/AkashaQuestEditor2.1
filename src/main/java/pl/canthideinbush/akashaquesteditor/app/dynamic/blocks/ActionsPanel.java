@@ -70,7 +70,7 @@ public class ActionsPanel extends JPanel {
     }
 
     private void initializeComponents() {
-        Font font = getFont();//.deriveFont(15f);
+        Font font = getFont();
 
         events = new JButton("Zdarzenia", new ImageIcon(eventsIcon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
         events.setFont(font);

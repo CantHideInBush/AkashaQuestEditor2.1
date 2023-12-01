@@ -4,6 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ZoomedComponentEventProxy;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
 import pl.canthideinbush.akashaquesteditor.io.Load;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
@@ -52,7 +53,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         setLooks();
         addHoverEffects();
         addActions();
-
+        registerLinkingListener();
     }
 
     private void addActions() {
@@ -113,7 +114,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         , BorderFactory.createEmptyBorder()));
 
         constraints.gridy = 0;
-        constraints.gridx = 1;
+        constraints.gridx = 2;
         constraints.gridheight = 2;
         constraints.gridwidth = 1;
         constraints.weightx = 0.1;
@@ -179,13 +180,13 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         Font font = nameLabel.getFont();
         nameLabel.setText("<html><body style=\"font-family: " + font.getFamily() +
                 ";font-size: 15" +
-                "\"" + "<b>" + who() + ":</b> <b style=\"text-align: center; color: rgb(" + defaultBorderColor().getRed() + "," + defaultBorderColor().getGreen() + "," + defaultBorderColor().getBlue() + ");\">" + getName() + "</b></body></html>");
+                "\"" + "<b>(" + who() + ") </b> <b style=\"text-align: center; color: rgb(" + defaultBorderColor().getRed() + "," + defaultBorderColor().getGreen() + "," + defaultBorderColor().getBlue() + ");\">" + getName() + "</b></body></html>");
         StyledDocument styledDocument = nameLabel.getStyledDocument();
         styledDocument.setParagraphAttributes(0, styledDocument.getLength(), centerAttributeSet, false);
     }
 
     private void initialize() {
-        setSize(new Dimension(350, 175));
+        setSize(new Dimension(300, 150));
         setBorder(new LineBorder(defaultBorderColor(), 2));
         gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
@@ -242,6 +243,21 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     }
 
     public Set<UUID> linkedBlocks = new HashSet<>();
+
+    public void linkBlock(ConversationBlock conversationBlock) {
+        if (getAllowedOuts().contains(conversationBlock.getClass()) && conversationBlock.getAllowedIns().contains(this.getClass())) {
+            linkedBlocks.add(conversationBlock.uuid);
+            updateLinkedBlocksCache();
+        }
+    }
+
+    public void toggleLink(ConversationBlock conversationBlock) {
+        if (linkedBlocks.contains(conversationBlock.uuid)) {
+            linkedBlocks.remove(conversationBlock.uuid);
+            updateLinkedBlocksCache();
+        }
+        else linkBlock(conversationBlock);
+    }
 
 
     static ArrayList<Point> connectionPoints;
@@ -304,7 +320,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         yDiff = endY - y;
 
 
-        g2d.setColor(Color.DARK_GRAY);
+        g2d.setColor(Color.WHITE);
         if (firstPoint.equals(ConnectionPoints.LEFT) || firstPoint.equals(ConnectionPoints.RIGHT)) {
             g2d.drawLine(x, y, x + xDiff / 2, y);
             g2d.drawLine(endX, endY, endX - xDiff / 2, endY);
@@ -318,5 +334,31 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
 
         g2d.setColor(Color.GREEN);
         g2d.fillOval(endX - 3, endY - 3, 6, 6);
+    }
+
+
+
+    static ConversationBlock lastPressed;
+    public void registerLinkingListener() {
+        ConversationBlock inst = this;
+        MouseAdapter adapter = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                lastPressed = inst;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (lastPressed != null && !lastPressed.equals(inst)) {
+                    lastPressed.toggleLink(inst);
+                }
+            }
+        };
+
+        for (Component child : ZoomedComponentEventProxy.getAllChildren(this)) {
+            child.addMouseListener(adapter);
+            child.addMouseMotionListener(adapter);
+        }
+
     }
 }

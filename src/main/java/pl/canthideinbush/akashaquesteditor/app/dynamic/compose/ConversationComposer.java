@@ -13,7 +13,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ConversationComposer extends JLayeredPane implements Zoomable {
 
@@ -73,6 +75,10 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
                 g2d.fillRect(w, h, 3, 3);
             }
         }
+
+        for (ConversationBlock conversationBlock : getConversationBlocks()) {
+            conversationBlock.linkBlocks(g2d);
+        }
     }
 
     @Override
@@ -107,5 +113,9 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
 
     public ConversationBlock getConversationBlockByUUID(UUID uuid) {
         return (ConversationBlock) Arrays.stream(getComponents()).filter(component -> component instanceof ConversationBlock && ((ConversationBlock) component).uuid.equals(uuid)).findAny().orElse(null);
+    }
+
+    public Collection<ConversationBlock> getConversationBlocks() {
+        return Arrays.stream(getComponents()).filter(component -> component instanceof ConversationBlock).map(component -> ((ConversationBlock) component)).collect(Collectors.toList());
     }
 }

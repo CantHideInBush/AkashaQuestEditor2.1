@@ -113,7 +113,7 @@ public class ZoomedComponentEventProxy extends JPanel {
                     e.setSource(component);
                     if (dragged != null) {
                         CenterAbleComponent optional = getOptionalDragComponent(component);
-                        if (optional != null) {
+                        if (e.isShiftDown() && optional != null) {
                             Container container = optional.getContainer();
                             Component parent = container.getParent();
                             Point converted = new Point((int) ((e.getLocationOnScreen().x - parent.getLocationOnScreen().x) / getZoom()), (int) ((e.getLocationOnScreen().y - parent.getLocationOnScreen().y) / getZoom()));
@@ -192,7 +192,7 @@ public class ZoomedComponentEventProxy extends JPanel {
         registeredForDrag.put(component, getAllChildren(component.getContainer()));
     }
 
-    private ArrayList<Component> getAllChildren(Container component) {
+    public static ArrayList<Component> getAllChildren(Container component) {
         ArrayList<Component> list = new ArrayList<>();
         for (Component child : component.getComponents()) {
             if (child instanceof Container) list.addAll(getAllChildren((Container) child));

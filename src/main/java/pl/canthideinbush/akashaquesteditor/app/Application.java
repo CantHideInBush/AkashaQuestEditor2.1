@@ -20,15 +20,11 @@ public class Application extends JPanel {
     public JFrame frame;
 
     public static void main(String[] args) {
-        System.setProperty("sun.java2d.opengl", "true");
-        System.setProperty("awt.useSystemAAFontSettings","on");
-        System.setProperty("swing.aatext", "true");
         SwingUtilities.invokeLater(() -> {
             instance = new Application();
 
             JFrame frame = new JFrame("AkashaQuestEditor 2.1");
             instance.frame = frame;
-
 
             frame.setLayout(new FlowLayout(FlowLayout.CENTER));
             frame.setResizable(true);
@@ -42,6 +38,7 @@ public class Application extends JPanel {
             frame.add(instance);
             frame.pack();
             frame.setVisible(true);
+            frame.createBufferStrategy(2);
 
             frame.addComponentListener(new ComponentAdapter() {
                 @Override
@@ -60,6 +57,9 @@ public class Application extends JPanel {
     }
 
     public Application() {
+        System.setProperty("sun.java2d.opengl", "True");
+        System.setProperty("awt.useSystemAAFontSettings","on");
+        System.setProperty("swing.aatext", "true");
     }
 
     private void initializeComponents() {
