@@ -12,10 +12,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.function.Consumer;
 
 public class Popups {
@@ -66,14 +63,30 @@ public class Popups {
         JPanel confirmPanel = new JPanel();
         gbc.weightx = 0.2;
 
-        ResizableIcon confirmButton = new ResizableIcon(tickStatic, tick);
-        confirmButton.setBorder(new LineBorder(Color.GREEN, 3, true));
-        ResizeAnimationContainer confirmButtonContainer = createResizableComponent(confirmButton, new Dimension(42, 42), new Dimension(50, 50));
+        ResizableIcon confirmButton = new ResizableIcon(tickStatic.getImage(), tick);
+        ResizeAnimationContainer confirmButtonContainer = createResizableComponent(confirmButton, new Dimension(38, 38), new Dimension(46, 46));
+        confirmButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3, true));
 
         //TODO: add way to offset
-        ResizableIcon closeButton = new ResizableIcon(close, close);
-        closeButton.setBorder(new LineBorder(Color.RED, 2, true));
-        ResizeAnimationContainer closeButtonContainer = createResizableComponent(closeButton, new Dimension(42, 42), new Dimension(50, 50));
+        ResizableIcon closeButton = new ResizableIcon(close.getImage(), close);
+        ResizeAnimationContainer closeButtonContainer = createResizableComponent(closeButton, new Dimension(48, 48), new Dimension(54, 54));
+        pane.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyChar()) {
+                    case KeyEvent.VK_ESCAPE:
+                        dialog.dispose();
+                        break;
+                    case KeyEvent.VK_ENTER:
+                        if (e.isAltDown()) {
+                            consumer.accept(pane.getText());
+                            dialog.dispose();
+                        }
+                        break;
+                }
+            }
+        });
+
 
         confirmPanel.setLayout(new BorderLayout());
 

@@ -8,14 +8,13 @@ import java.awt.geom.AffineTransform;
 
 public class ResizableIcon extends JPanel implements Animate {
 
-    public ResizableIcon(ImageIcon iStatic, ImageIcon iAnimated) {
-        this.iconStatic = iStatic;
+    public ResizableIcon(Image iStatic, ImageIcon iAnimated) {
+        this.imageStatic = iStatic;
         this.iconAnimated = iAnimated;
         setOpaque(true);
-        setBackground(Color.WHITE);
     }
 
-    private final ImageIcon iconStatic;
+    private final Image imageStatic;
     private final ImageIcon iconAnimated;
     public boolean animated = false;
 
@@ -31,16 +30,15 @@ public class ResizableIcon extends JPanel implements Animate {
 
 
         AffineTransform stretch = new AffineTransform();
-        stretch.scale((double) getWidth() / iconStatic.getIconWidth(), (double) getHeight() / iconStatic.getIconHeight());
+        stretch.scale((double) getWidth() / iconAnimated.getIconWidth(), (double) getHeight() / iconAnimated.getIconHeight());
         g2d.setTransform(stretch);
 
 
-
         if (firstTick) {
-            g2d.drawImage(iconAnimated.getImage(), 0, 0, this);
+            g2d.drawImage(Popups.tick.getImage(), 0, 0, this);
             firstTick = false;
         }
-        else g2d.drawImage(animated ? iconAnimated.getImage() : iconStatic.getImage(), 0, 0, this);
+        else g2d.drawImage(animated ? iconAnimated.getImage() : imageStatic, 0, 0, this);
 
         g2d.dispose();
     }

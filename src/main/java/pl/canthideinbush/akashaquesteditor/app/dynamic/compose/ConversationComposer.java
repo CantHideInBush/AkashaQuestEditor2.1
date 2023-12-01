@@ -1,8 +1,8 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 import pl.canthideinbush.akashaquesteditor.app.components.Zoomable;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.NPCBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.PlayerBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
@@ -22,6 +22,7 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
     public ConversationComposer() {
         initialize();
     }
+
 
     private void initialize() {
         setLayout(null);
@@ -54,16 +55,15 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
         Graphics2D g2d = ((Graphics2D) g);
-
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+        super.paintComponent(g);
 
         AffineTransform affineTransform = g2d.getTransform();
         affineTransform.scale(zoom, zoom);
         g2d.setTransform(affineTransform);
-
 
         g2d.setColor(getBackground());
         g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -76,10 +76,21 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
     }
 
     @Override
+    protected void paintChildren(Graphics g) {
+        Graphics2D g2d = ((Graphics2D) g);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+        super.paintChildren(g);
+    }
+
+    @Override
     public void paintComponents(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 
         super.paintComponents(g);
     }

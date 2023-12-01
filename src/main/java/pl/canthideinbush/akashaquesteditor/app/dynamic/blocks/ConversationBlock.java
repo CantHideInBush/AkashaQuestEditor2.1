@@ -9,6 +9,8 @@ import pl.canthideinbush.akashaquesteditor.io.Load;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -35,7 +37,9 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         initialize();
         initializeComponents();
         uuid = UUID.randomUUID();
+        setDoubleBuffered(true);
     }
+
 
     GridBagLayout gridBagLayout;
     GridBagConstraints constraints;
@@ -124,6 +128,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         text.setBorder(BorderFactory.createEmptyBorder());
         text.setBackground(Color.WHITE);
         text.setOpaque(true);
+        text.setBorder(new CompoundBorder(new LineBorder(Color.LIGHT_GRAY, 3, true), new EmptyBorder(5, 7, 5,7)));
 
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridy = 1;
