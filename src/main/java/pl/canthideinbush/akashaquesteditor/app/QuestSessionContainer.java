@@ -7,25 +7,25 @@ import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 import javax.swing.*;
 import java.awt.*;
 
+
 public class QuestSessionContainer extends JTabbedPane {
 
-    private final QuestSession session;
+    public final QuestSession session;
     public DragZoomPanel conversationComposerPanel;
 
     public QuestSessionContainer(QuestSession session) {
         this.session = session;
+        conversationComposer = new ConversationComposer(session);
         initialize();
         initializeComponents();
     }
 
-    public ConversationComposer conversationComposer = new ConversationComposer();
+    public ConversationComposer conversationComposer;
 
     private void initialize() {
         setPreferredSize(Application.instance.getPreferredSize());
         setForeground(Color.BLACK);
         setOpaque(true);
-
-
     }
 
 

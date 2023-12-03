@@ -1,5 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
+import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.Serialization;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
@@ -13,6 +14,7 @@ import java.util.Locale;
 
 public class Application extends JPanel {
 
+
     public static Application instance;
     public QuestSessionContainer sessionContainer;
     public WelcomePanel welcomePanel;
@@ -20,6 +22,8 @@ public class Application extends JPanel {
     public JFrame frame;
 
     public static void main(String[] args) {
+        ISerialization.scan();
+        ISerialization.registerSerialization(new Serialization());
         SwingUtilities.invokeLater(() -> {
             instance = new Application();
 
@@ -90,12 +94,12 @@ public class Application extends JPanel {
         frame.setIconImage(icon);
     }
 
-    public void createNewSession() {
+    public void createNewSession(QuestSession session) {
         clean();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        sessionContainer = new QuestSessionContainer(new QuestSession());
+        sessionContainer = new QuestSessionContainer(session);
         sessionContainer.setVisible(true);
         add(sessionContainer);
 
@@ -109,9 +113,14 @@ public class Application extends JPanel {
         repaint();
     }
 
+
+    /**
+     * Clears workspace, preparing it for new QuestSession
+     */
     public void clean() {
         if (sessionContainer != null) {
             remove(sessionContainer);
+            ISerialization.terminate(sessionContainer.session);
         }
         if (welcomePanel != null) {
             remove(welcomePanel);

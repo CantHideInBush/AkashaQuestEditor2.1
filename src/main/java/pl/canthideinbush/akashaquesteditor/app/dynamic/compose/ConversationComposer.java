@@ -6,6 +6,7 @@ import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.NPCBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.PlayerBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
+import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,9 +20,13 @@ import java.util.stream.Collectors;
 
 public class ConversationComposer extends JLayeredPane implements Zoomable {
 
+    private final QuestSession session;
+
+
     private double zoom = 1.0;
 
-    public ConversationComposer() {
+    public ConversationComposer(QuestSession session) {
+        this.session = session;
         initialize();
     }
 

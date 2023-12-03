@@ -6,16 +6,14 @@ import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ZoomedComponentEventProxy;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
-import pl.canthideinbush.akashaquesteditor.io.Load;
+import pl.canthideinbush.akashaquesteditor.io.SF;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -26,7 +24,7 @@ import java.util.UUID;
 
 public abstract class ConversationBlock extends WorkspaceBlock<ConversationOption> implements CenterAbleComponent {
 
-    @Load
+    @SF
     public UUID uuid;
     protected JTextPane nameLabel;
     protected JTextPane text;
@@ -75,7 +73,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     Popups.createLongTextPopup("Edytor wypowiedzi", text.getText(), (string) -> {
-                        text.setText(string);
+                        setText(string);
                     });
                 }
             }
@@ -176,6 +174,14 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         StyleConstants.setAlignment(centerAttributeSet, StyleConstants.ALIGN_CENTER);
     }
 
+    public void setText(String text) {
+        this.text.setText(text);
+        //StyledDocument styledDocument = this.text.getStyledDocument();
+        //StyleContext styleContext = StyleContext.getDefaultStyleContext();
+        //AttributeSet attributeSet = styleContext.addAttribute(styleContext.getEmptySet(), StyleConstants.Foreground, Color.RED);
+        //styledDocument.setCharacterAttributes(0, text.length(), attributeSet, true);
+    }
+
     public void updateNameLabel() {
         Font font = nameLabel.getFont();
         nameLabel.setText("<html><body style=\"font-family: " + font.getFamily() +
@@ -208,15 +214,6 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         return conversationOption;
     }
 
-    @Override
-    public void load(ConfigurationSection section) {
-
-    }
-
-    @Override
-    public void save(ConfigurationSection section) {
-
-    }
 
     public Container getContainer() {
         return this;

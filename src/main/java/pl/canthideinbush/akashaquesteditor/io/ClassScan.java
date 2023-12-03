@@ -10,8 +10,7 @@ public class ClassScan {
 
 
     private final ArrayList<Class<?>> foundClasses = new ArrayList<>();
-    public ClassScan(String pkg) {
-        getClasses(pkg);
+    public ClassScan() {
     }
 
     public void getClasses(String pkg) {
@@ -37,8 +36,15 @@ public class ClassScan {
         }
     }
 
+    public ArrayList<Class<?>> getFoundClasses() {
+        return foundClasses;
+    }
+
     public List<Class<?>> getClassesAnnotatedBy(Class<? extends Annotation> c) {
         return foundClasses.stream().parallel().filter(clazz -> clazz.isAnnotationPresent(c)).collect(Collectors.toList());
+    }
+    public List<Class<?>> getAssignableFrom(Class<?> c) {
+        return foundClasses.stream().parallel().filter(c::isAssignableFrom).collect(Collectors.toList());
     }
 
 
