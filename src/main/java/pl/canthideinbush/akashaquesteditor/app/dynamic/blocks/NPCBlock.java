@@ -1,12 +1,20 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.blocks;
 
+import org.jetbrains.annotations.NotNull;
+import pl.canthideinbush.akashaquesteditor.io.AnnotationSerialized;
+
 import java.awt.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
-public class NPCBlock extends ConversationBlock {
+public class NPCBlock extends ConversationBlock implements AnnotationSerialized {
     public NPCBlock(String name) {
         super(name);
+    }
+
+    public NPCBlock(Map<String, Object> map) {
+        super(map);
     }
 
     @Override
@@ -17,6 +25,11 @@ public class NPCBlock extends ConversationBlock {
     @Override
     Collection<Class<? extends WorkspaceBlock<?>>> getAllowedOuts() {
         return Collections.singleton(PlayerBlock.class);
+    }
+
+    @Override
+    public @NotNull Map<String, Object> serialize() {
+        return AnnotationSerialized.super.serialize();
     }
 
     @Override

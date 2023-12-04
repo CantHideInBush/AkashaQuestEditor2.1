@@ -21,7 +21,10 @@ public interface ISerialization {
     static void scan() {
         scan.getClasses("pl.canthideinbush.akashaquesteditor");
         scan.getAssignableFrom(ConfigurationSerializable.class).forEach(c -> {
-            ConfigurationSerialization.registerClass((Class<? extends ConfigurationSerializable>) c);
+            if (!c.isInterface()) {
+                ConfigurationSerialization.registerClass((Class<? extends ConfigurationSerializable>) c);
+                System.out.println("Registered serializable class: " + c.getName());
+            }
         });
     }
 

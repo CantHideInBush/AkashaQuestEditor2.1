@@ -66,8 +66,7 @@ public class Popups {
         ResizableIcon confirmButton = new ResizableIcon(tickStatic.getImage(), tick);
         ResizeAnimationContainer confirmButtonContainer = createResizableComponent(confirmButton, new Dimension(38, 38), new Dimension(46, 46));
         confirmButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3, true));
-
-        //TODO: add way to offset
+        
         ResizableIcon closeButton = new ResizableIcon(close.getImage(), close);
         ResizeAnimationContainer closeButtonContainer = createResizableComponent(closeButton, new Dimension(48, 48), new Dimension(54, 54));
         pane.addKeyListener(new KeyAdapter() {

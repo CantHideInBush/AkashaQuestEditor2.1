@@ -1,6 +1,7 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.blocks;
 
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
@@ -13,18 +14,17 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.text.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-public abstract class ConversationBlock extends WorkspaceBlock<ConversationOption> implements CenterAbleComponent {
 
-    @SF
+public abstract class ConversationBlock extends WorkspaceBlock<ConversationOption> implements CenterAbleComponent, ConfigurationSerializable {
+
     public UUID uuid;
     protected JTextPane nameLabel;
     protected JTextPane text;
@@ -36,7 +36,12 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         initialize();
         initializeComponents();
         uuid = UUID.randomUUID();
-        setDoubleBuffered(true);
+    }
+
+    public ConversationBlock(Map<String, Object> data) {
+        deserializeFromMap(data);
+        initialize();
+        initializeComponents();
     }
 
 
@@ -356,6 +361,25 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             child.addMouseListener(adapter);
             child.addMouseMotionListener(adapter);
         }
-
     }
+
+    @Override
+    public @NotNull Map<String, Object> serialize() {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("uuid", uuid.toString());
+        data.put("name", getName());
+        data.put("x", getX());
+        data.put("y", getY());
+        data.put("text", text.getText());
+        return data;
+    }
+
+    public void deserializeFromMap(@NotNull Map<String, Object> map) {
+        uuid = UUID.fromString((String) map.get("uuid"));
+        setLocation((int) map.getOrDefault("x", 0), (int) map.getOrDefault("y", 0));
+        setName((String) map.getOrDefault("name", ""));
+        setText((String) map.getOrDefault("text", ""));
+    }
+
+
 }

@@ -1,12 +1,19 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.blocks;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 public class PlayerBlock extends ConversationBlock {
     public PlayerBlock(String name) {
         super(name);
+    }
+
+    public PlayerBlock(Map<String, Object> data) {
+        super(data);
     }
 
     @Override
