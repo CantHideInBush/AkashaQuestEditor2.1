@@ -56,12 +56,13 @@ public class DragZoomPanel extends JScrollPane {
                 double rotation = e.getWheelRotation();
                 double currentZoom = ((Zoomable) component).getZoom();
                 if (rotation < 0) {
-                    currentZoom += 0.1;
+                    currentZoom += 0.25;
                 }
-                else currentZoom -= 0.1;
+                else currentZoom -= 0.25;
                 currentZoom = Math.max(0.5, currentZoom);
-                currentZoom = Math.min(3, currentZoom);
+                currentZoom = Math.min(1, currentZoom);
                 ((Zoomable) component).setZoom(currentZoom);
+                //TODO: Add view scaling
                 component.repaint();
             }
 
