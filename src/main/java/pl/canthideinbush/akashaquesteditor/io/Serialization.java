@@ -28,17 +28,21 @@ public class Serialization implements ISerialization {
 
     @Override
     public void serialize(YamlConfiguration configuration) {
-        for (Map.Entry<Class<? extends SelfAttach>, HashSet<SelfAttach>> hashSetEntry : registeredClasses.entrySet()) {
-            HashSet<SelfAttach> objects = hashSetEntry.getValue();
-            configuration.set("SelfAttach", objects);
+        ArrayList<SelfAttach> toSave = new ArrayList<>();
+        for (Map.Entry<Class<? extends SelfAttach>, ArrayList<SelfAttach>> entry : registeredClasses.entrySet()) {
+            toSave.addAll(entry.getValue());
         }
+        configuration.set("SelfAttach", toSave);
 
     }
 
     @Override
     public void deserialize(YamlConfiguration configuration) {
         List<SelfAttach> loaded = (List<SelfAttach>) configuration.getList("SelfAttach", new ArrayList<>());
-        resolveDependencies(loaded);
+        System.out.println(configuration.get("SelfAttach"));
+        for (SelfAttach selfAttach : resolveDependencies(loaded)) {
+            selfAttach.attach();
+        }
     }
 
     public ArrayList<SelfAttach> resolveDependencies(List<SelfAttach> attaches) {
@@ -54,7 +58,6 @@ public class Serialization implements ISerialization {
                 }
             }
         }
-
         return resolved;
     }
 

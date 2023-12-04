@@ -3,6 +3,7 @@ package pl.canthideinbush.akashaquesteditor.quest.session;
 import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
+import pl.canthideinbush.akashaquesteditor.io.SF;
 import pl.canthideinbush.akashaquesteditor.io.SelfAttach;
 import pl.canthideinbush.akashaquesteditor.quest.objects.Conversation;
 import pl.canthideinbush.akashaquesteditor.quest.objects.Instruction;
@@ -16,7 +17,9 @@ import java.util.Map;
 public class QuestSession implements SelfAttach {
 
     public ArrayList<EditorConversation> conversations = new ArrayList<>();
-    public String activeConversation;
+
+    @SF
+    public EditorConversation activeConversation;
 
     public QuestSession() {
         ISerialization.register(this);
@@ -30,6 +33,7 @@ public class QuestSession implements SelfAttach {
 
     public void attach() {
         Application.instance.createNewSession(this);
+        System.out.println("Attached");
     }
 
     public PackageFile generatePackage() {

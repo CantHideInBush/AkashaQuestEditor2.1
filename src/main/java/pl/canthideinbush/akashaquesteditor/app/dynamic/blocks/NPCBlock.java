@@ -17,6 +17,7 @@ public class NPCBlock extends ConversationBlock implements AnnotationSerialized 
         super(map);
     }
 
+
     @Override
     Collection<Class<? extends WorkspaceBlock<?>>> getAllowedIns() {
         return Collections.singleton(PlayerBlock.class);
@@ -26,11 +27,7 @@ public class NPCBlock extends ConversationBlock implements AnnotationSerialized 
     Collection<Class<? extends WorkspaceBlock<?>>> getAllowedOuts() {
         return Collections.singleton(PlayerBlock.class);
     }
-
-    @Override
-    public @NotNull Map<String, Object> serialize() {
-        return AnnotationSerialized.super.serialize();
-    }
+    
 
     @Override
     protected void setLooks() {

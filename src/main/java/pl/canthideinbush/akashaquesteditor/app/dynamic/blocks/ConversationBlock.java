@@ -21,13 +21,16 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
+//TODO: Fix drag event highlight bug
 public abstract class ConversationBlock extends WorkspaceBlock<ConversationOption> implements CenterAbleComponent, ConfigurationSerializable {
 
     public UUID uuid;
     protected JTextPane nameLabel;
-    protected JTextPane text;
+    protected JTextPane text = new JTextPane();
     protected ActionsPanel actionsPanel;
     private SimpleAttributeSet centerAttributeSet;
 
@@ -38,17 +41,17 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         uuid = UUID.randomUUID();
     }
 
+
+    //Initialization managed by EditorConversation on attach
     public ConversationBlock(Map<String, Object> data) {
         deserializeFromMap(data);
-        initialize();
-        initializeComponents();
     }
 
 
     GridBagLayout gridBagLayout;
     GridBagConstraints constraints;
 
-    private void initializeComponents() {
+    public void initializeComponents() {
         addNamePanel();
         addTextPanel();
         addActionsPanel();
@@ -57,6 +60,8 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         addHoverEffects();
         addActions();
         registerLinkingListener();
+
+        Application.instance.sessionContainer.conversationComposerPanel.zoomedComponentEventProxy.registerDrag(this);
     }
 
     private void addActions() {
@@ -128,7 +133,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
 
     private void addTextPanel() {
 
-        text = new JTextPane();
+
         text.setBorder(BorderFactory.createEmptyBorder());
         text.setBackground(Color.WHITE);
         text.setOpaque(true);
@@ -196,7 +201,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         styledDocument.setParagraphAttributes(0, styledDocument.getLength(), centerAttributeSet, false);
     }
 
-    private void initialize() {
+    public void initialize() {
         setSize(new Dimension(300, 150));
         setBorder(new LineBorder(defaultBorderColor(), 2));
         gridBagLayout = new GridBagLayout();
@@ -239,9 +244,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
 
     public void updateLinkedBlocksCache() {
         linkedBlocksCache.clear();
-        linkedBlocks.forEach(uuid -> {
-            linkedBlocksCache.add(Application.instance.sessionContainer.conversationComposer.getConversationBlockByUUID(uuid));
-        });
+        linkedBlocks.forEach(uuid -> linkedBlocksCache.add(Application.instance.sessionContainer.conversationComposer.getConversationBlockByUUID(uuid)));
     }
 
     public Set<UUID> linkedBlocks = new HashSet<>();
@@ -371,14 +374,17 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         data.put("x", getX());
         data.put("y", getY());
         data.put("text", text.getText());
+        data.put("linked", linkedBlocks.stream().map(UUID::toString).collect(Collectors.toList()));
         return data;
     }
 
-    public void deserializeFromMap(@NotNull Map<String, Object> map) {
-        uuid = UUID.fromString((String) map.get("uuid"));
-        setLocation((int) map.getOrDefault("x", 0), (int) map.getOrDefault("y", 0));
-        setName((String) map.getOrDefault("name", ""));
-        setText((String) map.getOrDefault("text", ""));
+    @SuppressWarnings("unchecked")
+    public void deserializeFromMap(@NotNull Map<String, Object> data) {
+        uuid = UUID.fromString((String) data.get("uuid"));
+        setLocation((int) data.getOrDefault("x", 0), (int) data.getOrDefault("y", 0));
+        setName((String) data.getOrDefault("name", ""));
+        setText((String) data.getOrDefault("text", ""));
+        if (data.containsKey("linked")) linkedBlocks.addAll(((List<String>) data.get("linked")).stream().map(UUID::fromString).toList());
     }
 
 

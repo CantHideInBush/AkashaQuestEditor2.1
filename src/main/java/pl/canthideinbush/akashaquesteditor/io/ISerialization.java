@@ -4,9 +4,12 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import pl.canthideinbush.akashaquesteditor.app.Application;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -38,6 +41,8 @@ public interface ISerialization {
             yamlConfiguration.save(file);
         } catch (
                 IOException e) {
+            JOptionPane.showMessageDialog(Application.instance, "Podczas zapisywania pliku wystąpił błąd", "Błąd zapisu", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Podczas zapisywania pliku wystąpił błąd");
             throw new RuntimeException(e);
         }
     }
@@ -49,6 +54,8 @@ public interface ISerialization {
         } catch (
                 IOException |
                 InvalidConfigurationException e) {
+            JOptionPane.showMessageDialog(Application.instance, "Podczas wczytywania pliku wystąpił błąd", "Błąd odczytu", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Podczas wczytywania pliku wystąpił błąd");
             throw new RuntimeException(e);
         }
         int version = yamlConfiguration.getInt("version", -1);
@@ -75,18 +82,18 @@ public interface ISerialization {
         return serializations.getOrDefault(serializations.keySet().stream().max(Integer::compareTo).orElse(null), null);
     }
 
-    HashMap<Class<? extends SelfAttach>, HashSet<SelfAttach>> registeredClasses = new HashMap<>();
+    HashMap<Class<? extends SelfAttach>, ArrayList<SelfAttach>> registeredClasses = new HashMap<>();
 
     static <T extends SelfAttach> void register(T object) {
         if (!registeredClasses.containsKey(object.getClass())) {
-            registeredClasses.put(object.getClass(), new HashSet<>());
+            registeredClasses.put(object.getClass(), new ArrayList<>());
         }
         registeredClasses.get(object.getClass()).add(object);
     }
 
     static void terminate(SelfAttach object) {
         if (!registeredClasses.containsKey(object.getClass())) return;
-        HashSet<SelfAttach> registered = registeredClasses.get(object.getClass());
+        ArrayList<SelfAttach> registered = registeredClasses.get(object.getClass());
         registered.remove(object);
         if (registered.isEmpty()) {
             registeredClasses.remove(object.getClass());

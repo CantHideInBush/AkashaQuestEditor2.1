@@ -145,7 +145,7 @@ public class Popups {
         return confirmButtonContainer;
     }
 
-    private static JDialog templateDialog(String title) {
+    public static JDialog templateDialog(String title) {
         JDialog dialog = new JDialog(Application.instance.frame, title, true);
         dialog.setPreferredSize(cachedSize);
         dialog.setIconImage(Application.icon);

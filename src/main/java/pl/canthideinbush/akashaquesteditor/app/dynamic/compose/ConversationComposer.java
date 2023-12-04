@@ -49,7 +49,7 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
                     ConversationBlock conversationBlock = e.getButton() == MouseEvent.BUTTON1 ? new NPCBlock(name) : new PlayerBlock(name);
                     conversationBlock.centerIn(convert(e.getPoint()));
                     add(conversationBlock);
-                    Application.instance.sessionContainer.conversationComposerPanel.zoomedComponentEventProxy.registerDrag(conversationBlock);
+                    Application.instance.sessionContainer.session.activeConversation.conversationBlocks.add(conversationBlock);
                     repaint();
                 }
             }
@@ -123,4 +123,5 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
     public Collection<ConversationBlock> getConversationBlocks() {
         return Arrays.stream(getComponents()).filter(component -> component instanceof ConversationBlock).map(component -> ((ConversationBlock) component)).collect(Collectors.toList());
     }
+
 }
