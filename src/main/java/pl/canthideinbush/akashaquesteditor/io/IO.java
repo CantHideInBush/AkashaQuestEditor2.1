@@ -45,7 +45,7 @@ public class IO {
             File file = fileChooser.getSelectedFile();
             if (!file.exists()) {
                 System.out.println("Wskazany plik nie istnieje");
-                Application.instance.createNewSession(new QuestSession());
+                JOptionPane.showMessageDialog(Application.instance, "Wskazany plik nie istnieje", "Błąd odczytu", JOptionPane.ERROR_MESSAGE);
             }
             else ISerialization.deserialize(file);
         }

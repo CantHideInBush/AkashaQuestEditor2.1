@@ -20,6 +20,8 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -220,6 +222,10 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     public ConversationOption create() {
         ConversationOption conversationOption = new ConversationOption(getName());
         conversationOption.setTextRaw(text.getText());
+        for (ConversationBlock conversationBlock : linkedBlocksCache) {
+            conversationOption.addPointer(conversationBlock.getName());
+        }
+
 
         return conversationOption;
     }
@@ -387,5 +393,39 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         if (data.containsKey("linked")) linkedBlocks.addAll(((List<String>) data.get("linked")).stream().map(UUID::fromString).toList());
     }
 
+    @Override
+    public void paint(Graphics g) {
+        if (Application.instance.sessionContainer.conversationComposer.getZoom() > 0.5) {
+            super.paint(g);
+        }
+        else {
+            Graphics2D g2d = ((Graphics2D) g);
+            g2d.setColor(defaultBorderColor());
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(7, 7, getWidth() - 7 * 2 - 1, getHeight() - 7 * 2 - 1);
+            g2d.setColor(defaultBorderColor());
+            g2d.setFont(getFont().deriveFont(Font.BOLD, 50f));
+            Rectangle stringBounds = getStringBounds(g2d, getName(), (float) getWidth() / 2, (float) getHeight() / 2);
+            g2d.drawString(getName(), getWidth() / 2 - stringBounds.width, getHeight() / 2 + stringBounds.height / 2);
+        }
+    }
 
+    //https://stackoverflow.com/questions/368295/how-to-get-real-string-height-in-java
+    private Rectangle getStringBounds(Graphics2D g2, String str,
+                                      float x, float y)
+    {
+        FontRenderContext frc = g2.getFontRenderContext();
+        GlyphVector gv = g2.getFont().createGlyphVector(frc, str);
+        return gv.getPixelBounds(null, x, y);
+    }
+
+
+    /**
+     * @implNote DragZoomPanel is not compatible with this method for reasons unknown
+     */
+    @Override
+    public void scrollRectToVisible(Rectangle aRect) {
+
+    }
 }

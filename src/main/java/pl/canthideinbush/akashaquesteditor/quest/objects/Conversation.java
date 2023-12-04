@@ -4,7 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 
-public class Conversation {
+public class Conversation implements QuestObject {
 
     public Conversation(ConfigurationSection section) {
         this.name = section.getName();

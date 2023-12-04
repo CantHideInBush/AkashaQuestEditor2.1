@@ -113,7 +113,10 @@ public class ZoomedComponentEventProxy extends JPanel {
                     e.setSource(component);
                     if (dragged != null) {
                         CenterAbleComponent optional = getOptionalDragComponent(component);
-                        if (e.isShiftDown() && optional != null) {
+                        int precision = 0;
+                        if (e.isShiftDown()) precision += 5;
+                        if (e.isAltDown()) precision += 10;
+                        if (precision != 0 && optional != null) {
                             Container container = optional.getContainer();
                             Component parent = container.getParent();
                             Point converted = new Point((int) ((e.getLocationOnScreen().x - parent.getLocationOnScreen().x) / getZoom()), (int) ((e.getLocationOnScreen().y - parent.getLocationOnScreen().y) / getZoom()));
@@ -124,6 +127,9 @@ public class ZoomedComponentEventProxy extends JPanel {
 
                             converted.x = converted.x + dragMouseOffset.x;
                             converted.y = converted.y + dragMouseOffset.y;
+
+                            converted.x = converted.x - converted.x % precision;
+                            converted.y = converted.y - converted.y % precision;
 
                             container.setLocation(converted);
                             parent.repaint();
