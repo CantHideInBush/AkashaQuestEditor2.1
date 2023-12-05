@@ -1,5 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
+import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ComposerInfoBar;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.DragZoomPanel;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
@@ -40,6 +41,30 @@ public class QuestSessionContainer extends JTabbedPane {
 
         conversationComposerPanel.configureComponent();
         conversationComposerPanel.setPreferredSize(getPreferredSize());
-        addTab("Konwersacja", conversationComposerPanel);
+
+        JPanel conversationComposerHolder = new JPanel();
+        conversationComposerHolder.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1;
+        constraints.weighty = 0.95;
+
+        conversationComposerHolder.add(conversationComposerPanel, constraints);
+
+        createInfoBar(constraints, conversationComposerHolder);
+
+
+        addTab("Konwersacja", conversationComposerHolder);
+    }
+
+    private void createInfoBar(GridBagConstraints constraints, JPanel conversationComposerHolder) {
+        constraints.gridy = 1;
+        constraints.weighty = 0;
+        ComposerInfoBar composerInfoBar = new ComposerInfoBar(this);
+        composerInfoBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        composerInfoBar.setBackground(conversationComposer.getBackground());
+        composerInfoBar.setPreferredSize(new Dimension(9999, 5));
+        composerInfoBar.setMaximumSize(composerInfoBar.getPreferredSize());
+        conversationComposerHolder.add(composerInfoBar, constraints);
     }
 }
