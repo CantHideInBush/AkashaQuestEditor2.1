@@ -1,5 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
 
+import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.Zoomable;
 
 import javax.swing.*;
@@ -13,6 +14,8 @@ public class DragZoomPanel extends JScrollPane {
 
     private final JLayeredPane component;
     public ZoomedComponentEventProxy zoomedComponentEventProxy;
+    private double viewY;
+    private double viewX;
 
     public DragZoomPanel(JLayeredPane component) {
         super(component);
@@ -22,6 +25,7 @@ public class DragZoomPanel extends JScrollPane {
         this.component = component;
         initialize();
     }
+
 
     public void configureComponent() {
 
@@ -55,6 +59,8 @@ public class DragZoomPanel extends JScrollPane {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 double rotation = e.getWheelRotation();
                 double currentZoom = ((Zoomable) component).getZoom();
+                double oldZoom = currentZoom;
+                Rectangle oldViewSize = getZoomedViewSize();
                 if (rotation < 0) {
                     currentZoom += 0.25;
                 }
@@ -62,6 +68,14 @@ public class DragZoomPanel extends JScrollPane {
                 currentZoom = Math.max(0.5, currentZoom);
                 currentZoom = Math.min(1, currentZoom);
                 ((Zoomable) component).setZoom(currentZoom);
+
+                Rectangle currentViewSize = getZoomedViewSize();
+
+
+
+                fixInBounds();
+                getViewport().setViewPosition(new Point((int) viewX, (int) viewY));
+                Application.instance.sessionContainer.composerInfoBar.updateXYDisplay();
                 //TODO: Add view scaling
                 component.repaint();
             }
@@ -71,15 +85,13 @@ public class DragZoomPanel extends JScrollPane {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (screenOrigin != null) {
-                    int x = e.getLocationOnScreen().x - screenOrigin.x;
-                    int y = e.getLocationOnScreen().y - screenOrigin.y;
+                    double x = e.getLocationOnScreen().getX() - screenOrigin.getX();
+                    double y = e.getLocationOnScreen().getY() - screenOrigin.getY();
 
-                    Point view = getViewport().getViewPosition();
-                    getViewport().setViewPosition(fixViewInBounds(new Point(
-                            view.x - x,
-                            view.y - y
-                            )
-                    ));
+                    viewX = viewX - x;
+                    viewY = viewY - y;
+                    fixInBounds();
+                    getViewport().setViewPosition(new Point((int) viewX, (int) viewY));
 
                     screenOrigin = e.getLocationOnScreen();
                 }
@@ -98,22 +110,47 @@ public class DragZoomPanel extends JScrollPane {
         zoomedComponentEventProxy = new ZoomedComponentEventProxy(component);
     }
 
-    public Point fixViewInBounds(Point point) {
-        if (point.x < 0) {
-            point.x = 0;
+    private Rectangle getZoomedViewSize() {
+        Rectangle rect = new Rectangle();
+
+        System.out.println(getComponentZoom());
+        rect.width = (int) (getWidth() / getComponentZoom());
+        rect.height = (int) (getHeight() / getComponentZoom());
+
+        return rect;
+    }
+
+    public double fixInBoundsX(double x) {
+        if (x < 0) {
+            x = 0;
         }
-        if (point.y < 0) {
-            point.y = 0;
-        }
-        if (point.x > component.getWidth() - getWidth()) {
-            point.x = component.getWidth() - getWidth();
-        }
-        if (point.y > component.getHeight() - getHeight()) {
-            point.y = component.getHeight() - getHeight();
+        if (x > component.getWidth() - getWidth()) {
+            x = component.getWidth() - getWidth();
         }
 
-        return point;
+        return x;
     }
+
+    public double fixInBoundsY(double y) {
+        if (y < 0) {
+            y = 0;
+        }
+        if (y > component.getHeight() - getHeight()) {
+            y = component.getHeight() - getHeight();
+        }
+
+        return y;
+    }
+
+    public void fixInBounds() {
+        viewX = fixInBoundsX(viewX);
+        viewY = fixInBoundsY(viewY);
+    }
+
+    public double getComponentZoom() {
+        return ((Zoomable) component).getZoom();
+    }
+
 
 
     private void initialize() {

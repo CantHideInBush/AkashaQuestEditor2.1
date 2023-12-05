@@ -13,6 +13,7 @@ public class QuestSessionContainer extends JTabbedPane {
 
     public final QuestSession session;
     public DragZoomPanel conversationComposerPanel;
+    public ComposerInfoBar composerInfoBar;
 
     public QuestSessionContainer(QuestSession session) {
         this.session = session;
@@ -60,7 +61,7 @@ public class QuestSessionContainer extends JTabbedPane {
     private void createInfoBar(GridBagConstraints constraints, JPanel conversationComposerHolder) {
         constraints.gridy = 1;
         constraints.weighty = 0;
-        ComposerInfoBar composerInfoBar = new ComposerInfoBar(this);
+        composerInfoBar = new ComposerInfoBar(this);
         composerInfoBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         composerInfoBar.setBackground(conversationComposer.getBackground());
         composerInfoBar.setPreferredSize(new Dimension(9999, 5));

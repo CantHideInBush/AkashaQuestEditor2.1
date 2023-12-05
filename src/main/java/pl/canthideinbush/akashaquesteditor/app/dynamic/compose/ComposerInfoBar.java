@@ -99,7 +99,7 @@ public class ComposerInfoBar extends JPanel {
         return  label;
     }
 
-    private void updateXYDisplay() {
+    public void updateXYDisplay() {
         Point viewPosition = container.conversationComposerPanel.getViewport().getViewPosition();
         xTracker.setText(""+viewPosition.x);
         yTracker.setText(""+viewPosition.y);
