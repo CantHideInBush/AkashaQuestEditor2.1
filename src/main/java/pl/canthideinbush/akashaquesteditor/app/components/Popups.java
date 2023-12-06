@@ -121,7 +121,7 @@ public class Popups {
     }
 
     @NotNull
-    private static ResizeAnimationContainer createResizableComponent(ResizableIcon component, Dimension start, Dimension resize) {
+    public static ResizeAnimationContainer createResizableComponent(ResizableIcon component, Dimension start, Dimension resize) {
         component.setSize(start );
         ResizeAnimationContainer confirmButtonContainer = new ResizeAnimationContainer(component);
 
