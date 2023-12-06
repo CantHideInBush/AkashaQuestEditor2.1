@@ -6,8 +6,7 @@ import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ZoomedComponentEventProxy;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
-import pl.canthideinbush.akashaquesteditor.io.SF;
+import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
 
 import javax.swing.*;

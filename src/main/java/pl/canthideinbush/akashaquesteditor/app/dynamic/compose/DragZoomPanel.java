@@ -59,8 +59,6 @@ public class DragZoomPanel extends JScrollPane {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 double rotation = e.getWheelRotation();
                 double currentZoom = ((Zoomable) component).getZoom();
-                double oldZoom = currentZoom;
-                Rectangle oldViewSize = getZoomedViewSize();
                 if (rotation < 0) {
                     currentZoom += 0.25;
                 }
@@ -69,15 +67,10 @@ public class DragZoomPanel extends JScrollPane {
                 currentZoom = Math.min(1, currentZoom);
                 ((Zoomable) component).setZoom(currentZoom);
 
-                Rectangle currentViewSize = getZoomedViewSize();
-
-
 
                 fixInBounds();
-                getViewport().setViewPosition(new Point((int) viewX, (int) viewY));
+                getViewport().setViewPosition(new Point((int) (viewX * currentZoom), (int) (viewY * currentZoom)));
                 Application.instance.sessionContainer.composerInfoBar.updateXYDisplay();
-                //TODO: Add view scaling
-                component.repaint();
             }
 
             Point screenOrigin;
@@ -88,10 +81,10 @@ public class DragZoomPanel extends JScrollPane {
                     double x = e.getLocationOnScreen().getX() - screenOrigin.getX();
                     double y = e.getLocationOnScreen().getY() - screenOrigin.getY();
 
-                    viewX = viewX - x;
-                    viewY = viewY - y;
+                    viewX = viewX - (x / getComponentZoom()) * 0.75;
+                    viewY = viewY - (y / getComponentZoom()) * 0.75;
                     fixInBounds();
-                    getViewport().setViewPosition(new Point((int) viewX, (int) viewY));
+                    getViewport().setViewPosition(new Point((int) (viewX * getComponentZoom()), (int) (viewY * getComponentZoom())));
 
                     screenOrigin = e.getLocationOnScreen();
                 }
@@ -110,15 +103,6 @@ public class DragZoomPanel extends JScrollPane {
         zoomedComponentEventProxy = new ZoomedComponentEventProxy(component);
     }
 
-    private Rectangle getZoomedViewSize() {
-        Rectangle rect = new Rectangle();
-
-        System.out.println(getComponentZoom());
-        rect.width = (int) (getWidth() / getComponentZoom());
-        rect.height = (int) (getHeight() / getComponentZoom());
-
-        return rect;
-    }
 
     public double fixInBoundsX(double x) {
         if (x < 0) {

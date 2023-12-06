@@ -1,6 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.animations.components;
 
-import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
+import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 
 import javax.swing.*;
 import java.awt.*;

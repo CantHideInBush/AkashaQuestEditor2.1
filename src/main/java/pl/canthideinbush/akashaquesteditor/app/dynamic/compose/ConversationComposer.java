@@ -5,7 +5,7 @@ import pl.canthideinbush.akashaquesteditor.app.components.Zoomable;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.NPCBlock;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.PlayerBlock;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
+import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.swing.*;

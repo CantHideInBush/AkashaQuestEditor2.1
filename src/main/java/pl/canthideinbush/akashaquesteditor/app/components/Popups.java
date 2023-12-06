@@ -1,8 +1,7 @@
-package pl.canthideinbush.akashaquesteditor.app.dynamic.popups;
+package pl.canthideinbush.akashaquesteditor.app.components;
 
 import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.Application;
-import pl.canthideinbush.akashaquesteditor.app.components.WrapEditorKit;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimation;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimationContainer;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.components.ResizableIcon;

@@ -1,6 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
-import pl.canthideinbush.akashaquesteditor.app.dynamic.popups.Popups;
+import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.io.IO;
 import pl.canthideinbush.akashaquesteditor.quest.session.EditorConversation;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
