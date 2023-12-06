@@ -114,8 +114,8 @@ public class ZoomedComponentEventProxy extends JPanel {
                     if (dragged != null) {
                         CenterAbleComponent optional = getOptionalDragComponent(component);
                         int precision = 0;
-                        if (e.isShiftDown()) precision += 5;
-                        if (e.isAltDown()) precision += 10;
+                        if (e.isShiftDown()) precision += 15;
+                        if (e.isAltDown()) precision += 15;
                         if (precision != 0 && optional != null) {
                             Container container = optional.getContainer();
                             Component parent = container.getParent();

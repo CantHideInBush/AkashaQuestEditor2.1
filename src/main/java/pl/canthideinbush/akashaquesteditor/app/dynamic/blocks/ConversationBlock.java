@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ZoomedComponentEventProxy;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
@@ -360,7 +361,13 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (lastPressed != null && !lastPressed.equals(inst)) {
-                    lastPressed.toggleLink(inst);
+                    if (!e.isShiftDown()) {
+                        lastPressed.toggleLink(inst);
+                    }
+                    else {
+                        ConversationComposer composer = Application.instance.sessionContainer.conversationComposer;
+                        composer.setLayer(lastPressed, getLayer(inst) + 1);
+                    }
                 }
             }
         };

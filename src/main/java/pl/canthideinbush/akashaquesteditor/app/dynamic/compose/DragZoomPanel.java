@@ -70,6 +70,9 @@ public class DragZoomPanel extends JScrollPane {
 
                 fixInBounds();
                 getViewport().setViewPosition(new Point((int) (viewX * currentZoom), (int) (viewY * currentZoom)));
+                if (viewX == 0 || viewY == 0) {
+                    component.repaint();
+                }
                 Application.instance.sessionContainer.composerInfoBar.updateXYDisplay();
             }
 
