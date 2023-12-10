@@ -7,7 +7,13 @@ import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.DragZoomPanel;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class QuestSessionContainer extends JTabbedPane {
@@ -54,6 +60,13 @@ public class QuestSessionContainer extends JTabbedPane {
         instructionsPanel = new InstructionsPanel();
 
         addTab("Instrukcje", instructionsPanel);
+        addChangeListener(e -> {
+            if (getSelectedIndex() == 1) {
+                instructionsPanel.fixAnimation();
+            }
+        });
+
+
     }
 
     private JPanel createConversationComposerHolder() {

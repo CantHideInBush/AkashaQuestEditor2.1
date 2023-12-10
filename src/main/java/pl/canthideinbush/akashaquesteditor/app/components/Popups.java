@@ -63,11 +63,11 @@ public class Popups {
         gbc.weightx = 0.2;
 
         ResizableIcon confirmButton = new ResizableIcon(tickStatic.getImage(), tick);
-        ResizeAnimationContainer confirmButtonContainer = createResizableComponent(confirmButton, new Dimension(38, 38), new Dimension(46, 46));
+        ResizeAnimationContainer confirmButtonContainer = createResizableComponent(confirmButton, new Dimension(38, 38), new Dimension(46, 46), 200);
         confirmButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3, true));
         
         ResizableIcon closeButton = new ResizableIcon(close.getImage(), close);
-        ResizeAnimationContainer closeButtonContainer = createResizableComponent(closeButton, new Dimension(48, 48), new Dimension(54, 54));
+        ResizeAnimationContainer closeButtonContainer = createResizableComponent(closeButton, new Dimension(48, 48), new Dimension(54, 54), 200);
         pane.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -114,21 +114,29 @@ public class Popups {
             }
         });
 
+        dialog.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                confirmButtonContainer.centerComponent();
+                closeButtonContainer.centerComponent();
+            }
+        });
+
         dialog.add(confirmPanel, gbc);
         dialog.setResizable(true);
         dialog.pack();
         dialog.setVisible(true);
+
     }
 
     @NotNull
-    public static ResizeAnimationContainer createResizableComponent(ResizableIcon component, Dimension start, Dimension resize) {
+    public static ResizeAnimationContainer createResizableComponent(ResizableIcon component, Dimension start, Dimension resize, int duration) {
         component.setSize(start );
-        ResizeAnimationContainer confirmButtonContainer = new ResizeAnimationContainer(component);
+        ResizeAnimationContainer resizeAnimationContainer = new ResizeAnimationContainer(component, start);
 
-        ResizeAnimation resizeAnimation = new ResizeAnimation(confirmButtonContainer, resize, 200);
-        component.setLocation(confirmButtonContainer.getPreferredSize().width / 2 - component.getWidth() / 2, confirmButtonContainer.getPreferredSize().height / 2 - component.getHeight() / 2);
+        ResizeAnimation resizeAnimation = new ResizeAnimation(resizeAnimationContainer, resize, duration);
 
-        confirmButtonContainer.addMouseListener(new MouseAdapter() {
+        resizeAnimationContainer.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 resizeAnimation.start(false);
@@ -141,7 +149,10 @@ public class Popups {
                 component.setAnimated(false);
             }
         });
-        return confirmButtonContainer;
+
+
+
+        return resizeAnimationContainer;
     }
 
     public static JDialog templateDialog(String title) {
