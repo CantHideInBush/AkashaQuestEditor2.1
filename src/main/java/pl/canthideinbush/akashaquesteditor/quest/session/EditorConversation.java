@@ -48,8 +48,6 @@ public class EditorConversation implements SelfAttach {
 
     public void contract() {
         for (ConversationBlock conversationBlock : conversationBlocks) {
-            conversationBlock.initialize();
-            conversationBlock.initializeComponents();
             Application.instance.sessionContainer.conversationComposer.remove(conversationBlock);
         }
     }

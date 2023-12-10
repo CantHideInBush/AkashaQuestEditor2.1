@@ -1,4 +1,4 @@
-package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
+package pl.canthideinbush.akashaquesteditor.app.components.quest.compose;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.Zoomable;
@@ -14,8 +14,8 @@ public class DragZoomPanel extends JScrollPane {
 
     private final JLayeredPane component;
     public ZoomedComponentEventProxy zoomedComponentEventProxy;
-    private double viewY;
-    private double viewX;
+    public double viewY;
+    public double viewX;
 
     public DragZoomPanel(JLayeredPane component) {
         super(component);
@@ -144,6 +144,13 @@ public class DragZoomPanel extends JScrollPane {
         setAutoscrolls(false);
         setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
         setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
+    }
+
+    public void setView(double x, double y) {
+        viewX = x;
+        viewY = y;
+        fixInBounds();
+        getViewport().setViewPosition(new Point((int) viewX, (int) viewY));
     }
 
 

@@ -42,6 +42,7 @@ public class InstructionsPanel extends JPanel {
 
 
         JTextField instructionField = new JTextField();
+        instructionField.setHorizontalAlignment(SwingConstants.CENTER);
         instructionField.setFont(instructionField.getFont().deriveFont(20f));
         Dimension preferred = new Dimension(0, 40);
         instructionField.setPreferredSize(preferred);

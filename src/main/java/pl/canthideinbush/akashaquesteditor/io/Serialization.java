@@ -39,7 +39,7 @@ public class Serialization implements ISerialization {
     @Override
     public void deserialize(YamlConfiguration configuration) {
         List<SelfAttach> loaded = (List<SelfAttach>) configuration.getList("SelfAttach", new ArrayList<>());
-        System.out.println(configuration.get("SelfAttach"));
+        System.out.println("Found self-attach objects: "  + configuration.get("SelfAttach"));
         for (SelfAttach selfAttach : resolveDependencies(loaded)) {
             selfAttach.attach();
         }

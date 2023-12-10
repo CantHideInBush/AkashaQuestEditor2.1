@@ -5,8 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ConversationComposer;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ZoomedComponentEventProxy;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ZoomedComponentEventProxy;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
 

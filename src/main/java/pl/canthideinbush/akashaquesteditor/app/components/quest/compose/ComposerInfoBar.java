@@ -1,4 +1,4 @@
-package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
+package pl.canthideinbush.akashaquesteditor.app.components.quest.compose;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.QuestSessionContainer;
@@ -69,7 +69,7 @@ public class ComposerInfoBar extends JPanel {
                     y.setValue(view.y);
                     int result = JOptionPane.showConfirmDialog(Application.instance, message, "Wprowadź współrzędne", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
                     if (result == 0) {
-                        container.conversationComposerPanel.getViewport().setViewPosition(new Point((int) x.getValue(), (int) y.getValue()));
+                        container.conversationComposerPanel.setView((int) x.getValue(), (int) y.getValue());
                         updateXYDisplay();
                     }
                 }

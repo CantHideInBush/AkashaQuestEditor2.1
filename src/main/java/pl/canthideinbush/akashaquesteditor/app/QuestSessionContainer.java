@@ -1,19 +1,13 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
 import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsPanel;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ComposerInfoBar;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.ConversationComposer;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.compose.DragZoomPanel;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ComposerInfoBar;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.DragZoomPanel;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 
 public class QuestSessionContainer extends JTabbedPane {
@@ -92,4 +86,6 @@ public class QuestSessionContainer extends JTabbedPane {
         composerInfoBar.setMaximumSize(composerInfoBar.getPreferredSize());
         conversationComposerHolder.add(composerInfoBar, constraints);
     }
+
+
 }

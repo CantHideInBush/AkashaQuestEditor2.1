@@ -1,4 +1,4 @@
-package pl.canthideinbush.akashaquesteditor.app.dynamic.compose;
+package pl.canthideinbush.akashaquesteditor.app.components.quest.compose;
 
 import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
 import pl.canthideinbush.akashaquesteditor.app.components.Zoomable;
