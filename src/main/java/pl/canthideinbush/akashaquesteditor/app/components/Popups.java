@@ -133,6 +133,7 @@ public class Popups {
     public static ResizeAnimationContainer createResizableComponent(ResizableIcon component, Dimension start, Dimension resize, int duration) {
         component.setSize(start );
         ResizeAnimationContainer resizeAnimationContainer = new ResizeAnimationContainer(component, start);
+        resizeAnimationContainer.setFocusable(true);
 
         ResizeAnimation resizeAnimation = new ResizeAnimation(resizeAnimationContainer, resize, duration);
 
@@ -145,6 +146,20 @@ public class Popups {
 
             @Override
             public void mouseExited(MouseEvent e) {
+                resizeAnimation.start(true);
+                component.setAnimated(false);
+            }
+        });
+
+        resizeAnimationContainer.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                resizeAnimation.start(false);
+                component.setAnimated(true);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
                 resizeAnimation.start(true);
                 component.setAnimated(false);
             }

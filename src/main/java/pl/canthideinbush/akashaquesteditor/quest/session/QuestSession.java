@@ -10,9 +10,8 @@ import pl.canthideinbush.akashaquesteditor.quest.objects.Instruction;
 import pl.canthideinbush.akashaquesteditor.quest.objects.JournalEntry;
 import pl.canthideinbush.akashaquesteditor.quest.objects.PackageFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class QuestSession implements SelfAttach {
 
@@ -21,8 +20,14 @@ public class QuestSession implements SelfAttach {
     @SF
     public EditorConversation activeConversation;
 
+    @SF
+    public Map<String, Map<String, String>> instructions = new HashMap<>();
+
     public QuestSession() {
         ISerialization.register(this);
+        instructions.putIfAbsent("events", new HashMap<>());
+        instructions.putIfAbsent("conditions", new HashMap<>());
+        instructions.putIfAbsent("objectives", new HashMap<>());
     }
 
     public static @NotNull QuestSession deserialize(Map<String, Object> data) {
@@ -48,20 +53,17 @@ public class QuestSession implements SelfAttach {
     }
 
     private List<Instruction> generateEvents() {
-
-
-        return null;
+        if (!instructions.containsKey("events")) return Collections.emptyList();
+        return instructions.get("events").entrySet().stream().map(entry -> new Instruction(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
     private List<Instruction> generateConditions() {
-
-
-        return null;
+        if (!instructions.containsKey("conditions")) return Collections.emptyList();
+        return instructions.get("conditions").entrySet().stream().map(entry -> new Instruction(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
 
     private List<Instruction> generateObjectives() {
-
-
-        return null;
+        if (!instructions.containsKey("objectives")) return Collections.emptyList();
+        return instructions.get("objectives").entrySet().stream().map(entry -> new Instruction(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
 
     private List<JournalEntry> generateJournalEntries() {
