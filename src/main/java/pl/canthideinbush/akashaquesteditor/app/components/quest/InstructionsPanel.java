@@ -18,6 +18,7 @@ public class InstructionsPanel extends JPanel {
     private JTextField instructionNameField;
     private JTextField instructionField;
     private JComboBox<Object> categoriesBox;
+    private GridBagConstraints constraints;
 
     public InstructionsPanel() {
         initialize();
@@ -28,6 +29,11 @@ public class InstructionsPanel extends JPanel {
 
     private void initializeComponents() {
         addCreateInstructionPanel();
+        addInstructionsTable();
+    }
+
+    private void addInstructionsTable() {
+        add(new InstructionsTable());
     }
 
     private void addCreateInstructionPanel() {
@@ -173,7 +179,8 @@ public class InstructionsPanel extends JPanel {
 
     private void initialize() {
         setPreferredSize(new Dimension(9999, 9999));
-        this.setLayout(new FlowLayout());
+        setLayout(new GridBagLayout());
+        constraints = new GridBagConstraints();
         integrateResize();
     }
 
