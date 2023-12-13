@@ -18,8 +18,14 @@ public class InstructionsTable extends JTable {
 
     private void initializeComponents() {
         eventsColumn = new TableColumn();
+        addColumn(eventsColumn);
+        setValueAt("Eventy", 0, 0);
+
         conditionsColumn = new TableColumn();
+        addColumn(conditionsColumn);
+
         objectivesColumn = new TableColumn();
+        addColumn(objectivesColumn);
     }
 
     private void initialize() {

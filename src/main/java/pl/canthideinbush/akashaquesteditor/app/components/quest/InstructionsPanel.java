@@ -19,7 +19,7 @@ public class InstructionsPanel extends JPanel {
     private JTextField instructionField;
     private JComboBox<Object> categoriesBox;
     private GridBagConstraints constraints;
-
+    private InstructionsTable instructionsTable;
     public InstructionsPanel() {
         initialize();
         initializeComponents();
@@ -28,15 +28,21 @@ public class InstructionsPanel extends JPanel {
     Component[] resize = new Component[5];
 
     private void initializeComponents() {
-        addCreateInstructionPanel();
+        addInstructionCreationPanel();
         addInstructionsTable();
     }
 
     private void addInstructionsTable() {
-        add(new InstructionsTable());
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridy = 1;
+        constraints.weighty = 1;
+        constraints.weightx = 1;
+        instructionsTable = new InstructionsTable();
+        instructionsTable.setPreferredSize(new Dimension(1, 1));
+        add(instructionsTable, constraints);
     }
 
-    private void addCreateInstructionPanel() {
+    private void addInstructionCreationPanel() {
         JPanel createInstructionPanel = new JPanel();
         resize[0] = createInstructionPanel;
         createInstructionPanel.setLayout(new GridBagLayout());
@@ -48,7 +54,14 @@ public class InstructionsPanel extends JPanel {
         createInstructionPanelFields(constraints, createInstructionPanel);
         createInstructionPanelLabels(constraints, createInstructionPanel);
 
-        add(createInstructionPanel);
+        constraints.insets = new Insets(10, 5,5, 5);
+        constraints.gridx = 0;
+        constraints.weightx = 1;
+        constraints.weighty = 0;
+        constraints.anchor = GridBagConstraints.NORTH;
+
+
+        add(createInstructionPanel, constraints);
 
 
     }
@@ -181,7 +194,7 @@ public class InstructionsPanel extends JPanel {
         setPreferredSize(new Dimension(9999, 9999));
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
-        integrateResize();
+        //integrateResize();
     }
 
     private void integrateResize() {
