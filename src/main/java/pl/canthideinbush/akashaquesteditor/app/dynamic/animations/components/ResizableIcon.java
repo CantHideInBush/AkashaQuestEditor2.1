@@ -30,7 +30,7 @@ public class ResizableIcon extends JPanel implements Animate {
 
 
         AffineTransform stretch = new AffineTransform();
-        stretch.scale((double) getWidth() / iconAnimated.getIconWidth(), (double) getHeight() / iconAnimated.getIconHeight());
+        stretch.scale((double) (getWidth()) / iconAnimated.getIconWidth(), (double) getHeight() / iconAnimated.getIconHeight());
         g2d.setTransform(stretch);
 
 

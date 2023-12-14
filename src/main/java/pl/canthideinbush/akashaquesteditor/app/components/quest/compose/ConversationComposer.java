@@ -31,10 +31,12 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
     }
 
 
+    public static Color background = new Color(37, 41, 51);
+
     private void initialize() {
         setLayout(null);
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-        setBackground(new Color(37, 41, 51));
+        setBackground(background);
         setOpaque(true);
         listenToEvents();
     }

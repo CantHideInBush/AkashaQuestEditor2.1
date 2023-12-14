@@ -2,6 +2,7 @@ package pl.canthideinbush.akashaquesteditor.app.components.quest;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimationContainer;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.components.ResizableIcon;
 
@@ -19,7 +20,6 @@ public class InstructionsPanel extends JPanel {
     private JTextField instructionField;
     private JComboBox<Object> categoriesBox;
     private GridBagConstraints constraints;
-    private InstructionsTable instructionsTable;
     public InstructionsPanel() {
         initialize();
         initializeComponents();
@@ -29,35 +29,26 @@ public class InstructionsPanel extends JPanel {
 
     private void initializeComponents() {
         addInstructionCreationPanel();
-        addInstructionsTable();
-    }
-
-    private void addInstructionsTable() {
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridy = 1;
-        constraints.weighty = 1;
-        constraints.weightx = 1;
-        instructionsTable = new InstructionsTable();
-        instructionsTable.setPreferredSize(new Dimension(1, 1));
-        add(instructionsTable, constraints);
     }
 
     private void addInstructionCreationPanel() {
         JPanel createInstructionPanel = new JPanel();
+        createInstructionPanel.setBackground(Color.LIGHT_GRAY);
         resize[0] = createInstructionPanel;
         createInstructionPanel.setLayout(new GridBagLayout());
-        createInstructionPanel.setMinimumSize(new Dimension(500, 75));
-        createInstructionPanel.setPreferredSize(new Dimension(1100, 75));
+        createInstructionPanel.setMinimumSize(new Dimension(500, 100));
+        createInstructionPanel.setPreferredSize(new Dimension(1100, 100));
         createInstructionPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5, 0, 0, 0)));
 
-        GridBagConstraints constraints = new GridBagConstraints();
-        createInstructionPanelFields(constraints, createInstructionPanel);
-        createInstructionPanelLabels(constraints, createInstructionPanel);
+        GridBagConstraints instructionCreationPanelConstraints = new GridBagConstraints();
+        createInstructionPanelFields(instructionCreationPanelConstraints, createInstructionPanel);
+        createInstructionPanelLabels(instructionCreationPanelConstraints, createInstructionPanel);
 
         constraints.insets = new Insets(10, 5,5, 5);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.weightx = 1;
-        constraints.weighty = 0;
+        constraints.weighty = 0.3;
         constraints.anchor = GridBagConstraints.NORTH;
 
 
@@ -67,7 +58,10 @@ public class InstructionsPanel extends JPanel {
     }
 
     private void createInstructionPanelLabels(GridBagConstraints constraints, JPanel createInstructionPanel) {
-        constraints.weighty = 0.25;
+        constraints.insets.top = 15;
+        constraints.weighty = 0.1;
+        constraints.gridheight = 1;
+        constraints.gridwidth = 1;
         constraints.gridy = 0;
 
         JLabel nameLabel = bottomCenterLabel("Nazwa");
@@ -94,17 +88,17 @@ public class InstructionsPanel extends JPanel {
     }
 
     private void createInstructionPanelFields(GridBagConstraints constraints, JPanel createInstructionPanel) {
-        constraints.insets = new Insets(0, 5, 0, 5);
+        constraints.insets = new Insets(-15, 5, 0, 5);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 0.2;
-        constraints.weighty = 0.75;
+        constraints.weighty = 0.9;
         constraints.gridy = 1;
 
         instructionNameField = new JTextField();
         instructionNameField.setHorizontalAlignment(SwingConstants.CENTER);
         instructionNameField.setFont(instructionNameField.getFont().deriveFont(20f));
-        Dimension preferred = new Dimension(0, 40);
+        Dimension preferred = new Dimension(0, 30);
         instructionNameField.setPreferredSize(preferred);
         createInstructionPanel.add(instructionNameField, constraints);
 
@@ -130,9 +124,11 @@ public class InstructionsPanel extends JPanel {
 
         ResizableIcon confirmButton = new ResizableIcon(Popups.tickStatic.getImage(), Popups.tick);
         confirmButton.setPreferredSize(new Dimension(20, 20));
-        confirmButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3, true));
+        confirmButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, true));
 
-        cbResizeContainer = Popups.createResizableComponent(confirmButton, new Dimension(45, 45), new Dimension(50, 50), 150);
+        cbResizeContainer = Popups.createResizableComponent(confirmButton, new Dimension(45, 45), new Dimension(52, 52), 150);
+        cbResizeContainer.setFocusable(true);
+        cbResizeContainer.setBackground(Color.LIGHT_GRAY);
 
 
         cbResizeContainer.addMouseListener(new MouseAdapter() {
@@ -154,8 +150,14 @@ public class InstructionsPanel extends JPanel {
 
 
         constraints.gridx = 3;
+        constraints.gridy = 1;
         constraints.weightx = 0;
+        constraints.weighty = 1;
+        constraints.insets.top = -10;
+        constraints.insets.right = 10;
         createInstructionPanel.add(cbResizeContainer, constraints);
+
+
     }
 
     private void addInstruction() {
@@ -192,6 +194,7 @@ public class InstructionsPanel extends JPanel {
 
     private void initialize() {
         setPreferredSize(new Dimension(9999, 9999));
+        setBackground(ConversationComposer.background);
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         //integrateResize();

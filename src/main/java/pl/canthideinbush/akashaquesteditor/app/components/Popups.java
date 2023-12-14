@@ -133,7 +133,6 @@ public class Popups {
     public static ResizeAnimationContainer createResizableComponent(ResizableIcon component, Dimension start, Dimension resize, int duration) {
         component.setSize(start );
         ResizeAnimationContainer resizeAnimationContainer = new ResizeAnimationContainer(component, start);
-        resizeAnimationContainer.setFocusable(true);
 
         ResizeAnimation resizeAnimation = new ResizeAnimation(resizeAnimationContainer, resize, duration);
 
