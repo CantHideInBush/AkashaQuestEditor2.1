@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -20,16 +22,41 @@ public class InstructionsPanel extends JPanel {
     private JTextField instructionField;
     private JComboBox<Object> categoriesBox;
     private GridBagConstraints constraints;
+    private JTabbedPane instructionTables;
+
     public InstructionsPanel() {
         initialize();
-        initializeComponents();
     }
 
     Component[] resize = new Component[5];
 
-    private void initializeComponents() {
+    public void clean() {
+        instructionTables.removeAll();
+    }
+
+    public void initializeComponents() {
+        addInstructionTables();
         addInstructionCreationPanel();
     }
+
+    private void addInstructionTables() {
+        instructionTables = new JTabbedPane();
+
+        instructionTables.addTab("Zdarzenia", new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("events")));
+        instructionTables.addTab("Warunki", new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("conditions")));
+        instructionTables.addTab("Cele", new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("objectives")));
+
+        constraints.insets = new Insets(0, 5, 0, 5);
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 1;
+        constraints.weighty = 0.5;
+        add(instructionTables, constraints);
+
+    }
+
 
     private void addInstructionCreationPanel() {
         JPanel createInstructionPanel = new JPanel();
@@ -44,11 +71,12 @@ public class InstructionsPanel extends JPanel {
         createInstructionPanelFields(instructionCreationPanelConstraints, createInstructionPanel);
         createInstructionPanelLabels(instructionCreationPanelConstraints, createInstructionPanel);
 
-        constraints.insets = new Insets(10, 5,5, 5);
+        constraints.insets = new Insets(0, 5,5, 5);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
+        constraints.gridy = 1;
         constraints.weightx = 1;
-        constraints.weighty = 0.3;
+        constraints.weighty = 0;
         constraints.anchor = GridBagConstraints.NORTH;
 
 
@@ -156,8 +184,6 @@ public class InstructionsPanel extends JPanel {
         constraints.insets.top = -10;
         constraints.insets.right = 10;
         createInstructionPanel.add(cbResizeContainer, constraints);
-
-
     }
 
     private void addInstruction() {

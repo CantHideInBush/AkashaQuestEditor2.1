@@ -102,6 +102,7 @@ public class Application extends JPanel {
         sessionContainer = new QuestSessionContainer(session);
         sessionContainer.setVisible(true);
         add(sessionContainer);
+        sessionContainer.instructionsPanel.initializeComponents();
 
         if (footerSpacer == null) {
             footerSpacer = Box.createHorizontalBox();

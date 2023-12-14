@@ -50,12 +50,13 @@ public class QuestSessionContainer extends JTabbedPane {
         JPanel conversationComposerHolder = createConversationComposerHolder();
 
 
-
         addTab("Konwersacja", conversationComposerHolder);
+        setMnemonicAt(0, KeyEvent.VK_K);
 
         instructionsPanel = new InstructionsPanel();
 
         addTab("Instrukcje", instructionsPanel);
+        setMnemonicAt(1, KeyEvent.VK_I);
         addChangeListener(e -> {
             if (getSelectedIndex() == 1) {
                 instructionsPanel.fixAnimation();
