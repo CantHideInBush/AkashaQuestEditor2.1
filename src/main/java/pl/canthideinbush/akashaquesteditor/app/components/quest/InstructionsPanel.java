@@ -45,9 +45,9 @@ public class InstructionsPanel extends JPanel {
     private void addInstructionTables() {
         instructionTables = new JTabbedPane();
 
-        instructionTables.addTab("Zdarzenia", eventsTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("events")));
-        instructionTables.addTab("Warunki", conditionsTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("conditions")));
-        instructionTables.addTab("Cele", objectivesTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("objectives")));
+        instructionTables.addTab("Zdarzenia", new JScrollPane(eventsTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("events"))));
+        instructionTables.addTab("Warunki", new JScrollPane(conditionsTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("conditions"))));
+        instructionTables.addTab("Cele", new JScrollPane(objectivesTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("objectives"))));
 
         constraints.insets = new Insets(0, 5, 0, 5);
         constraints.anchor = GridBagConstraints.NORTH;
@@ -187,6 +187,7 @@ public class InstructionsPanel extends JPanel {
         constraints.insets.top = -10;
         constraints.insets.right = 10;
         createInstructionPanel.add(cbResizeContainer, constraints);
+        cbResizeContainer.centerComponent();
     }
 
     private void addInstruction() {
@@ -197,6 +198,7 @@ public class InstructionsPanel extends JPanel {
         String error = verifyInstruction(instruction);
         if (error != null) {
             JOptionPane.showMessageDialog(Application.instance, error, "Błąd dodawania instrukcji", JOptionPane.ERROR_MESSAGE, null);
+            return;
         }
         Application.instance.sessionContainer.session.instructions.get((String) categoriesBox.getSelectedItem()).put(instructionNameField.getText(), instruction);
         assert categoriesBox.getSelectedItem() != null;
@@ -214,6 +216,7 @@ public class InstructionsPanel extends JPanel {
 
     private boolean shouldOverride() {
         String name = instructionNameField.getText();
+        if ("".equalsIgnoreCase(name) || name == null) return false;
         if (Application.instance.sessionContainer.session.instructions.get((String) categoriesBox.getSelectedItem()).containsKey(name)) {
             //result 0 = User pressed ok button
             return JOptionPane.showConfirmDialog(Application.instance, "Nadpisać instrukcję " + name + "?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null) == 0;
@@ -226,10 +229,6 @@ public class InstructionsPanel extends JPanel {
             return "Pole instrukcji nie może być puste!";
         }
         return null;
-    }
-
-    public void fixAnimation() {
-        cbResizeContainer.centerComponent();
     }
 
     private void initialize() {

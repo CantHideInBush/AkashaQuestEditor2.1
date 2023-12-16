@@ -12,6 +12,7 @@ public class ResizeAnimationContainer extends JPanel {
         setLayout(null);
         this.originalSize = originalSize;
         this.component = component;
+        setPreferredSize(originalSize);
         add(component);
     }
 
@@ -29,7 +30,7 @@ public class ResizeAnimationContainer extends JPanel {
     //TODO: Find cause why this method is even needed
     public void centerComponent() {
         component.setSize(originalSize);
-        component.setLocation(getWidth() / 2 - component.getWidth() / 2, getHeight() / 2 - component.getHeight() / 2);
+        component.setLocation(getPreferredSize().width / 2 - component.getWidth() / 2, getPreferredSize().height / 2 - component.getHeight() / 2);
     }
 
 }

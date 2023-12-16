@@ -57,11 +57,6 @@ public class QuestSessionContainer extends JTabbedPane {
 
         addTab("Instrukcje", instructionsPanel);
         setMnemonicAt(1, KeyEvent.VK_I);
-        addChangeListener(e -> {
-            if (getSelectedIndex() == 1) {
-                instructionsPanel.fixAnimation();
-            }
-        });
 
 
     }

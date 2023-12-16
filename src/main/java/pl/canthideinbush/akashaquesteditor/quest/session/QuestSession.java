@@ -21,13 +21,13 @@ public class QuestSession implements SelfAttach {
     public EditorConversation activeConversation;
 
     @SF
-    public Map<String, Map<String, String>> instructions = new HashMap<>();
+    public Map<String, LinkedHashMap<String, String>> instructions = new HashMap<>();
 
     public QuestSession() {
         ISerialization.register(this);
-        instructions.putIfAbsent("events", new HashMap<>());
-        instructions.putIfAbsent("conditions", new HashMap<>());
-        instructions.putIfAbsent("objectives", new HashMap<>());
+        instructions.putIfAbsent("events", new LinkedHashMap<>());
+        instructions.putIfAbsent("conditions", new LinkedHashMap<>());
+        instructions.putIfAbsent("objectives", new LinkedHashMap<>());
     }
 
     public static @NotNull QuestSession deserialize(Map<String, Object> data) {
