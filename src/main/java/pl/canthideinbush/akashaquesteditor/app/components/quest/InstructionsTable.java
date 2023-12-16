@@ -1,14 +1,11 @@
 package pl.canthideinbush.akashaquesteditor.app.components.quest;
 
+import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimationContainer;
-import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.components.ResizableIcon;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -34,12 +31,12 @@ public class InstructionsTable extends JPanel {
     private void initialize() {
         setLayout(new GridBagLayout());
         setBackground(Color.LIGHT_GRAY);
-        InstructionBlock header = new InstructionBlock("Nazwa", "Instrukcja", false);
+        InstructionBlock header = new InstructionBlock(null, "Nazwa", "Instrukcja", false);
         header.setFont(header.getFont().deriveFont(Font.BOLD, 16f));
         header.setBackground(Color.LIGHT_GRAY);
         add(header, constraints);
         filler.setPreferredSize(new Dimension(0, 9999));
-        filler.setBackground(getBackground());
+        filler.setBackground(Color.DARK_GRAY);
 
     }
 
@@ -74,7 +71,7 @@ public class InstructionsTable extends JPanel {
     }
 
     private void addInstructionBlock(String name, String instruction) {
-        InstructionBlock instructionBlock = new InstructionBlock(name, instruction, true);
+        InstructionBlock instructionBlock = new InstructionBlock(this, name, instruction, true);
         instructionBlocks.add(instructionBlock);
         constraints.gridy += 1;
         add(instructionBlock, constraints);
@@ -84,8 +81,10 @@ public class InstructionsTable extends JPanel {
     public static class InstructionBlock extends JPanel {
 
         private final GridBagConstraints constraints;
+        private final InstructionsTable parent;
 
-        public InstructionBlock(String name, String instruction, boolean withRemove) {
+        public InstructionBlock(InstructionsTable parent, String name, String instruction, boolean withRemove) {
+            this.parent = parent;
             setLayout(new GridBagLayout());
             constraints = new GridBagConstraints();
             setName(name);
@@ -103,6 +102,8 @@ public class InstructionsTable extends JPanel {
             nameField.setPreferredSize(new Dimension(getWidth(), 30));
             nameField.setFont(getFont().deriveFont(15f));
             nameField.setHorizontalAlignment(SwingConstants.CENTER);
+            nameField.setBorder(new LineBorder(Color.BLACK));
+            TextComponents.disableSelection(nameField);
             add(nameField, constraints);
 
 
@@ -112,6 +113,8 @@ public class InstructionsTable extends JPanel {
             instructionField.setPreferredSize(new Dimension(9999, 30));
             instructionField.setFont(getFont().deriveFont(15f));
             instructionField.setHorizontalAlignment(SwingConstants.CENTER);
+            instructionField.setBorder(new LineBorder(Color.BLACK));
+            TextComponents.disableSelection(instructionField);
             add(instructionField, constraints);
 
 
@@ -130,10 +133,18 @@ public class InstructionsTable extends JPanel {
                     public void mouseExited(MouseEvent e) {
                         removeButton.setBackground(Color.WHITE);
                     }
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        parent.instructions.remove(nameField.getText());
+                        parent.update();
+                    }
                 });
+
                 constraints.gridx = 2;
                 constraints.weightx = 0.01;
                 add(removeButton, constraints);
+
             }
         }
 

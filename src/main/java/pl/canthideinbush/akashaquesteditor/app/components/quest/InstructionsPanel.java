@@ -33,9 +33,6 @@ public class InstructionsPanel extends JPanel {
 
     Component[] resize = new Component[5];
 
-    public void clean() {
-        instructionTables.removeAll();
-    }
 
     public void initializeComponents() {
         addInstructionTables();
@@ -49,6 +46,10 @@ public class InstructionsPanel extends JPanel {
         instructionTables.addTab("Warunki", new JScrollPane(conditionsTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("conditions"))));
         instructionTables.addTab("Cele", new JScrollPane(objectivesTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("objectives"))));
 
+        eventsTable.update();
+        conditionsTable.update();
+        objectivesTable.update();
+
         constraints.insets = new Insets(0, 5, 0, 5);
         constraints.anchor = GridBagConstraints.NORTH;
         constraints.fill = GridBagConstraints.BOTH;
@@ -57,6 +58,8 @@ public class InstructionsPanel extends JPanel {
         constraints.weightx = 1;
         constraints.weighty = 0.5;
         add(instructionTables, constraints);
+
+        instructionTables.addChangeListener(e -> categoriesBox.setSelectedIndex(instructionTables.getSelectedIndex()));
 
     }
 
@@ -237,6 +240,7 @@ public class InstructionsPanel extends JPanel {
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         //integrateResize();
+
     }
 
     private void integrateResize() {
