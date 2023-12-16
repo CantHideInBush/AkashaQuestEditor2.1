@@ -23,6 +23,9 @@ public class InstructionsPanel extends JPanel {
     private JComboBox<Object> categoriesBox;
     private GridBagConstraints constraints;
     private JTabbedPane instructionTables;
+    private InstructionsTable eventsTable;
+    private InstructionsTable conditionsTable;
+    private InstructionsTable objectivesTable;
 
     public InstructionsPanel() {
         initialize();
@@ -42,9 +45,9 @@ public class InstructionsPanel extends JPanel {
     private void addInstructionTables() {
         instructionTables = new JTabbedPane();
 
-        instructionTables.addTab("Zdarzenia", new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("events")));
-        instructionTables.addTab("Warunki", new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("conditions")));
-        instructionTables.addTab("Cele", new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("objectives")));
+        instructionTables.addTab("Zdarzenia", eventsTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("events")));
+        instructionTables.addTab("Warunki", conditionsTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("conditions")));
+        instructionTables.addTab("Cele", objectivesTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("objectives")));
 
         constraints.insets = new Insets(0, 5, 0, 5);
         constraints.anchor = GridBagConstraints.NORTH;
@@ -196,6 +199,17 @@ public class InstructionsPanel extends JPanel {
             JOptionPane.showMessageDialog(Application.instance, error, "Błąd dodawania instrukcji", JOptionPane.ERROR_MESSAGE, null);
         }
         Application.instance.sessionContainer.session.instructions.get((String) categoriesBox.getSelectedItem()).put(instructionNameField.getText(), instruction);
+        assert categoriesBox.getSelectedItem() != null;
+        switch ((String) categoriesBox.getSelectedItem()) {
+            case "events":
+                eventsTable.update();
+                break;
+            case "conditions":
+                conditionsTable.update();
+                break;
+            case "objectives":
+                objectivesTable.update();
+        }
     }
 
     private boolean shouldOverride() {
