@@ -118,11 +118,11 @@ public class InstructionsTable extends JPanel {
             add(instructionField, constraints);
 
 
+            constraints.gridx = 2;
+            constraints.weightx = 0.01;
+            JLabel removeButton;
             if (withRemove) {
-                JLabel removeButton = new JLabel(new ImageIcon(Popups.close.getImage().getScaledInstance(30, 30, Image.SCALE_REPLICATE)));
-                removeButton.setPreferredSize(new Dimension(30, 30));
-                removeButton.setBorder(new LineBorder(Color.BLACK));
-                removeButton.setOpaque(true);
+                removeButton = new JLabel(new ImageIcon(Popups.close.getImage().getScaledInstance(30, 30, Image.SCALE_REPLICATE)));
                 removeButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
@@ -140,12 +140,22 @@ public class InstructionsTable extends JPanel {
                         parent.update();
                     }
                 });
-
-                constraints.gridx = 2;
-                constraints.weightx = 0.01;
-                add(removeButton, constraints);
-
             }
+            else {
+                removeButton = new JLabel(new ImageIcon(Popups.close.getImage().getScaledInstance(30, 30, Image.SCALE_FAST))) {
+                    @Override
+                    protected void paintComponent(Graphics g) {
+
+                    }
+                };
+            }
+            removeButton.setPreferredSize(new Dimension(30, 30));
+            removeButton.setBorder(new LineBorder(Color.BLACK));
+            removeButton.setOpaque(true);
+
+
+
+            add(removeButton, constraints);
         }
 
         @Override
