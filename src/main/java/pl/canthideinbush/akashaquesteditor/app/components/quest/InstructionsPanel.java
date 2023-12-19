@@ -18,7 +18,7 @@ import java.awt.event.*;
 public class InstructionsPanel extends JPanel {
 
     private ResizeAnimationContainer cbResizeContainer;
-    private JTextField instructionNameField;
+    public JTextField instructionNameField;
     private JTextField instructionField;
     private JComboBox<Object> categoriesBox;
     private GridBagConstraints constraints;
@@ -60,6 +60,7 @@ public class InstructionsPanel extends JPanel {
         add(instructionTables, constraints);
 
         instructionTables.addChangeListener(e -> categoriesBox.setSelectedIndex(instructionTables.getSelectedIndex()));
+
 
     }
 
@@ -136,6 +137,15 @@ public class InstructionsPanel extends JPanel {
         instructionNameField.setPreferredSize(preferred);
         createInstructionPanel.add(instructionNameField, constraints);
 
+        instructionNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+                    instructionField.requestFocus();
+                }
+            }
+        });
+
 
         constraints.weightx = 0.6;
         constraints.gridx = 1;
@@ -144,6 +154,38 @@ public class InstructionsPanel extends JPanel {
         instructionField.setFont(instructionField.getFont().deriveFont(20f));
         instructionField.setPreferredSize(preferred);
         createInstructionPanel.add(instructionField, constraints);
+
+        InputMap inputMap = instructionField.getInputMap();
+        ActionMap actionMap = instructionField.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("control E"), "add-event");
+        actionMap.put("add-event", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                categoriesBox.setSelectedIndex(0);
+                addInstruction();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("control C"), "add-condition");
+        actionMap.put("add-condition", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                categoriesBox.setSelectedIndex(1);
+                addInstruction();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("control O"), "add-objective");
+        actionMap.put("add-objective", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                categoriesBox.setSelectedIndex(2);
+                addInstruction();
+            }
+        });
+
+
 
         categoriesBox = new JComboBox<>();
         ((JLabel) categoriesBox.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
@@ -208,13 +250,19 @@ public class InstructionsPanel extends JPanel {
         switch ((String) categoriesBox.getSelectedItem()) {
             case "events":
                 eventsTable.update();
+                instructionTables.setSelectedIndex(0);
                 break;
             case "conditions":
                 conditionsTable.update();
+                instructionTables.setSelectedIndex(1);
                 break;
             case "objectives":
                 objectivesTable.update();
+                instructionTables.setSelectedIndex(2);
         }
+        instructionNameField.requestFocus();
+        instructionNameField.setText("");
+        instructionField.setText("");
     }
 
     private boolean shouldOverride() {

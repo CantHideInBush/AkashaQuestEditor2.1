@@ -58,6 +58,13 @@ public class QuestSessionContainer extends JTabbedPane {
         addTab("Instrukcje", instructionsPanel);
         setMnemonicAt(1, KeyEvent.VK_I);
 
+        addChangeListener(e -> {
+            //If instructions panel got selected
+            if (getSelectedIndex() == 1) {
+                instructionsPanel.instructionNameField.requestFocus();
+            }
+        });
+
 
     }
 
