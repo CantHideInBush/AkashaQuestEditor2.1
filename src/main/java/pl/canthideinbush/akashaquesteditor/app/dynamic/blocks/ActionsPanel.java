@@ -5,6 +5,8 @@ import pl.canthideinbush.akashaquesteditor.app.Application;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -76,10 +78,31 @@ public class ActionsPanel extends JPanel {
         events.setFont(font);
         add(events);
 
+        events.addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        Application.instance.sessionContainer.setSelectedIndex(1);
+                        Application.instance.sessionContainer.instructionsPanel.instructionTables.setSelectedIndex(0);
+                    }
+                }
+        );
+
         conditions = new JButton("Warunki", new ImageIcon(conditionsIcon.getScaledInstance(26, 26, Image.SCALE_REPLICATE)));
         conditions.setFont(font);
         add(conditions);
-    
+
+        conditions.addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        Application.instance.sessionContainer.setSelectedIndex(1);
+                        Application.instance.sessionContainer.instructionsPanel.instructionTables.setSelectedIndex(1);
+                    }
+                }
+        );
+
+
         objectives = new JButton("Zadania", new ImageIcon(objectivesIcon.getScaledInstance(32, 32, Image.SCALE_REPLICATE)));
         objectives.setFont(font);
         add(objectives);

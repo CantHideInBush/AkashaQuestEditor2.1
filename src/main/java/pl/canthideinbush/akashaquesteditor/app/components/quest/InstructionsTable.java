@@ -2,6 +2,7 @@ package pl.canthideinbush.akashaquesteditor.app.components.quest;
 
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -18,6 +19,20 @@ public class InstructionsTable extends JPanel {
 
     private final ArrayList<InstructionBlock> instructionBlocks = new ArrayList<>();
     private GridBagConstraints constraints = newConstraints();
+
+    private ConversationBlock editedBlock;
+
+    enum Category {
+        EVENTS(0),
+        CONDITIONS(1),
+        OBJECTIVES(2);
+
+        public final int id;
+
+        Category(int id) {
+            this.id = id;
+        }
+    }
 
 
     public InstructionsTable(Map<String, String> instructions) {
@@ -78,10 +93,20 @@ public class InstructionsTable extends JPanel {
     }
 
 
+    private void handleInstructionClick(InstructionBlock instance) {
+        if (editedBlock != null) {
+
+        }
+    }
+
     public static class InstructionBlock extends JPanel {
+
 
         private final GridBagConstraints constraints;
         private final InstructionsTable parent;
+        private JLabel actionButton;
+
+        InstructionBlock instance = this;
 
         public InstructionBlock(InstructionsTable parent, String name, String instruction, boolean withRemove) {
             this.parent = parent;
@@ -120,43 +145,45 @@ public class InstructionsTable extends JPanel {
 
             constraints.gridx = 2;
             constraints.weightx = 0.01;
-            JLabel removeButton;
             if (withRemove) {
-                removeButton = new JLabel(new ImageIcon(Popups.close.getImage().getScaledInstance(30, 30, Image.SCALE_REPLICATE)));
-                removeButton.addMouseListener(new MouseAdapter() {
+                actionButton = new JLabel(new ImageIcon(Popups.close.getImage().getScaledInstance(30, 30, Image.SCALE_REPLICATE)));
+                actionButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
-                        removeButton.setBackground(Color.LIGHT_GRAY);
+                        actionButton.setBackground(Color.LIGHT_GRAY);
                     }
 
                     @Override
                     public void mouseExited(MouseEvent e) {
-                        removeButton.setBackground(Color.WHITE);
+                        actionButton.setBackground(Color.WHITE);
                     }
 
                     @Override
                     public void mouseClicked(MouseEvent e) {
+                        parent.handleInstructionClick(instance);
                         parent.instructions.remove(nameField.getText());
                         parent.update();
                     }
                 });
             }
             else {
-                removeButton = new JLabel(new ImageIcon(Popups.close.getImage().getScaledInstance(30, 30, Image.SCALE_FAST))) {
+                actionButton = new JLabel(new ImageIcon(Popups.close.getImage().getScaledInstance(30, 30, Image.SCALE_FAST))) {
                     @Override
                     protected void paintComponent(Graphics g) {
 
                     }
                 };
             }
-            removeButton.setPreferredSize(new Dimension(30, 30));
-            removeButton.setBorder(new LineBorder(Color.BLACK));
-            removeButton.setOpaque(true);
+            actionButton.setPreferredSize(new Dimension(30, 30));
+            actionButton.setBorder(new LineBorder(Color.BLACK));
+            actionButton.setOpaque(true);
 
 
 
-            add(removeButton, constraints);
+            add(actionButton, constraints);
         }
+
+
 
         @Override
         public void setBackground(Color bg) {
@@ -173,6 +200,14 @@ public class InstructionsTable extends JPanel {
                 component.setFont(font);
             }
         }
+    }
+
+    public void enterEdit(ConversationBlock conversationBlock) {
+        this.editedBlock = conversationBlock;
+    }
+
+    public void exitEdit() {
+        this.editedBlock = null;
     }
 
 }

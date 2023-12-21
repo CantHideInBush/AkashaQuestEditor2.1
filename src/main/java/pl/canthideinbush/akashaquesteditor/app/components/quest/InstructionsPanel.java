@@ -5,6 +5,7 @@ import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimationContainer;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.components.ResizableIcon;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -22,10 +23,12 @@ public class InstructionsPanel extends JPanel {
     private JTextField instructionField;
     private JComboBox<Object> categoriesBox;
     private GridBagConstraints constraints;
-    private JTabbedPane instructionTables;
-    private InstructionsTable eventsTable;
-    private InstructionsTable conditionsTable;
-    private InstructionsTable objectivesTable;
+    public JTabbedPane instructionTables;
+    public InstructionsTable eventsTable;
+    public InstructionsTable conditionsTable;
+    public InstructionsTable objectivesTable;
+
+    public ConversationBlock editedBlock;
 
     public InstructionsPanel() {
         initialize();
@@ -305,6 +308,14 @@ public class InstructionsPanel extends JPanel {
         });
     }
 
+    public void enterEdit(ConversationBlock conversationBlock) {
+        this.editedBlock = conversationBlock;
+    }
+
+    public void exitEdit() {
+        this.editedBlock = null;
+        
+    }
 
 
 }

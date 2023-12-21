@@ -8,6 +8,7 @@ import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ZoomedComponentEventProxy;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
+import pl.canthideinbush.akashaquesteditor.io.SF;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
 
 import javax.swing.*;
@@ -35,6 +36,11 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     protected JTextPane text = new JTextPane();
     protected ActionsPanel actionsPanel;
     private SimpleAttributeSet centerAttributeSet;
+
+    List<String> events = new ArrayList<>();
+    List<String> conditions = new ArrayList<>();
+    List<String> objectives = new ArrayList<>();
+
 
     public ConversationBlock(String name) {
         setName(name);
@@ -434,4 +440,28 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     public void scrollRectToVisible(Rectangle aRect) {
 
     }
+
+
+    public void toggleEvent(String instruction) {
+        if (events.contains(instruction)) {
+            events.remove(instruction);
+        }
+        else events.add(instruction);
+    }
+
+    public void toggleCondition(String instruction) {
+        if (conditions.contains(instruction)) {
+            conditions.remove(instruction);
+        }
+        else conditions.add(instruction);
+    }
+
+    public void toggleObjective(String instruction) {
+        if (objectives.contains(instruction)) {
+            objectives.remove(instruction);
+        }
+        else objectives.add(instruction);
+    }
+
+
 }
