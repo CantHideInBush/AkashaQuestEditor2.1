@@ -29,3 +29,6 @@ boockcover
 bookmark.png
 Muhammad Usman
 https://www.flaticon.com/authors/muhammad-usman
+
+plus.png by https://www.flaticon.com/authors/kliwir-art
+minus.png by https://www.freepik.com/

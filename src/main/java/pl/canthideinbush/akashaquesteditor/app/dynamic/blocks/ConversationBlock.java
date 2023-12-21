@@ -37,9 +37,9 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     protected ActionsPanel actionsPanel;
     private SimpleAttributeSet centerAttributeSet;
 
-    List<String> events = new ArrayList<>();
-    List<String> conditions = new ArrayList<>();
-    List<String> objectives = new ArrayList<>();
+    public List<String> events = new ArrayList<>();
+    public List<String> conditions = new ArrayList<>();
+    public List<String> objectives = new ArrayList<>();
 
 
     public ConversationBlock(String name) {
@@ -123,7 +123,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
 
 
     private void addActionsPanel() {
-        actionsPanel = new ActionsPanel();
+        actionsPanel = new ActionsPanel(this);
         actionsPanel.setBackground(Color.WHITE);
         actionsPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(-5, 0, -5, -5), BorderFactory.createDashedBorder(defaultBorderColor(), 1, 5, 4, false))
@@ -393,6 +393,9 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         data.put("y", getY());
         data.put("text", text.getText());
         data.put("linked", linkedBlocks.stream().map(UUID::toString).collect(Collectors.toList()));
+        data.put("events", events);
+        data.put("conditions", conditions);
+        data.put("objectives", objectives);
         return data;
     }
 
@@ -402,6 +405,9 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         setLocation((int) data.getOrDefault("x", 0), (int) data.getOrDefault("y", 0));
         setName((String) data.getOrDefault("name", ""));
         setText((String) data.getOrDefault("text", ""));
+        events.addAll((Collection<? extends String>) data.getOrDefault("events", Collections.emptyList()));
+        conditions.addAll((Collection<? extends String>) data.getOrDefault("conditions", Collections.emptyList()));
+        objectives.addAll((Collection<? extends String>) data.getOrDefault("objectives", Collections.emptyList()));
         if (data.containsKey("linked")) linkedBlocks.addAll(((List<String>) data.get("linked")).stream().map(UUID::fromString).toList());
     }
 

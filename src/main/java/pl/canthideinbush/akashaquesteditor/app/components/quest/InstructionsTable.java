@@ -1,14 +1,17 @@
 package pl.canthideinbush.akashaquesteditor.app.components.quest;
 
+import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -18,11 +21,12 @@ public class InstructionsTable extends JPanel {
     private final Map<String, String> instructions;
 
     private final ArrayList<InstructionBlock> instructionBlocks = new ArrayList<>();
+    private final Category category;
     private GridBagConstraints constraints = newConstraints();
 
     private ConversationBlock editedBlock;
 
-    enum Category {
+    public enum Category {
         EVENTS(0),
         CONDITIONS(1),
         OBJECTIVES(2);
@@ -35,7 +39,9 @@ public class InstructionsTable extends JPanel {
     }
 
 
-    public InstructionsTable(Map<String, String> instructions) {
+
+    public InstructionsTable(Category category, Map<String, String> instructions) {
+        this.category = category;
         initialize();
         this.instructions = instructions;
     }
@@ -95,18 +101,45 @@ public class InstructionsTable extends JPanel {
 
     private void handleInstructionClick(InstructionBlock instance) {
         if (editedBlock != null) {
-
+            editedBlock.toggleEvent(instance.getName());
         }
+        else {
+            instructions.remove(instance.getName());
+        }
+        update();
     }
 
+    public void enterEdit(ConversationBlock conversationBlock) {
+        this.editedBlock = conversationBlock;
+    }
+
+    public void exitEdit() {
+        this.editedBlock = null;
+    }
     public static class InstructionBlock extends JPanel {
 
 
         private final GridBagConstraints constraints;
         private final InstructionsTable parent;
+
         private JLabel actionButton;
 
         InstructionBlock instance = this;
+
+        static ImageIcon removeIcon = new ImageIcon(Popups.close.getImage().getScaledInstance(30, 30, Image.SCALE_REPLICATE));
+        static ImageIcon plusIcon;
+        static ImageIcon minusIcon;
+
+
+        static {
+            try {
+                minusIcon = new ImageIcon(ImageIO.read(InstructionsTable.class.getResource("/assets/minus.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
+                plusIcon = new ImageIcon(ImageIO.read(InstructionsTable.class.getResource("/assets/plus.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
 
         public InstructionBlock(InstructionsTable parent, String name, String instruction, boolean withRemove) {
             this.parent = parent;
@@ -122,6 +155,8 @@ public class InstructionsTable extends JPanel {
             constraints.fill = GridBagConstraints.BOTH;
             constraints.weightx = 0.3;
             constraints.weighty = 1;
+            constraints.gridx = 1;
+
 
             JTextField nameField = new JTextField(getName());
             nameField.setPreferredSize(new Dimension(getWidth(), 30));
@@ -133,7 +168,7 @@ public class InstructionsTable extends JPanel {
 
 
             JTextField instructionField = new JTextField(instruction);
-            constraints.gridx = 1;
+            constraints.gridx = 2;
             constraints.weightx = 0.6;
             instructionField.setPreferredSize(new Dimension(9999, 30));
             instructionField.setFont(getFont().deriveFont(15f));
@@ -143,10 +178,36 @@ public class InstructionsTable extends JPanel {
             add(instructionField, constraints);
 
 
-            constraints.gridx = 2;
-            constraints.weightx = 0.01;
+            constraints.gridx = 0;
+            constraints.weightx = 0;
             if (withRemove) {
-                actionButton = new JLabel(new ImageIcon(Popups.close.getImage().getScaledInstance(30, 30, Image.SCALE_REPLICATE)));
+                actionButton = new JLabel() {
+                    @Override
+                    public Icon getIcon() {
+                        if (parent.editedBlock != null) {
+                            switch (parent.category) {
+                                case EVENTS -> {
+                                    if (parent.editedBlock.events.contains(nameField.getText())) {
+                                        return minusIcon;
+                                    }
+                                }
+                                case CONDITIONS -> {
+                                    if (parent.editedBlock.conditions.contains(nameField.getText())) {
+                                        return minusIcon;
+                                    }
+                                }
+                                case OBJECTIVES -> {
+                                    if (parent.editedBlock.objectives.contains(nameField.getText())) {
+                                        return minusIcon;
+                                    }
+                                }
+                            }
+                            return plusIcon;
+                        }
+                        return removeIcon;
+                    }
+                };
+                actionButton.setHorizontalTextPosition(SwingConstants.CENTER);
                 actionButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
@@ -161,8 +222,6 @@ public class InstructionsTable extends JPanel {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         parent.handleInstructionClick(instance);
-                        parent.instructions.remove(nameField.getText());
-                        parent.update();
                     }
                 });
             }
@@ -192,7 +251,6 @@ public class InstructionsTable extends JPanel {
                 component.setBackground(bg);
             }
         }
-
         @Override
         public void setFont(Font font) {
             super.setFont(font);
@@ -200,14 +258,7 @@ public class InstructionsTable extends JPanel {
                 component.setFont(font);
             }
         }
-    }
 
-    public void enterEdit(ConversationBlock conversationBlock) {
-        this.editedBlock = conversationBlock;
-    }
-
-    public void exitEdit() {
-        this.editedBlock = null;
     }
 
 }

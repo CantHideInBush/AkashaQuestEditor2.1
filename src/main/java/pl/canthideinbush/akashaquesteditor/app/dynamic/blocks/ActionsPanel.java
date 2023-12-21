@@ -1,6 +1,7 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.blocks;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsTable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,14 +15,15 @@ import java.io.IOException;
 
 public class ActionsPanel extends JPanel {
 
+    private final ConversationBlock parent;
     private JButton events;
     private JButton conditions;
     private JButton objectives;
     private JButton journal;
     private JButton custom;
 
-    public ActionsPanel() {
-
+    public ActionsPanel(ConversationBlock parent) {
+        this.parent = parent;
         initialize();
         initializeComponents();
     }
@@ -82,8 +84,7 @@ public class ActionsPanel extends JPanel {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        Application.instance.sessionContainer.setSelectedIndex(1);
-                        Application.instance.sessionContainer.instructionsPanel.instructionTables.setSelectedIndex(0);
+                        Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.EVENTS);
                     }
                 }
         );
@@ -96,8 +97,7 @@ public class ActionsPanel extends JPanel {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        Application.instance.sessionContainer.setSelectedIndex(1);
-                        Application.instance.sessionContainer.instructionsPanel.instructionTables.setSelectedIndex(1);
+                        Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.CONDITIONS);
                     }
                 }
         );
@@ -106,6 +106,15 @@ public class ActionsPanel extends JPanel {
         objectives = new JButton("Zadania", new ImageIcon(objectivesIcon.getScaledInstance(32, 32, Image.SCALE_REPLICATE)));
         objectives.setFont(font);
         add(objectives);
+
+        objectives.addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.OBJECTIVES);
+                    }
+                }
+        );
 
         journal = new JButton("Dziennik", new ImageIcon(journalIcon.getScaledInstance(25, 25, Image.SCALE_REPLICATE)));
         journal.setFont(font);

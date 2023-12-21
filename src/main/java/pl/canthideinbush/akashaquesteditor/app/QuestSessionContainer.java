@@ -63,6 +63,7 @@ public class QuestSessionContainer extends JTabbedPane {
             if (getSelectedIndex() == 1) {
                 instructionsPanel.instructionNameField.requestFocus();
             }
+            else instructionsPanel.exitEdit();
         });
 
 

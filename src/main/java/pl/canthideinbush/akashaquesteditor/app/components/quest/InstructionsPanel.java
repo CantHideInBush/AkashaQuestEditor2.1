@@ -45,9 +45,9 @@ public class InstructionsPanel extends JPanel {
     private void addInstructionTables() {
         instructionTables = new JTabbedPane();
 
-        instructionTables.addTab("Zdarzenia", new JScrollPane(eventsTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("events"))));
-        instructionTables.addTab("Warunki", new JScrollPane(conditionsTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("conditions"))));
-        instructionTables.addTab("Cele", new JScrollPane(objectivesTable = new InstructionsTable(Application.instance.sessionContainer.session.instructions.get("objectives"))));
+        instructionTables.addTab("Zdarzenia", new JScrollPane(eventsTable = new InstructionsTable(InstructionsTable.Category.EVENTS, Application.instance.sessionContainer.session.instructions.get("events"))));
+        instructionTables.addTab("Warunki", new JScrollPane(conditionsTable = new InstructionsTable(InstructionsTable.Category.CONDITIONS, Application.instance.sessionContainer.session.instructions.get("conditions"))));
+        instructionTables.addTab("Cele", new JScrollPane(objectivesTable = new InstructionsTable(InstructionsTable.Category.OBJECTIVES, Application.instance.sessionContainer.session.instructions.get("objectives"))));
 
         eventsTable.update();
         conditionsTable.update();
@@ -308,13 +308,20 @@ public class InstructionsPanel extends JPanel {
         });
     }
 
-    public void enterEdit(ConversationBlock conversationBlock) {
+    public void enterEdit(ConversationBlock conversationBlock, InstructionsTable.Category category) {
         this.editedBlock = conversationBlock;
+        objectivesTable.enterEdit(editedBlock);
+        conditionsTable.enterEdit(editedBlock);
+        eventsTable.enterEdit(editedBlock);
+        Application.instance.sessionContainer.setSelectedIndex(1);
+        Application.instance.sessionContainer.instructionsPanel.instructionTables.setSelectedIndex(category.id);
     }
 
     public void exitEdit() {
         this.editedBlock = null;
-        
+        eventsTable.exitEdit();
+        conditionsTable.exitEdit();
+        eventsTable.exitEdit();
     }
 
 
