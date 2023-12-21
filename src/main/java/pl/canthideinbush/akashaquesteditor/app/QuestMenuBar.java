@@ -60,6 +60,15 @@ public class QuestMenuBar extends JMenuBar {
 
         fileMenu.add(load);
 
+
+        JMenuItem export = new JMenuItem("Eksportuj");
+        export.setMnemonic('E');
+        export.addActionListener(e -> {
+            IO.export();
+        });
+
+        fileMenu.add(export);
+
         add(fileMenu);
     }
 

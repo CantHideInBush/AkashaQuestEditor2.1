@@ -231,7 +231,12 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         for (ConversationBlock conversationBlock : linkedBlocksCache) {
             conversationOption.addPointer(conversationBlock.getName());
         }
-
+        for (String event : events) {
+            conversationOption.addEvent(event);
+        }
+        for (String condition : conditions) {
+            conversationOption.addCondition(condition);
+        }
 
         return conversationOption;
     }

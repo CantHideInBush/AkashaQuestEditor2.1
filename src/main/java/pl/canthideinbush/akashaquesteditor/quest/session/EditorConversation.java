@@ -2,9 +2,13 @@ package pl.canthideinbush.akashaquesteditor.quest.session;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.NPCBlock;
+import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.PlayerBlock;
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.SF;
 import pl.canthideinbush.akashaquesteditor.io.SelfAttach;
+import pl.canthideinbush.akashaquesteditor.quest.objects.Conversation;
+import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -55,6 +59,23 @@ public class EditorConversation implements SelfAttach {
     @Override
     public List<Class<? extends SelfAttach>> dependencies() {
         return Collections.singletonList(QuestSession.class);
+    }
+
+    public Conversation generateConversation() {
+        Conversation conversation = new Conversation(name);
+
+        for (ConversationBlock conversationBlock : conversationBlocks) {
+            ConversationOption option = conversationBlock.create();
+            if (NPCBlock.class.isAssignableFrom(conversationBlock.getClass())) {
+                conversation.addNPCOption(option);
+            }
+            else if (PlayerBlock.class.isAssignableFrom(conversationBlock.getClass())) {
+                conversation.addPlayerOption(option);
+            }
+        }
+
+
+        return conversation;
     }
 
 

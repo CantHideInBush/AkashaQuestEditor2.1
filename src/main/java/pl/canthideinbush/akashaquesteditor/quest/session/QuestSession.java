@@ -23,6 +23,9 @@ public class QuestSession implements SelfAttach {
     @SF
     public Map<String, LinkedHashMap<String, String>> instructions = new HashMap<>();
 
+    @SF
+    public List<UUID> firstOptions = new ArrayList<>();
+
     public QuestSession() {
         ISerialization.register(this);
         instructions.putIfAbsent("events", new LinkedHashMap<>());
@@ -43,12 +46,19 @@ public class QuestSession implements SelfAttach {
 
     public PackageFile generatePackage() {
         PackageFile packageFile = new PackageFile("package");
+        packageFile.addEvents(generateEvents());
+        packageFile.addConditions(generateConditions());
+        packageFile.addObjectives(generateObjectives());
 
-        return null;
+        return packageFile;
     }
 
     public ArrayList<Conversation> generateConversations() {
         ArrayList<Conversation> conversations = new ArrayList<>();
+        for (EditorConversation eConversation : this.conversations) {
+            conversations.add(eConversation.generateConversation());
+        }
+
         return conversations;
     }
 

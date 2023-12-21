@@ -2,7 +2,6 @@ package pl.canthideinbush.akashaquesteditor.io;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.QuestMenuBar;
-import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.swing.*;
 import java.io.File;
@@ -50,5 +49,31 @@ public class IO {
             else ISerialization.deserialize(file);
         }
     }
+
+    public static void export() {
+        if (Application.instance.sessionContainer == null) {
+            JOptionPane.showMessageDialog(Application.instance, "Żadne zadanie nie jest otwarte w programie", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int result = fileChooser.showSaveDialog(Application.instance);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (
+                        IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            ISerialization.exportToDir(file);
+        }
+    }
+
+
+
 
 }
