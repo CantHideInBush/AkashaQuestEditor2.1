@@ -16,6 +16,9 @@ import java.io.IOException;
 public class ActionsPanel extends JPanel {
 
     private final ConversationBlock parent;
+
+    ActionsPanel instance = this;
+
     private JButton events;
     private JButton conditions;
     private JButton objectives;
@@ -122,9 +125,17 @@ public class ActionsPanel extends JPanel {
         add(journal);
 
 
-        custom = new JButton("Własne");
+        custom = new JButton("Akcje");
         custom.setFont(font);
         add(custom);
+
+        custom.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Point converted = SwingUtilities.convertPoint(Application.instance.sessionContainer.conversationComposerPanel.zoomedComponentEventProxy, e.getX(), e.getY(), parent);
+                parent.getMenu().show(parent, converted.x, converted.y);
+            }
+        });
 
 
 

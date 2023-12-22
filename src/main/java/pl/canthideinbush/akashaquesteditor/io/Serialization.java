@@ -59,6 +59,7 @@ public class Serialization implements ISerialization {
                 throw new RuntimeException(e);
             }
             YamlConfiguration conversationConfiguration = new YamlConfiguration();
+            conversation.save(conversationConfiguration.createSection("conversations"));
             try {
                 conversationConfiguration.save(conversationFile);
             } catch (

@@ -101,7 +101,11 @@ public class InstructionsTable extends JPanel {
 
     private void handleInstructionClick(InstructionBlock instance) {
         if (editedBlock != null) {
-            editedBlock.toggleEvent(instance.getName());
+            switch (category) {
+                case EVENTS -> editedBlock.toggleEvent(instance.getName());
+                case CONDITIONS -> editedBlock.toggleCondition(instance.getName());
+                case OBJECTIVES -> editedBlock.toggleObjective(instance.getName());
+            }
         }
         else {
             instructions.remove(instance.getName());

@@ -10,17 +10,19 @@ import pl.canthideinbush.akashaquesteditor.io.SelfAttach;
 import pl.canthideinbush.akashaquesteditor.quest.objects.Conversation;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class EditorConversation implements SelfAttach {
 
+    @SF
     String name;
     @SF
     public List<ConversationBlock> conversationBlocks = new ArrayList<>();
+
+    @SF
+    public List<String> startOptions = new ArrayList<>();
+
 
     public EditorConversation(Map<String, Object> data) {
         deserializeFromMap(data);
@@ -63,7 +65,8 @@ public class EditorConversation implements SelfAttach {
 
     public Conversation generateConversation() {
         Conversation conversation = new Conversation(name);
-
+        conversation.setQuester(name);
+        conversation.setRawFirst(generateFirstOptions());
         for (ConversationBlock conversationBlock : conversationBlocks) {
             ConversationOption option = conversationBlock.create();
             if (NPCBlock.class.isAssignableFrom(conversationBlock.getClass())) {
@@ -78,5 +81,14 @@ public class EditorConversation implements SelfAttach {
         return conversation;
     }
 
+
+    public String generateFirstOptions() {
+        if (startOptions.isEmpty()) return "";
+        StringBuilder builder = new StringBuilder();
+        for (String uuid : startOptions) {
+            builder.append(conversationBlocks.stream().filter(cB -> uuid.equals(cB.uuid.toString())).findFirst().get().getName()).append(", ");
+        }
+        return builder.substring(0, builder.length() - 2);
+    }
 
 }

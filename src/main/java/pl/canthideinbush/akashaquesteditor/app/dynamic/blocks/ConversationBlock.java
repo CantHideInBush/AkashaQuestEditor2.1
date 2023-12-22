@@ -37,10 +37,10 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     protected ActionsPanel actionsPanel;
     private SimpleAttributeSet centerAttributeSet;
 
+
     public List<String> events = new ArrayList<>();
     public List<String> conditions = new ArrayList<>();
     public List<String> objectives = new ArrayList<>();
-
 
     public ConversationBlock(String name) {
         setName(name);
@@ -299,6 +299,29 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         });
     }
 
+    public JPopupMenu getMenu() {
+        JPopupMenu menu = new JPopupMenu();
+
+        JMenuItem linkItem = new JMenuItem("Połącz z");
+        linkItem.addActionListener(e -> {
+            ConversationBlock.lastPressedAction = this;
+        });
+        menu.add(linkItem);
+
+
+        JMenuItem removeItem = new JMenuItem("Usuń");
+        removeItem.addActionListener(e -> {
+            int result = JOptionPane.showConfirmDialog(Application.instance, "Czy na pewno chcesz usunąć blok " + getName() + "?", "Ostrzeżenie", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
+            if (result == 0) {
+                remove();
+            }
+        });
+
+        menu.add(removeItem);
+
+        return menu;
+    }
+
     private enum ConnectionPoints {
         TOP(0),BOTTOM(1),LEFT(2),RIGHT(3);
 
@@ -342,7 +365,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         yDiff = endY - y;
 
 
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(Color.GRAY);
         if (firstPoint.equals(ConnectionPoints.LEFT) || firstPoint.equals(ConnectionPoints.RIGHT)) {
             g2d.drawLine(x, y, x + xDiff / 2, y);
             g2d.drawLine(endX, endY, endX - xDiff / 2, endY);
@@ -361,18 +384,23 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
 
 
     static ConversationBlock lastPressed;
+    static ConversationBlock lastPressedAction;
     public void registerLinkingListener() {
         ConversationBlock inst = this;
         MouseAdapter adapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                lastPressed = inst;
+                if (lastPressedAction != null) {
+                    lastPressed = lastPressedAction;
+                    lastPressedAction = null;
+                }
+                else lastPressed = inst;
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (lastPressed != null && !lastPressed.equals(inst)) {
-                    if (!e.isShiftDown()) {
+                    if (e.isShiftDown()) {
                         lastPressed.toggleLink(inst);
                     }
                     else {
@@ -472,6 +500,16 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             objectives.remove(instruction);
         }
         else objectives.add(instruction);
+    }
+
+    public void remove() {
+        for (ConversationBlock conversationBlock : Application.instance.sessionContainer.session.activeConversation.conversationBlocks) {
+            conversationBlock.linkedBlocks.remove(uuid);
+            conversationBlock.updateLinkedBlocksCache();
+        }
+        Application.instance.sessionContainer.conversationComposer.remove(this);
+        Application.instance.sessionContainer.session.activeConversation.conversationBlocks.remove(this);
+        Application.instance.sessionContainer.repaint();
     }
 
 

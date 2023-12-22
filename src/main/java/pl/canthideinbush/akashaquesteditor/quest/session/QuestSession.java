@@ -23,8 +23,6 @@ public class QuestSession implements SelfAttach {
     @SF
     public Map<String, LinkedHashMap<String, String>> instructions = new HashMap<>();
 
-    @SF
-    public List<UUID> firstOptions = new ArrayList<>();
 
     public QuestSession() {
         ISerialization.register(this);
@@ -41,7 +39,6 @@ public class QuestSession implements SelfAttach {
 
     public void attach() {
         Application.instance.createNewSession(this);
-        System.out.println("Attached");
     }
 
     public PackageFile generatePackage() {
