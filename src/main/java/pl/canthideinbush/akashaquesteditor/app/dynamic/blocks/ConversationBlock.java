@@ -450,7 +450,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             g2d.setColor(Color.WHITE);
             g2d.fillRect(7, 7, getWidth() - 7 * 2 - 1, getHeight() - 7 * 2 - 1);
             g2d.setColor(defaultBorderColor());
-            g2d.setFont(getFont().deriveFont(Font.BOLD, 50f));
+            g2d.setFont(getFont().deriveFont(Font.BOLD, 35f));
             Rectangle stringBounds = getStringBounds(g2d, getName(), (float) getWidth() / 2, (float) getHeight() / 2);
             g2d.drawString(getName(), getWidth() / 2 - stringBounds.width, getHeight() / 2 + stringBounds.height / 2);
         }
@@ -485,6 +485,10 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     public void toggleCondition(String instruction) {
         if (conditions.contains(instruction)) {
             conditions.remove(instruction);
+            conditions.add("!" + instruction);
+        }
+        else if (conditions.contains("!" + instruction)) {
+            conditions.remove("!" + instruction);
         }
         else conditions.add(instruction);
     }

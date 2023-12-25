@@ -32,6 +32,7 @@ public class ZoomedComponentEventProxy extends JPanel {
         intercepted.setLayer(this, JLayeredPane.DRAG_LAYER + 1);
     }
 
+    public static int precision = 20;
 
     private void initializeIntercepting() {
         MouseAdapter adapter = new MouseAdapter() {
@@ -113,7 +114,6 @@ public class ZoomedComponentEventProxy extends JPanel {
                     e.setSource(component);
                     if (dragged != null) {
                         CenterAbleComponent optional = getOptionalDragComponent(component);
-                        int precision = 20;
                         if (!e.isShiftDown() && !e.isAltDown() && !e.isControlDown() && optional != null) {
                             Container container = optional.getContainer();
                             Component parent = container.getParent();

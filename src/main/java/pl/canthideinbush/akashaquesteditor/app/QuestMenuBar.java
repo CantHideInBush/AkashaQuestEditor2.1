@@ -78,7 +78,7 @@ public class QuestMenuBar extends JMenuBar {
 
     private String getNewConversationName() {
         String conversation = Popups.createShortTextPopup("Nowa konwersacja", "Wprowadź nazwę konwersacji", "");
-        if (conversation.equalsIgnoreCase("")) {
+        if ("".equalsIgnoreCase(conversation)) {
             JOptionPane.showMessageDialog(Application.instance, "Wprowadzono błędną nazwę", "Błąd użytkownika", JOptionPane.ERROR_MESSAGE);
             return null;
         }

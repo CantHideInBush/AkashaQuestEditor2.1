@@ -1,7 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app.components.quest;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
-import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;
 
@@ -107,7 +106,10 @@ public class InstructionsTable extends JPanel {
             }
         }
         else {
-            instructions.remove(instance.getName());
+            int result = JOptionPane.showConfirmDialog(Application.instance, "Czy na pewno chcesz usunąć " + instance.getName() + "?", "Ostrzeżenie", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
+            if (result == 0) {
+                instructions.remove(instance.getName());
+            }
         }
         update();
     }
@@ -133,11 +135,14 @@ public class InstructionsTable extends JPanel {
         static ImageIcon plusIcon;
         static ImageIcon minusIcon;
 
+        static ImageIcon warningIcon;
+
 
         static {
             try {
                 minusIcon = new ImageIcon(ImageIO.read(InstructionsTable.class.getResource("/assets/minus.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
                 plusIcon = new ImageIcon(ImageIO.read(InstructionsTable.class.getResource("/assets/plus.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
+                warningIcon = new ImageIcon(ImageIO.read(InstructionsTable.class.getResource("/assets/warning.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -196,6 +201,9 @@ public class InstructionsTable extends JPanel {
                                 }
                                 case CONDITIONS -> {
                                     if (parent.editedBlock.conditions.contains(nameField.getText())) {
+                                        return warningIcon;
+                                    }
+                                    else if (parent.editedBlock.conditions.contains("!" + nameField.getText())) {
                                         return minusIcon;
                                     }
                                 }

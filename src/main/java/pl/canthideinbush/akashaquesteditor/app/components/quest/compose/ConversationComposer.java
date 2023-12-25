@@ -49,7 +49,8 @@ public class ConversationComposer extends JLayeredPane implements Zoomable {
                     String name = Popups.createShortTextPopup("Utwórz nowy blok", "Wprowadź nazwę", "");
                     if (name == null) return;
                     ConversationBlock conversationBlock = e.getButton() == MouseEvent.BUTTON1 ? new NPCBlock(name) : new PlayerBlock(name);
-                    conversationBlock.centerIn(convert(e.getPoint()));
+                    Point converted = convert(e.getPoint());
+                    conversationBlock.centerIn(new Point(converted.x - converted.x % ZoomedComponentEventProxy.precision, converted.y - converted.y % ZoomedComponentEventProxy.precision));
                     add(conversationBlock);
                     Application.instance.sessionContainer.session.activeConversation.conversationBlocks.add(conversationBlock);
                     repaint();

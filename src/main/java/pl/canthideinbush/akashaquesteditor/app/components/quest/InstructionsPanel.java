@@ -102,7 +102,7 @@ public class InstructionsPanel extends JPanel {
         constraints.gridwidth = 1;
         constraints.gridy = 0;
 
-        JLabel nameLabel = bottomCenterLabel("Nazwa");
+        JLabel nameLabel = bottomCenterLabel("Nazwa ");
         constraints.weightx = 0.2;
         constraints.gridx = 0;
         createInstructionPanel.add(nameLabel, constraints);
