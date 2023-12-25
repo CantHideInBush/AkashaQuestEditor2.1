@@ -4,12 +4,11 @@ import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsPane
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ComposerInfoBar;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.DragZoomPanel;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.StartOrderPanel;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.StartOptionsOrderPanel;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 
@@ -19,7 +18,6 @@ public class QuestSessionContainer extends JTabbedPane {
     public DragZoomPanel conversationComposerPanel;
     public ComposerInfoBar composerInfoBar;
     public InstructionsPanel instructionsPanel;
-    public StartOrderPanel startOrderPanel;
 
     public QuestSessionContainer(QuestSession session) {
         this.session = session;
@@ -38,6 +36,7 @@ public class QuestSessionContainer extends JTabbedPane {
 
 
     private void initializeComponents() {
+
         conversationComposer.setOpaque(true);
         conversationComposer.setPreferredSize(new Dimension(9999, 9999));
         conversationComposer.setLocation(0, 0);

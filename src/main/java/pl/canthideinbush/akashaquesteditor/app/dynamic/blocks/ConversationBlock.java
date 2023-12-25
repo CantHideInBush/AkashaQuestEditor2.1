@@ -400,13 +400,10 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (lastPressed != null && !lastPressed.equals(inst)) {
-                    if (e.isShiftDown()) {
-                        lastPressed.toggleLink(inst);
-                    }
-                    else {
-                        ConversationComposer composer = Application.instance.sessionContainer.conversationComposer;
-                        composer.setLayer(lastPressed, getLayer(inst) + 1);
-                    }
+                    lastPressed.toggleLink(inst);
+                    ConversationComposer composer = Application.instance.sessionContainer.conversationComposer;
+                    composer.setLayer(lastPressed, getLayer(inst) + 1);
+                    Application.instance.sessionContainer.conversationComposer.repaint();
                 }
             }
         };

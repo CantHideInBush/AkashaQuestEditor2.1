@@ -83,41 +83,40 @@ public class ActionsPanel extends JPanel {
         events.setFont(font);
         add(events);
 
-        events.addMouseListener(
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.EVENTS);
-                    }
-                }
-        );
+        events.addActionListener(e -> Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.EVENTS));
+        events.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.EVENTS);
+            }
+        });
 
         conditions = new JButton("Warunki", new ImageIcon(conditionsIcon.getScaledInstance(26, 26, Image.SCALE_REPLICATE)));
         conditions.setFont(font);
         add(conditions);
 
-        conditions.addMouseListener(
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.CONDITIONS);
-                    }
-                }
-        );
+        conditions.addActionListener(e -> Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.CONDITIONS));
+        conditions.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.CONDITIONS);
+            }
+        });
 
 
-        objectives = new JButton("Zadania", new ImageIcon(objectivesIcon.getScaledInstance(32, 32, Image.SCALE_REPLICATE)));
+        objectives = new JButton("Cele", new ImageIcon(objectivesIcon.getScaledInstance(32, 32, Image.SCALE_REPLICATE)));
         objectives.setFont(font);
         add(objectives);
 
-        objectives.addMouseListener(
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.OBJECTIVES);
-                    }
-                }
+        objectives.addActionListener(
+                e -> Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.OBJECTIVES)
         );
+        objectives.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.OBJECTIVES);
+            }
+        });
 
         journal = new JButton("Dziennik", new ImageIcon(journalIcon.getScaledInstance(25, 25, Image.SCALE_REPLICATE)));
         journal.setFont(font);
@@ -129,11 +128,18 @@ public class ActionsPanel extends JPanel {
         custom.setFont(font);
         add(custom);
 
+        custom.addActionListener(e -> {
+                JPopupMenu menu = parent.getMenu();
+                menu.show(custom, custom.getWidth(), 0);
+                menu.requestFocus();
+            }
+        );
         custom.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Point converted = SwingUtilities.convertPoint(Application.instance.sessionContainer.conversationComposerPanel.zoomedComponentEventProxy, e.getX(), e.getY(), parent);
-                parent.getMenu().show(parent, converted.x, converted.y);
+                JPopupMenu menu = parent.getMenu();
+                menu.show(custom, custom.getWidth(), 0);
+                menu.requestFocus();
             }
         });
 

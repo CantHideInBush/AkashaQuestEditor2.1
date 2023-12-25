@@ -78,7 +78,24 @@ public class QuestSession implements SelfAttach {
         return null;
     }
 
+    public List<String> getConversationNames() {
+        return conversations.stream().map(editorConversation -> editorConversation.getName().toLowerCase()).collect(Collectors.toList());
+    }
 
 
+    public void setActiveConversation(EditorConversation editorConversation) {
+        if (activeConversation.equals(editorConversation)) return;
+        activeConversation.deactivate();
+        activeConversation = editorConversation;
+        editorConversation.activate();
+    }
 
+    public void removeActiveConversation() {
+        activeConversation.deactivate();
+        conversations.remove(activeConversation);
+        if (!conversations.isEmpty()) {
+            activeConversation = conversations.get(0);
+        }
+        else activeConversation = null;
+    }
 }

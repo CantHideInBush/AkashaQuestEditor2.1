@@ -20,9 +20,13 @@ public class EditorConversation implements SelfAttach {
     @SF
     public List<ConversationBlock> conversationBlocks = new ArrayList<>();
 
+    //UUID's as strings
     @SF
     public List<String> startOptions = new ArrayList<>();
 
+    public String getName() {
+        return name;
+    }
 
     public EditorConversation(Map<String, Object> data) {
         deserializeFromMap(data);
@@ -38,21 +42,28 @@ public class EditorConversation implements SelfAttach {
     public void attach() {
         QuestSession session = Application.instance.sessionContainer.session;
         session.conversations.add(this);
+        initialize();
         if (this.equals(session.activeConversation)) {
-            deploy();
+            activate();
         }
     }
 
-    public void deploy() {
+    public void initialize() {
         for (ConversationBlock conversationBlock : conversationBlocks) {
             conversationBlock.initialize();
             conversationBlock.initializeComponents();
-            Application.instance.sessionContainer.conversationComposer.add(conversationBlock);
         }
-        conversationBlocks.forEach(ConversationBlock::updateLinkedBlocksCache);
     }
 
-    public void contract() {
+    public void activate() {
+        conversationBlocks.forEach(conversationBlock -> {
+            Application.instance.sessionContainer.conversationComposer.add(conversationBlock);
+        });
+        conversationBlocks.forEach(ConversationBlock::updateLinkedBlocksCache);
+        Application.instance.sessionContainer.conversationComposer.repaint();
+    }
+
+    public void deactivate() {
         for (ConversationBlock conversationBlock : conversationBlocks) {
             Application.instance.sessionContainer.conversationComposer.remove(conversationBlock);
         }
