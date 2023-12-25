@@ -310,7 +310,6 @@ public class InstructionsPanel extends JPanel {
 
     public void enterEdit(ConversationBlock conversationBlock, InstructionsTable.Category category) {
         this.editedBlock = conversationBlock;
-        objectivesTable.enterEdit(editedBlock);
         conditionsTable.enterEdit(editedBlock);
         eventsTable.enterEdit(editedBlock);
         Application.instance.sessionContainer.setSelectedIndex(1);

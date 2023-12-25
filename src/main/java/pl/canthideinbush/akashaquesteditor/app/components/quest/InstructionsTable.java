@@ -104,7 +104,6 @@ public class InstructionsTable extends JPanel {
             switch (category) {
                 case EVENTS -> editedBlock.toggleEvent(instance.getName());
                 case CONDITIONS -> editedBlock.toggleCondition(instance.getName());
-                case OBJECTIVES -> editedBlock.toggleObjective(instance.getName());
             }
         }
         else {
@@ -167,7 +166,7 @@ public class InstructionsTable extends JPanel {
             nameField.setFont(getFont().deriveFont(15f));
             nameField.setHorizontalAlignment(SwingConstants.CENTER);
             nameField.setBorder(new LineBorder(Color.BLACK));
-            TextComponents.disableSelection(nameField);
+            nameField.setEditable(false);
             add(nameField, constraints);
 
 
@@ -178,7 +177,7 @@ public class InstructionsTable extends JPanel {
             instructionField.setFont(getFont().deriveFont(15f));
             instructionField.setHorizontalAlignment(SwingConstants.CENTER);
             instructionField.setBorder(new LineBorder(Color.BLACK));
-            TextComponents.disableSelection(instructionField);
+            instructionField.setEditable(false);
             add(instructionField, constraints);
 
 
@@ -201,9 +200,7 @@ public class InstructionsTable extends JPanel {
                                     }
                                 }
                                 case OBJECTIVES -> {
-                                    if (parent.editedBlock.objectives.contains(nameField.getText())) {
-                                        return minusIcon;
-                                    }
+                                    return removeIcon;
                                 }
                             }
                             return plusIcon;

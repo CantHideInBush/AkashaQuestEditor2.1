@@ -40,7 +40,6 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
 
     public List<String> events = new ArrayList<>();
     public List<String> conditions = new ArrayList<>();
-    public List<String> objectives = new ArrayList<>();
 
     public ConversationBlock(String name) {
         setName(name);
@@ -425,7 +424,6 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         data.put("linked", linkedBlocks.stream().map(UUID::toString).collect(Collectors.toList()));
         data.put("events", events);
         data.put("conditions", conditions);
-        data.put("objectives", objectives);
         return data;
     }
 
@@ -437,7 +435,6 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         setText((String) data.getOrDefault("text", ""));
         events.addAll((Collection<? extends String>) data.getOrDefault("events", Collections.emptyList()));
         conditions.addAll((Collection<? extends String>) data.getOrDefault("conditions", Collections.emptyList()));
-        objectives.addAll((Collection<? extends String>) data.getOrDefault("objectives", Collections.emptyList()));
         if (data.containsKey("linked")) linkedBlocks.addAll(((List<String>) data.get("linked")).stream().map(UUID::fromString).toList());
     }
 
@@ -490,13 +487,6 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             conditions.remove(instruction);
         }
         else conditions.add(instruction);
-    }
-
-    public void toggleObjective(String instruction) {
-        if (objectives.contains(instruction)) {
-            objectives.remove(instruction);
-        }
-        else objectives.add(instruction);
     }
 
     public void remove() {
