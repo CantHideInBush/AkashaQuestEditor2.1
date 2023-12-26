@@ -2,6 +2,7 @@ package pl.canthideinbush.akashaquesteditor.quest.session;
 
 import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.Application;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntryPanel;
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.SF;
 import pl.canthideinbush.akashaquesteditor.io.SelfAttach;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class QuestSession implements SelfAttach {
 
-    public ArrayList<EditorConversation> conversations = new ArrayList<>();
+    public HashSet<EditorConversation> conversations = new HashSet<>();
 
     @SF
     public EditorConversation activeConversation;
@@ -44,7 +45,6 @@ public class QuestSession implements SelfAttach {
     }
 
     public void attach() {
-        Application.instance.clean();
         Application.instance.createNewSession(this);
     }
 
@@ -53,6 +53,7 @@ public class QuestSession implements SelfAttach {
         packageFile.addEvents(generateEvents());
         packageFile.addConditions(generateConditions());
         packageFile.addObjectives(generateObjectives());
+        packageFile.addJournalEntries(generateJournalEntries());
         for (EditorConversation conversation : conversations) {
             packageFile.addNPC(conversation.npcId, conversation.getName());
         }
@@ -84,8 +85,11 @@ public class QuestSession implements SelfAttach {
     }
 
     private List<JournalEntry> generateJournalEntries() {
-
-        return null;
+        ArrayList<JournalEntry> journalEntries = new ArrayList<>();
+        for (JournalEntryPanel journalEntryPanel : Application.instance.sessionContainer.journalEntriesContainer.journalEntryPanels) {
+            journalEntries.add(new JournalEntry(journalEntryPanel.getName(), journalEntryPanel.textPane.getText().replaceAll("\\r", "")));
+        }
+        return journalEntries;
     }
 
     public List<String> getConversationNames() {
@@ -105,7 +109,7 @@ public class QuestSession implements SelfAttach {
         conversations.remove(activeConversation);
         activeConversation.terminate();
         if (!conversations.isEmpty()) {
-            activeConversation = conversations.get(0);
+            activeConversation = conversations.iterator().next();
             activeConversation.activate();
         }
         else activeConversation = null;

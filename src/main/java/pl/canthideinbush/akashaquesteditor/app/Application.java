@@ -1,5 +1,7 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
+import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntriesContainer;
+import pl.canthideinbush.akashaquesteditor.io.IO;
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.Serialization;
 import pl.canthideinbush.akashaquesteditor.quest.session.EditorConversation;
@@ -8,8 +10,8 @@ import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -41,6 +43,7 @@ public class Application extends JPanel {
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setLocationByPlatform(true);
             frame.add(instance);
+            instance.registerActions();
             frame.pack();
             frame.setVisible(true);
             frame.createBufferStrategy(2);
@@ -56,6 +59,7 @@ public class Application extends JPanel {
                     instance.repaint();
                 }
             });
+
 
             new Serialization();
         });
@@ -79,6 +83,25 @@ public class Application extends JPanel {
         setLayout(new GridLayout(1, 1));
     }
 
+    private void registerActions() {
+        getRootPane().registerKeyboardAction(e -> {
+            if (sessionContainer != null && !sessionContainer.session.recentFilePath.equalsIgnoreCase("/")) {
+                ISerialization.serialize(new File(sessionContainer.session.recentFilePath));
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), WHEN_IN_FOCUSED_WINDOW);
+
+        getRootPane().registerKeyboardAction(e -> {
+            if (sessionContainer != null && !sessionContainer.session.recentExportPath.equalsIgnoreCase("/")) {
+                ISerialization.exportToDir(new File(sessionContainer.session.recentExportPath));
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK), WHEN_IN_FOCUSED_WINDOW);
+
+            getRootPane().registerKeyboardAction(e -> {
+                IO.load();
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK), WHEN_IN_FOCUSED_WINDOW);
+
+
+    }
 
 
     public static Image icon;
@@ -110,6 +133,12 @@ public class Application extends JPanel {
         }
         add(footerSpacer);
 
+        /*if (session.conversations.isEmpty()) {
+            session.conversations.add(session.activeConversation);
+            session.activeConversation.initialize();
+            session.activeConversation.activate();
+        }*/
+
         revalidate();
         repaint();
     }
@@ -120,6 +149,8 @@ public class Application extends JPanel {
      */
     public void clean() {
         if (ISerialization.registeredClasses.containsKey(EditorConversation.class)) ISerialization.registeredClasses.get(EditorConversation.class).clear();
+        if (ISerialization.registeredClasses.containsKey(JournalEntriesContainer.class)) ISerialization.registeredClasses.get(JournalEntriesContainer.class).clear();
+
         if (sessionContainer != null) {
             remove(sessionContainer);
             ISerialization.terminate(sessionContainer.session);

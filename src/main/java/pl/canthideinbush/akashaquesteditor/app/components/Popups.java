@@ -51,8 +51,8 @@ public class Popups {
         pane.setBorder(new CompoundBorder(new LineBorder(dialog.getBackground(), 15), new EmptyBorder(5, 15, 5,15)));
 
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 0.8;
-        gbc.weighty = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 0.95;
 
 
         JScrollPane scrollPane = new JScrollPane(pane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -60,14 +60,15 @@ public class Popups {
         dialog.add(scrollPane, gbc);
 
         JPanel confirmPanel = new JPanel();
-        gbc.weightx = 0.2;
+        gbc.weighty = 0.05;
+        gbc.gridy = 1;
 
         ResizableIcon confirmButton = new ResizableIcon(tickStatic.getImage(), tick);
-        ResizeAnimationContainer confirmButtonContainer = createResizableComponent(confirmButton, new Dimension(38, 38), new Dimension(46, 46), 200);
+        ResizeAnimationContainer confirmButtonContainer = createResizableComponent(confirmButton, new Dimension(40, 40), new Dimension(50, 50), 100);
         confirmButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3, true));
         
         ResizableIcon closeButton = new ResizableIcon(close.getImage(), close);
-        ResizeAnimationContainer closeButtonContainer = createResizableComponent(closeButton, new Dimension(48, 48), new Dimension(54, 54), 200);
+        ResizeAnimationContainer closeButtonContainer = createResizableComponent(closeButton, new Dimension(50, 50), new Dimension(56, 56), 100);
         pane.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {

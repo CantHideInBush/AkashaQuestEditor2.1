@@ -145,7 +145,8 @@ public class ActionsPanel extends JPanel {
         JPopupMenu menu = parent.getMenu();
         DragZoomPanel panel = Application.instance.sessionContainer.conversationComposerPanel;
         Point converted = SwingUtilities.convertPoint(custom, custom.getWidth(), 0, Application.instance.sessionContainer.conversationComposerPanel.zoomedComponentEventProxy);
-        menu.show(panel, (int) (converted.x * panel.getComponentZoom()), (int) (converted.y * panel.getComponentZoom()));
+        Point viewPosition = panel.getViewport().getViewPosition();
+        menu.show(panel, (int) (converted.x * panel.getComponentZoom()) - viewPosition.x, (int) (converted.y * panel.getComponentZoom()) - viewPosition.y);
         menu.requestFocus();
     }
 

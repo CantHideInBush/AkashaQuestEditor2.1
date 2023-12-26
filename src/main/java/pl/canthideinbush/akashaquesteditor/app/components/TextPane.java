@@ -2,10 +2,16 @@ package pl.canthideinbush.akashaquesteditor.app.components;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.html.CSS;
 import java.awt.*;
 import java.beans.BeanProperty;
 
 public class TextPane extends JTextPane {
+
+    public TextPane() {
+    }
 
     protected int getColumnWidth() {
         if (columnWidth == 0) {
@@ -50,6 +56,14 @@ public class TextPane extends JTextPane {
         size.height = (rows == 0) ? size.height :
                 rows * getRowHeight() + insets.top + insets.bottom;
         return size;
+    }
+
+    public void setDefaultFont(Font font) {
+        MutableAttributeSet set = getInputAttributes();
+        StyleConstants.FontConstants.setFontFamily(set, font.getFamily());
+        StyleConstants.FontConstants.setFontSize(set, font.getSize());
+        StyleConstants.FontConstants.setItalic(set, font.isItalic());
+        StyleConstants.FontConstants.setBold(set, font.isBold());
     }
 
 

@@ -56,6 +56,7 @@ public interface ISerialization {
     static void deserialize(File file) {
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
         try {
+            Application.instance.clean();
             yamlConfiguration.load(file);
         } catch (
                 IOException |

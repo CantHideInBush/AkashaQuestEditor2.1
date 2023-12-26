@@ -18,7 +18,7 @@ public class QuestSessionContainer extends JTabbedPane {
     public DragZoomPanel conversationComposerPanel;
     public ComposerInfoBar composerInfoBar;
     public InstructionsPanel instructionsPanel;
-    private JournalEntriesContainer journalEntriesContainer;
+    public JournalEntriesContainer journalEntriesContainer;
 
     public QuestSessionContainer(QuestSession session) {
         this.session = session;
@@ -68,8 +68,7 @@ public class QuestSessionContainer extends JTabbedPane {
             else instructionsPanel.exitEdit();
         });
 
-        journalEntriesContainer = new JournalEntriesContainer();
-        addTab("Dziennik", journalEntriesContainer);
+        addTab("Dziennik", journalEntriesContainer = new JournalEntriesContainer());
         setMnemonicAt(2, KeyEvent.VK_D);
 
     }
@@ -99,4 +98,7 @@ public class QuestSessionContainer extends JTabbedPane {
     }
 
 
+    public void attachJournalEntriesContainer(JournalEntriesContainer journalEntriesContainer) {
+        this.journalEntriesContainer.cloneFrom(journalEntriesContainer);
+    }
 }

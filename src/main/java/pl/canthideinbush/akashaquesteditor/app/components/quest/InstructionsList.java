@@ -56,7 +56,7 @@ public class InstructionsList extends JPanel {
         header.setBackground(Color.LIGHT_GRAY);
         add(header, constraints);
         filler.setPreferredSize(new Dimension(0, 9999));
-        filler.setBackground(Color.DARK_GRAY);
+        filler.setBackground(Application.instance.sessionContainer.conversationComposer.getBackground());
 
     }
 

@@ -285,7 +285,7 @@ public class InstructionsPanel extends JPanel {
 
     private void initialize() {
         setPreferredSize(new Dimension(9999, 9999));
-        setBackground(ConversationComposer.background);
+        setBackground(Color.LIGHT_GRAY);
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         //integrateResize();
