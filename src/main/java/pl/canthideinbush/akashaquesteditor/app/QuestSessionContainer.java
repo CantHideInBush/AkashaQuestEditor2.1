@@ -1,10 +1,10 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
 import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsPanel;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntriesContainer;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ComposerInfoBar;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.DragZoomPanel;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.StartOptionsOrderPanel;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.swing.*;
@@ -18,6 +18,7 @@ public class QuestSessionContainer extends JTabbedPane {
     public DragZoomPanel conversationComposerPanel;
     public ComposerInfoBar composerInfoBar;
     public InstructionsPanel instructionsPanel;
+    private JournalEntriesContainer journalEntriesContainer;
 
     public QuestSessionContainer(QuestSession session) {
         this.session = session;
@@ -67,6 +68,9 @@ public class QuestSessionContainer extends JTabbedPane {
             else instructionsPanel.exitEdit();
         });
 
+        journalEntriesContainer = new JournalEntriesContainer();
+        addTab("Dziennik", journalEntriesContainer);
+        setMnemonicAt(2, KeyEvent.VK_D);
 
     }
 

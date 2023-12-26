@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-public class InstructionsTable extends JPanel {
+public class InstructionsList extends JPanel {
 
     private final Map<String, String> instructions;
 
@@ -39,7 +39,7 @@ public class InstructionsTable extends JPanel {
 
 
 
-    public InstructionsTable(Category category, Map<String, String> instructions) {
+    public InstructionsList(Category category, Map<String, String> instructions) {
         this.category = category;
         initialize();
         this.instructions = instructions;
@@ -125,7 +125,7 @@ public class InstructionsTable extends JPanel {
 
 
         private final GridBagConstraints constraints;
-        private final InstructionsTable parent;
+        private final InstructionsList parent;
 
         private JLabel actionButton;
 
@@ -140,16 +140,16 @@ public class InstructionsTable extends JPanel {
 
         static {
             try {
-                minusIcon = new ImageIcon(ImageIO.read(InstructionsTable.class.getResource("/assets/minus.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
-                plusIcon = new ImageIcon(ImageIO.read(InstructionsTable.class.getResource("/assets/plus.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
-                warningIcon = new ImageIcon(ImageIO.read(InstructionsTable.class.getResource("/assets/warning.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
+                minusIcon = new ImageIcon(ImageIO.read(InstructionsList.class.getResource("/assets/minus.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
+                plusIcon = new ImageIcon(ImageIO.read(InstructionsList.class.getResource("/assets/plus.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
+                warningIcon = new ImageIcon(ImageIO.read(InstructionsList.class.getResource("/assets/warning.png")).getScaledInstance(30, 30, Image.SCALE_REPLICATE));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
 
-        public InstructionBlock(InstructionsTable parent, String name, String instruction, boolean withRemove) {
+        public InstructionBlock(InstructionsList parent, String name, String instruction, boolean withRemove) {
             this.parent = parent;
             setLayout(new GridBagLayout());
             constraints = new GridBagConstraints();

@@ -11,8 +11,6 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -24,9 +22,9 @@ public class InstructionsPanel extends JPanel {
     private JComboBox<Object> categoriesBox;
     private GridBagConstraints constraints;
     public JTabbedPane instructionTables;
-    public InstructionsTable eventsTable;
-    public InstructionsTable conditionsTable;
-    public InstructionsTable objectivesTable;
+    public InstructionsList eventsTable;
+    public InstructionsList conditionsTable;
+    public InstructionsList objectivesTable;
 
     public ConversationBlock editedBlock;
 
@@ -45,9 +43,9 @@ public class InstructionsPanel extends JPanel {
     private void addInstructionTables() {
         instructionTables = new JTabbedPane();
 
-        instructionTables.addTab("Zdarzenia", new JScrollPane(eventsTable = new InstructionsTable(InstructionsTable.Category.EVENTS, Application.instance.sessionContainer.session.instructions.get("events"))));
-        instructionTables.addTab("Warunki", new JScrollPane(conditionsTable = new InstructionsTable(InstructionsTable.Category.CONDITIONS, Application.instance.sessionContainer.session.instructions.get("conditions"))));
-        instructionTables.addTab("Cele", new JScrollPane(objectivesTable = new InstructionsTable(InstructionsTable.Category.OBJECTIVES, Application.instance.sessionContainer.session.instructions.get("objectives"))));
+        instructionTables.addTab("Zdarzenia", new JScrollPane(eventsTable = new InstructionsList(InstructionsList.Category.EVENTS, Application.instance.sessionContainer.session.instructions.get("events"))));
+        instructionTables.addTab("Warunki", new JScrollPane(conditionsTable = new InstructionsList(InstructionsList.Category.CONDITIONS, Application.instance.sessionContainer.session.instructions.get("conditions"))));
+        instructionTables.addTab("Cele", new JScrollPane(objectivesTable = new InstructionsList(InstructionsList.Category.OBJECTIVES, Application.instance.sessionContainer.session.instructions.get("objectives"))));
 
         eventsTable.update();
         conditionsTable.update();
@@ -308,7 +306,7 @@ public class InstructionsPanel extends JPanel {
         });
     }
 
-    public void enterEdit(ConversationBlock conversationBlock, InstructionsTable.Category category) {
+    public void enterEdit(ConversationBlock conversationBlock, InstructionsList.Category category) {
         this.editedBlock = conversationBlock;
         conditionsTable.enterEdit(editedBlock);
         eventsTable.enterEdit(editedBlock);

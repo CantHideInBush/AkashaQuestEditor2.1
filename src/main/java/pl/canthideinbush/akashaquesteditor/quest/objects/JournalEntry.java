@@ -7,6 +7,11 @@ public class JournalEntry implements QuestObject {
     private String name;
     private String text = "";
 
+    public JournalEntry(String name, String text) {
+        this.name = name;
+        this.text = text;
+    }
+
     public JournalEntry(String name) {
         this.name = name;
     }

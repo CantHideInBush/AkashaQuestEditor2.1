@@ -1,15 +1,12 @@
 package pl.canthideinbush.akashaquesteditor.app.dynamic.blocks;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsTable;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsList;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.DragZoomPanel;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ZoomedComponentEventProxy;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -85,11 +82,11 @@ public class ActionsPanel extends JPanel {
         events.setFont(font);
         add(events);
 
-        events.addActionListener(e -> Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.EVENTS));
+        events.addActionListener(e -> Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsList.Category.EVENTS));
         events.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.EVENTS);
+                Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsList.Category.EVENTS);
             }
         });
 
@@ -97,11 +94,11 @@ public class ActionsPanel extends JPanel {
         conditions.setFont(font);
         add(conditions);
 
-        conditions.addActionListener(e -> Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.CONDITIONS));
+        conditions.addActionListener(e -> Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsList.Category.CONDITIONS));
         conditions.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.CONDITIONS);
+                Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsList.Category.CONDITIONS);
             }
         });
 
@@ -111,12 +108,12 @@ public class ActionsPanel extends JPanel {
         add(objectives);
 
         objectives.addActionListener(
-                e -> Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.OBJECTIVES)
+                e -> Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsList.Category.OBJECTIVES)
         );
         objectives.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsTable.Category.OBJECTIVES);
+                Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsList.Category.OBJECTIVES);
             }
         });
 
