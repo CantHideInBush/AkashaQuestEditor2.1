@@ -2,6 +2,7 @@ package pl.canthideinbush.akashaquesteditor.app;
 
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.Serialization;
+import pl.canthideinbush.akashaquesteditor.quest.session.EditorConversation;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.imageio.ImageIO;
@@ -95,7 +96,6 @@ public class Application extends JPanel {
     }
 
     public void createNewSession(QuestSession session) {
-        clean();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -119,6 +119,7 @@ public class Application extends JPanel {
      * Clears workspace, preparing it for new QuestSession
      */
     public void clean() {
+        if (ISerialization.registeredClasses.containsKey(EditorConversation.class)) ISerialization.registeredClasses.get(EditorConversation.class).clear();
         if (sessionContainer != null) {
             remove(sessionContainer);
             ISerialization.terminate(sessionContainer.session);

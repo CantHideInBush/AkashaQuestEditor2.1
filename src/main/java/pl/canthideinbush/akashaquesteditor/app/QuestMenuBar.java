@@ -36,7 +36,12 @@ public class QuestMenuBar extends JMenuBar {
             QuestSession session = new QuestSession();
             String conversation = getNewConversationName();
             if (conversation != null) {
-                EditorConversation editorConversation = new EditorConversation(conversation);
+                int id = getNewConversationId();
+                if (id == -1) {
+                    JOptionPane.showMessageDialog(Application.instance, "Wprowadzono niepoprawne id", "Błąd użytkownika", JOptionPane.ERROR_MESSAGE, null);
+                }
+                Application.instance.clean();
+                EditorConversation editorConversation = new EditorConversation(conversation, id);
                 session.conversations.add(editorConversation);
                 session.activeConversation = editorConversation;
                 Application.instance.createNewSession(session);
@@ -76,13 +81,33 @@ public class QuestMenuBar extends JMenuBar {
         add(conversationMenu);
     }
 
-    private String getNewConversationName() {
-        String conversation = Popups.createShortTextPopup("Nowa konwersacja", "Wprowadź nazwę konwersacji", "");
+    private static String getNewConversationName() {
+        String conversation = Popups.createShortTextPopup("Nowa konwersacja", "Wprowadź nazwę NPC", "");
         if ("".equalsIgnoreCase(conversation)) {
             JOptionPane.showMessageDialog(Application.instance, "Wprowadzono błędną nazwę", "Błąd użytkownika", JOptionPane.ERROR_MESSAGE);
             return null;
         }
         return conversation;
+    }
+
+    /**
+     *
+     * @return -1 if input was in incorrect format, parses Integer otherwise
+     */
+    public static int getNewConversationId() {
+        String id = Popups.createShortTextPopup("Nowa konwersacja", "Wprowadź id npc", "0");
+        if (id == null || "".equalsIgnoreCase(id)) {
+            return -1;
+        }
+        try {
+            int intId = Integer.parseInt(id);
+            if (intId < 0) {
+                return -1;
+            }
+            return intId;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
     @NotNull
@@ -96,14 +121,15 @@ public class QuestMenuBar extends JMenuBar {
 
         conversationMenu.add(newConversation);
 
-        JMenuItem deleteConversation = new JMenuItem("Usuń");
-        deleteConversation.addActionListener(e -> {
-            if (nullSessionError()) return;
-            int result = JOptionPane.showConfirmDialog(Application.instance, "Czy na pewno chcesz usunąć konwersację " + Application.instance.sessionContainer.session.activeConversation.getName() + "?", "Ostrzeżenie", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
-            if (result == 0) {
-                Application.instance.sessionContainer.session.removeActiveConversation();
-            }
-        });
+        JMenuItem rename = getRenameMenuItem();
+        rename.setMnemonic('Z');
+        conversationMenu.add(rename);
+
+        JMenuItem setNPC = getSetNPCMenuItem();
+        setNPC.setMnemonic('I');
+        conversationMenu.add(setNPC);
+
+        JMenuItem deleteConversation = getDeleteConversationMenuItem();
         deleteConversation.setMnemonic('U');
         conversationMenu.add(deleteConversation);
 
@@ -128,6 +154,53 @@ public class QuestMenuBar extends JMenuBar {
 
         conversationMenu.add(firstOptions);
         return conversationMenu;
+    }
+
+    private static JMenuItem getSetNPCMenuItem() {
+        JMenuItem setNPCItem = new JMenuItem("Zmień id NPC");
+        setNPCItem.addActionListener(e -> {
+            if (nullSessionError()) {
+                return;
+            }
+            int id = getNewConversationId();
+            if (id == -1) {
+                JOptionPane.showMessageDialog(Application.instance, "Wprowadzono błędne id", "Błąd użytkownika", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Application.instance.sessionContainer.session.activeConversation.setNPCId(id);
+        });
+
+        return setNPCItem;
+    }
+
+    @NotNull
+    private static JMenuItem getDeleteConversationMenuItem() {
+        JMenuItem deleteConversation = new JMenuItem("Usuń");
+        deleteConversation.addActionListener(e -> {
+            if (nullSessionError()) return;
+            int result = JOptionPane.showConfirmDialog(Application.instance, "Czy na pewno chcesz usunąć konwersację " + Application.instance.sessionContainer.session.activeConversation.getName() + "?", "Ostrzeżenie", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
+            if (result == 0) {
+                Application.instance.sessionContainer.session.removeActiveConversation();
+            }
+        });
+        return deleteConversation;
+    }
+
+    @NotNull
+    private static JMenuItem getRenameMenuItem() {
+        JMenuItem rename = new JMenuItem("Zmień nazwę");
+
+        rename.addActionListener(e -> {
+            if (Application.instance.sessionContainer != null && Application.instance.sessionContainer.session.activeConversation != null) {
+                String name = getNewConversationName();
+                if (name == null) return;
+                if (conversationNameTakenError(name)) {
+                    return;
+                }
+                Application.instance.sessionContainer.session.activeConversation.setName(name);
+            }
+        });
+        return rename;
     }
 
     private static JMenuItem getSelectConversationMenuItem() {
@@ -156,17 +229,31 @@ public class QuestMenuBar extends JMenuBar {
         return selectConversationItem;
     }
 
+    public static boolean conversationNameTakenError(String name) {
+        if (Application.instance.sessionContainer.session.getConversationNames().contains(name.toLowerCase())) {
+            JOptionPane.showMessageDialog(Application.instance, "Konwersacja o podanej nazwie już istnieje", "Błąd użytkownika", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+        return false;
+    }
+
     @NotNull
     private static JMenuItem getNewConversationMenuItem() {
         JMenuItem newConversation = new JMenuItem("Nowa");
         newConversation.addActionListener(e -> {
-            String conversation = Popups.createShortTextPopup("Nowa konwersacja", "Wprowadź nazwę konwersacji", "");
+            String conversation = getNewConversationName();
             if (conversation != null) {
-                if (Application.instance.sessionContainer.session.getConversationNames().contains(conversation.toLowerCase())) {
-                    JOptionPane.showMessageDialog(Application.instance, "Konwersacja o podanej nazwie już istnieje", "Błąd użytkownika", JOptionPane.ERROR_MESSAGE);
+                if (conversationNameTakenError(conversation)) {
                     return;
                 }
-                EditorConversation editorConversation = new EditorConversation(conversation);
+                int id = getNewConversationId();
+                if (id == -1) {
+                    JOptionPane.showMessageDialog(Application.instance, "Wprowadzono błędne id", "Błąd użytkownika", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+
+                EditorConversation editorConversation = new EditorConversation(conversation, id);
                 Application.instance.sessionContainer.session.activeConversation.deactivate();
                 Application.instance.sessionContainer.session.conversations.add(editorConversation);
                 Application.instance.sessionContainer.session.activeConversation = editorConversation;
@@ -190,7 +277,7 @@ public class QuestMenuBar extends JMenuBar {
      * @return true if there was no conversation open, false otherwise
      */
     public static boolean nullSessionError() {
-        if (Application.instance.sessionContainer == null) {
+        if (Application.instance.sessionContainer == null || Application.instance.sessionContainer.session.activeConversation == null) {
             JOptionPane.showMessageDialog(Application.instance, "Brak konwersacji otwartej w edytorze!", "Błąd", JOptionPane.ERROR_MESSAGE, null);
             return true;
         }

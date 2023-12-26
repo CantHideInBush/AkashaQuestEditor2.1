@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import pl.canthideinbush.akashaquesteditor.app.Application;
+import pl.canthideinbush.akashaquesteditor.quest.session.EditorConversation;
 
 import javax.swing.*;
 import java.io.File;
@@ -18,6 +19,7 @@ public interface ISerialization {
     static void exportToDir(File file) {
         latest().export(file);
     }
+
 
     void export(File file);
 

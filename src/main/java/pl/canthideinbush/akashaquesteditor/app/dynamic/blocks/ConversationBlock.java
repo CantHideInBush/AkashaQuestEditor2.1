@@ -226,7 +226,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     @Override
     public ConversationOption create() {
         ConversationOption conversationOption = new ConversationOption(getName());
-        conversationOption.setTextRaw(text.getText());
+        conversationOption.setTextRaw(text.getText().replaceAll("\\r", ""));
         for (ConversationBlock conversationBlock : linkedBlocksCache) {
             conversationOption.addPointer(conversationBlock.getName());
         }

@@ -51,7 +51,7 @@ public class Serialization implements ISerialization {
         File conversationsDir = new File(file + File.separator + "conversations");
         conversationsDir.mkdir();
         for (Conversation conversation : questSession.generateConversations()) {
-            File conversationFile = new File(conversationsDir, conversation.name + ".yml");
+            File conversationFile = new File(conversationsDir, conversation.name.replaceAll(" ", "_") + ".yml");
             try {
                 conversationFile.createNewFile();
             } catch (

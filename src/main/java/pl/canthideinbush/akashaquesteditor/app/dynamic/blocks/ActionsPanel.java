@@ -2,6 +2,8 @@ package pl.canthideinbush.akashaquesteditor.app.dynamic.blocks;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsTable;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.DragZoomPanel;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ZoomedComponentEventProxy;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -128,24 +130,26 @@ public class ActionsPanel extends JPanel {
         custom.setFont(font);
         add(custom);
 
-        custom.addActionListener(e -> {
-                JPopupMenu menu = parent.getMenu();
-                menu.show(custom, custom.getWidth(), 0);
-                menu.requestFocus();
-            }
+        custom.addActionListener(e -> showMenu()
         );
         custom.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JPopupMenu menu = parent.getMenu();
-                menu.show(custom, custom.getWidth(), 0);
-                menu.requestFocus();
+                showMenu();
             }
         });
 
 
 
         addCustomBackgroundEffect();
+    }
+
+    private void showMenu() {
+        JPopupMenu menu = parent.getMenu();
+        DragZoomPanel panel = Application.instance.sessionContainer.conversationComposerPanel;
+        Point converted = SwingUtilities.convertPoint(custom, custom.getWidth(), 0, Application.instance.sessionContainer.conversationComposerPanel.zoomedComponentEventProxy);
+        menu.show(panel, (int) (converted.x * panel.getComponentZoom()), (int) (converted.y * panel.getComponentZoom()));
+        menu.requestFocus();
     }
 
     private void addCustomBackgroundEffect() {

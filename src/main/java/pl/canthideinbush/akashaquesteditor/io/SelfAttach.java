@@ -12,4 +12,8 @@ public interface SelfAttach extends AnnotationSerialized {
     default List<Class<? extends SelfAttach>> dependencies() {
         return Collections.emptyList();
     }
+
+    default void terminate() {
+        ISerialization.terminate(this);
+    }
 }

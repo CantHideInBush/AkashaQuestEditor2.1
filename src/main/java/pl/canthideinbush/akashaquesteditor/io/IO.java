@@ -16,6 +16,10 @@ public class IO {
         }
 
         JFileChooser fileChooser = new JFileChooser();
+        File recentFile = new File(Application.instance.sessionContainer.session.recentFilePath);
+        if (recentFile.exists()) {
+            fileChooser.setSelectedFile(recentFile);
+        }
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int result = fileChooser.showSaveDialog(Application.instance);
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -28,6 +32,7 @@ public class IO {
                     throw new RuntimeException(e);
                 }
             }
+            Application.instance.sessionContainer.session.recentFilePath = file.getAbsolutePath();
             ISerialization.serialize(file);
         }
     }
@@ -46,7 +51,10 @@ public class IO {
                 System.out.println("Wskazany plik nie istnieje");
                 JOptionPane.showMessageDialog(Application.instance, "Wskazany plik nie istnieje", "Błąd odczytu", JOptionPane.ERROR_MESSAGE);
             }
-            else ISerialization.deserialize(file);
+            else {
+                ISerialization.deserialize(file);
+                Application.instance.sessionContainer.session.recentFilePath = file.getAbsolutePath();
+            }
         }
     }
 
@@ -57,10 +65,12 @@ public class IO {
         }
 
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(Application.instance.sessionContainer.session.recentExportPath));
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int result = fileChooser.showSaveDialog(Application.instance);
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
+            Application.instance.sessionContainer.session.recentExportPath = file.getAbsolutePath();
             if (!file.exists()) {
                 try {
                     file.createNewFile();

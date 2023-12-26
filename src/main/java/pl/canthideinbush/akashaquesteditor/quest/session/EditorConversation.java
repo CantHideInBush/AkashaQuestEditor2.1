@@ -16,6 +16,8 @@ import java.util.List;
 public class EditorConversation implements SelfAttach {
 
     @SF
+    int npcId = 0;
+    @SF
     String name;
     @SF
     public List<ConversationBlock> conversationBlocks = new ArrayList<>();
@@ -33,8 +35,9 @@ public class EditorConversation implements SelfAttach {
         ISerialization.register(this);
     }
 
-    public EditorConversation(String name) {
+    public EditorConversation(String name, int npcId) {
         this.name = name;
+        this.npcId = npcId;
         ISerialization.register(this);
     }
 
@@ -102,4 +105,11 @@ public class EditorConversation implements SelfAttach {
         return builder.substring(0, builder.length() - 2);
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNPCId(int id) {
+        this.npcId = id;
+    }
 }

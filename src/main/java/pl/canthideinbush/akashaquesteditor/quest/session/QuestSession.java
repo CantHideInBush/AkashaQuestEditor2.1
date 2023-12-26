@@ -23,6 +23,12 @@ public class QuestSession implements SelfAttach {
     @SF
     public Map<String, LinkedHashMap<String, String>> instructions = new HashMap<>();
 
+    @SF
+    public String recentExportPath = "/";
+
+    @SF
+    public String recentFilePath = "/";
+
 
     public QuestSession() {
         ISerialization.register(this);
@@ -38,6 +44,7 @@ public class QuestSession implements SelfAttach {
     }
 
     public void attach() {
+        Application.instance.clean();
         Application.instance.createNewSession(this);
     }
 
@@ -46,6 +53,9 @@ public class QuestSession implements SelfAttach {
         packageFile.addEvents(generateEvents());
         packageFile.addConditions(generateConditions());
         packageFile.addObjectives(generateObjectives());
+        for (EditorConversation conversation : conversations) {
+            packageFile.addNPC(conversation.npcId, conversation.getName());
+        }
 
         return packageFile;
     }
@@ -93,8 +103,10 @@ public class QuestSession implements SelfAttach {
     public void removeActiveConversation() {
         activeConversation.deactivate();
         conversations.remove(activeConversation);
+        activeConversation.terminate();
         if (!conversations.isEmpty()) {
             activeConversation = conversations.get(0);
+            activeConversation.activate();
         }
         else activeConversation = null;
     }
