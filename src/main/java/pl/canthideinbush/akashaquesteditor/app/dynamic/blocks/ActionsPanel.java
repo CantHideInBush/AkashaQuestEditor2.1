@@ -2,7 +2,7 @@ package pl.canthideinbush.akashaquesteditor.app.dynamic.blocks;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsList;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.DragZoomPanel;
+import pl.canthideinbush.akashaquesteditor.app.components.compose.DragZoomPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

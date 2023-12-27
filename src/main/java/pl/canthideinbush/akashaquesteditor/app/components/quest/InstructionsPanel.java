@@ -2,7 +2,6 @@ package pl.canthideinbush.akashaquesteditor.app.components.quest;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.ResizeAnimationContainer;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.animations.components.ResizableIcon;
 import pl.canthideinbush.akashaquesteditor.app.dynamic.blocks.ConversationBlock;

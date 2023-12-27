@@ -2,9 +2,9 @@ package pl.canthideinbush.akashaquesteditor.app;
 
 import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsPanel;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntriesContainer;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ComposerInfoBar;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.DragZoomPanel;
+import pl.canthideinbush.akashaquesteditor.app.components.compose.ComposerInfoBar;
+import pl.canthideinbush.akashaquesteditor.app.components.compose.ConversationComposer;
+import pl.canthideinbush.akashaquesteditor.app.components.compose.DragZoomPanel;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
 import javax.swing.*;

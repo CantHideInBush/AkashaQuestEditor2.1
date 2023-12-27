@@ -1,4 +1,4 @@
-package pl.canthideinbush.akashaquesteditor.app.components.quest.compose;
+package pl.canthideinbush.akashaquesteditor.app.components.compose;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.Zoomable;
@@ -63,7 +63,7 @@ public class DragZoomPanel extends JScrollPane {
                     currentZoom += 0.25;
                 }
                 else currentZoom -= 0.25;
-                currentZoom = Math.max(0.5, currentZoom);
+                currentZoom = Math.max(0.25, currentZoom);
                 currentZoom = Math.min(1, currentZoom);
                 ((Zoomable) component).setZoom(currentZoom);
 

@@ -2,7 +2,7 @@ package pl.canthideinbush.akashaquesteditor.app;
 
 import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.StartOptionsOrderPanel;
+import pl.canthideinbush.akashaquesteditor.app.components.compose.StartOptionsOrderPanel;
 import pl.canthideinbush.akashaquesteditor.io.IO;
 import pl.canthideinbush.akashaquesteditor.quest.session.EditorConversation;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;

@@ -2,7 +2,7 @@ package pl.canthideinbush.akashaquesteditor.app.components.quest;
 
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
+import pl.canthideinbush.akashaquesteditor.app.components.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.SF;
 import pl.canthideinbush.akashaquesteditor.io.SelfAttach;

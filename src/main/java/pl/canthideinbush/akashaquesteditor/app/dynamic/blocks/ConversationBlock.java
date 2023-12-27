@@ -5,11 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.DragZoomPanel;
-import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ZoomedComponentEventProxy;
+import pl.canthideinbush.akashaquesteditor.app.components.compose.ConversationComposer;
+import pl.canthideinbush.akashaquesteditor.app.components.compose.DragZoomPanel;
+import pl.canthideinbush.akashaquesteditor.app.components.compose.ZoomedComponentEventProxy;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
-import pl.canthideinbush.akashaquesteditor.io.SF;
 import pl.canthideinbush.akashaquesteditor.quest.objects.ConversationOption;
 
 import javax.swing.*;
@@ -236,7 +235,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
                         DragZoomPanel panel = Application.instance.sessionContainer.conversationComposerPanel;
                         JPopupMenu menu = getMenu();
                         Point viewPosition = panel.getViewport().getViewPosition();
-                        menu.show(panel, (int) (e.getX() * panel.getComponentZoom()) - viewPosition.x, (int) (e.getY() * panel.getComponentZoom()) - viewPosition.y);
+                        menu.show(panel, e.getX() - viewPosition.x, e.getY() - viewPosition.y);
                         menu.requestFocus();
                     }
                 }
@@ -466,7 +465,8 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
 
     @Override
     public void paint(Graphics g) {
-        if (Application.instance.sessionContainer.conversationComposer.getZoom() > 0.5) {
+        double zoom = Application.instance.sessionContainer.conversationComposer.getZoom();
+        if (zoom > 0.5) {
             super.paint(g);
         }
         else {
@@ -476,8 +476,9 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             g2d.setColor(Color.WHITE);
             g2d.fillRect(7, 7, getWidth() - 7 * 2 - 1, getHeight() - 7 * 2 - 1);
             g2d.setColor(defaultBorderColor());
-            g2d.setFont(getFont().deriveFont(Font.BOLD, 35f));
-            Rectangle stringBounds = getStringBounds(g2d, getName(), (float) getWidth() / 2, (float) getHeight() / 2);
+            float fontSize = 35f;
+            g2d.setFont(getFont().deriveFont(Font.BOLD, fontSize));
+            Rectangle stringBounds = getStringBounds(g2d, getName(), fontSize, fontSize);
             g2d.drawString(getName(), getWidth() / 2 - stringBounds.width, getHeight() / 2 + stringBounds.height / 2);
         }
     }
