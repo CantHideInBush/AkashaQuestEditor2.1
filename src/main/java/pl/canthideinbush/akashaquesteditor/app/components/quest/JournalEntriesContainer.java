@@ -1,27 +1,16 @@
 package pl.canthideinbush.akashaquesteditor.app.components.quest;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.jetbrains.annotations.NotNull;
 import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
-import pl.canthideinbush.akashaquesteditor.app.components.QuestComponent;
-import pl.canthideinbush.akashaquesteditor.app.components.TextPane;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.SF;
 import pl.canthideinbush.akashaquesteditor.io.SelfAttach;
-import pl.canthideinbush.akashaquesteditor.quest.objects.JournalEntry;
 import pl.canthideinbush.akashaquesteditor.quest.session.QuestSession;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 
@@ -90,6 +79,12 @@ public class JournalEntriesContainer extends JPanel implements SelfAttach {
                         JournalEntryPanel journalEntryPanel = new JournalEntryPanel(name, text);
                         journalEntryPanels.add(journalEntryPanel);
                         container.add(journalEntryPanel);
+
+                        if (Application.instance.settings.shouldAutoGenerateJournalInstructions()) {
+                            generateEventsForEntry(name);
+                            InstructionsPanel.getInstance().eventsTable.update();
+                        }
+
                         container.updateUI();
                     }
                 });
@@ -98,6 +93,29 @@ public class JournalEntriesContainer extends JPanel implements SelfAttach {
 
         container.updateUI();
     }
+
+    public void generateEventsForEntry(String name) {
+        Map<String, String> events = Application.instance.sessionContainer.session.instructions.get("events");
+
+        events.put("jrnl_add_" + name, "journal add " + name);
+        events.put("jrnl_del_" + name, "journal delete " + name);
+
+
+    }
+
+    public void renameEventsOfEntry(String name, String newName) {
+        removeEventsOfEntry(name);
+        generateEventsForEntry(newName);
+        InstructionsPanel.getInstance().eventsTable.update();
+    }
+
+    public void removeEventsOfEntry(String name) {
+        Map<String, String> events = Application.instance.sessionContainer.session.instructions.get("events");
+        events.remove("jrnl_add_" + name);
+        events.remove("jrnl_del_" + name);
+    }
+
+
 
     @Override
     public void attach() {

@@ -52,7 +52,7 @@ public class Popups {
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1;
-        gbc.weighty = 0.95;
+        gbc.weighty = 0.9;
 
 
         JScrollPane scrollPane = new JScrollPane(pane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -60,7 +60,7 @@ public class Popups {
         dialog.add(scrollPane, gbc);
 
         JPanel confirmPanel = new JPanel();
-        gbc.weighty = 0.05;
+        gbc.weighty = 0.1;
         gbc.gridy = 1;
 
         ResizableIcon confirmButton = new ResizableIcon(tickStatic.getImage(), tick);
@@ -91,13 +91,14 @@ public class Popups {
 
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 25, 0));
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 15, 0));
+
+        buttonsPanel.add(confirmButtonContainer);
+        buttonsPanel.add(closeButtonContainer);
 
 
         confirmPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-        buttonsPanel.add(confirmButtonContainer);
-        buttonsPanel.add(closeButtonContainer);
 
 
         closeButtonContainer.addMouseListener(new MouseAdapter() {

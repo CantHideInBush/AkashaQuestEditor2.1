@@ -20,6 +20,7 @@ public class QuestSessionContainer extends JTabbedPane {
     public InstructionsPanel instructionsPanel;
     public JournalEntriesContainer journalEntriesContainer;
 
+
     public QuestSessionContainer(QuestSession session) {
         this.session = session;
         conversationComposer = new ConversationComposer(session);

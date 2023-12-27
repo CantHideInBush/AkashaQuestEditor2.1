@@ -6,6 +6,7 @@ import pl.canthideinbush.akashaquesteditor.app.Application;
 import pl.canthideinbush.akashaquesteditor.app.TextComponents;
 import pl.canthideinbush.akashaquesteditor.app.components.CenterAbleComponent;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ConversationComposer;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.DragZoomPanel;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.compose.ZoomedComponentEventProxy;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.io.SF;
@@ -44,7 +45,6 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     public ConversationBlock(String name) {
         setName(name);
         initialize();
-        initializeComponents();
         uuid = UUID.randomUUID();
     }
 
@@ -154,6 +154,10 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
 
         TextComponents.disableSelection(text);
 
+        text.setPreferredSize(new Dimension(180, 250));
+        text.setMinimumSize(text.getPreferredSize());
+        text.setMaximumSize(text.getPreferredSize());
+
         add(text, constraints);
     }
 
@@ -216,6 +220,28 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
         setOpaque(false);
         initializeCenterAttributeSet();
         if (connectionPoints == null) createConnectionPoints();
+
+        initializeComponents();
+
+        enableRightClickMenu();
+
+    }
+
+    private void enableRightClickMenu() {
+        for (Component component : ZoomedComponentEventProxy.getAllChildren(this)) {
+            component.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.getButton() == 3) {
+                        DragZoomPanel panel = Application.instance.sessionContainer.conversationComposerPanel;
+                        JPopupMenu menu = getMenu();
+                        Point viewPosition = panel.getViewport().getViewPosition();
+                        menu.show(panel, (int) (e.getX() * panel.getComponentZoom()) - viewPosition.x, (int) (e.getY() * panel.getComponentZoom()) - viewPosition.y);
+                        menu.requestFocus();
+                    }
+                }
+            });
+        }
     }
 
     /**

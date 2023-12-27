@@ -1,6 +1,7 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
 import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntriesContainer;
+import pl.canthideinbush.akashaquesteditor.app.settings.Settings;
 import pl.canthideinbush.akashaquesteditor.io.IO;
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.Serialization;
@@ -23,6 +24,8 @@ public class Application extends JPanel {
     public WelcomePanel welcomePanel;
     private Box footerSpacer;
     public JFrame frame;
+
+    public Settings settings;
 
     public static void main(String[] args) {
         ISerialization.scan();
@@ -69,6 +72,8 @@ public class Application extends JPanel {
         System.setProperty("sun.java2d.opengl", "True");
         System.setProperty("awt.useSystemAAFontSettings","on");
         System.setProperty("swing.aatext", "true");
+        this.settings = new Settings();
+        settings.load();
     }
 
     private void initializeComponents() {
@@ -81,6 +86,13 @@ public class Application extends JPanel {
         setMinimumSize(new Dimension(655, 357));
         setPreferredSize(new Dimension(1110, 715));
         setLayout(new GridLayout(1, 1));
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                settings.save();
+            }
+        });
     }
 
     private void registerActions() {

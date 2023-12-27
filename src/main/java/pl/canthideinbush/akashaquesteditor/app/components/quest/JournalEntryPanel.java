@@ -89,8 +89,12 @@ public class JournalEntryPanel extends JPanel implements QuestComponent<JournalE
                 if (e.getClickCount() == 2) {
                     String newName = Popups.createShortTextPopup("Edycja dziennika", "Nowa nazwa wpisu", getName());
                     if (!"".equalsIgnoreCase(newName) && newName != null) {
+                        if (Application.instance.settings.shouldAutoGenerateJournalInstructions()) {
+                            Application.instance.sessionContainer.journalEntriesContainer.renameEventsOfEntry(getName(), newName);
+                        }
                         setName(newName);
                         nameLabel.setText(newName);
+
                     }
                 }
             }
@@ -119,6 +123,10 @@ public class JournalEntryPanel extends JPanel implements QuestComponent<JournalE
                 int result = JOptionPane.showConfirmDialog(Application.instance, "Czy na pewno chcesz usunąć wpis " + getName() + "?", "Usuwanie wpisu", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
                 if (result == 0) {
                     Application.instance.sessionContainer.journalEntriesContainer.removeJournalEntry(instance);
+                    if (Application.instance.settings.shouldAutoGenerateJournalInstructions()) {
+                        Application.instance.sessionContainer.journalEntriesContainer.removeEventsOfEntry(getName());
+                        InstructionsPanel.getInstance().eventsTable.update();
+                    }
                 }
             }
         });

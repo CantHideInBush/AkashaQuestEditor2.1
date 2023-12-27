@@ -28,6 +28,10 @@ public class InstructionsPanel extends JPanel {
 
     public ConversationBlock editedBlock;
 
+    public static InstructionsPanel getInstance() {
+        return Application.instance.sessionContainer.instructionsPanel;
+    }
+
     public InstructionsPanel() {
         initialize();
     }

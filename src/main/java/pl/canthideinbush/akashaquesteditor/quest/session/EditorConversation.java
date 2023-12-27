@@ -54,7 +54,6 @@ public class EditorConversation implements SelfAttach {
     public void initialize() {
         for (ConversationBlock conversationBlock : conversationBlocks) {
             conversationBlock.initialize();
-            conversationBlock.initializeComponents();
         }
     }
 

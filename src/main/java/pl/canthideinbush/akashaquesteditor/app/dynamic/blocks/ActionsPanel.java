@@ -86,6 +86,7 @@ public class ActionsPanel extends JPanel {
         events.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != 1) return;
                 Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsList.Category.EVENTS);
             }
         });
@@ -98,6 +99,7 @@ public class ActionsPanel extends JPanel {
         conditions.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != 1) return;
                 Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsList.Category.CONDITIONS);
             }
         });
@@ -113,6 +115,7 @@ public class ActionsPanel extends JPanel {
         objectives.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != 1) return;
                 Application.instance.sessionContainer.instructionsPanel.enterEdit(parent, InstructionsList.Category.OBJECTIVES);
             }
         });
