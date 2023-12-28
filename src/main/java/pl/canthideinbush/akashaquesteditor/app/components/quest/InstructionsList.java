@@ -109,6 +109,9 @@ public class InstructionsList extends JPanel {
             int result = JOptionPane.showConfirmDialog(Application.instance, "Czy na pewno chcesz usunąć " + instance.getName() + "?", "Ostrzeżenie", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
             if (result == 0) {
                 instructions.remove(instance.getName());
+                if (category.equals(Category.OBJECTIVES) && Application.instance.settings.shouldAutoGenerateObjectiveInstructions()) {
+                    InstructionsPanel.getInstance().removeObjectiveEvents(instance.getName());
+                }
             }
         }
         update();
@@ -159,7 +162,7 @@ public class InstructionsList extends JPanel {
             setMaximumSize(getPreferredSize());
         }
 
-        private void initializeComponents(String instruction, boolean withRemove) {
+        private void initializeComponents(String instruction, boolean regular) {
             constraints.fill = GridBagConstraints.BOTH;
             constraints.weightx = 0.3;
             constraints.weighty = 1;
@@ -175,6 +178,8 @@ public class InstructionsList extends JPanel {
             add(nameField, constraints);
 
 
+
+
             JTextField instructionField = new JTextField(instruction);
             constraints.gridx = 2;
             constraints.weightx = 0.6;
@@ -188,7 +193,18 @@ public class InstructionsList extends JPanel {
 
             constraints.gridx = 0;
             constraints.weightx = 0;
-            if (withRemove) {
+            if (regular) {
+                nameField.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (e.getClickCount() == 2 && e.getButton() == 1) {
+                            InstructionsPanel.getInstance().instructionNameField.setText(getName());
+                            InstructionsPanel.getInstance().instructionField.setText(instruction);
+                            InstructionsPanel.getInstance().instructionField.requestFocus();
+                        }
+                    }
+                });
+
                 actionButton = new JLabel() {
                     @Override
                     public Icon getIcon() {

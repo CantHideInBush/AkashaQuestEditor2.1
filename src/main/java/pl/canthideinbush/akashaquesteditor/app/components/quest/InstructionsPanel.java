@@ -12,12 +12,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Map;
 
 public class InstructionsPanel extends JPanel {
 
     private ResizeAnimationContainer cbResizeContainer;
     public JTextField instructionNameField;
-    private JTextField instructionField;
+    JTextField instructionField;
     private JComboBox<Object> categoriesBox;
     private GridBagConstraints constraints;
     public JTabbedPane instructionTables;
@@ -162,6 +163,14 @@ public class InstructionsPanel extends JPanel {
         InputMap inputMap = instructionField.getInputMap();
         ActionMap actionMap = instructionField.getActionMap();
 
+        inputMap.put(KeyStroke.getKeyStroke("ENTER"), "add-instruction");
+        actionMap.put("add-instruction", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addInstruction();
+            }
+        });
+
         inputMap.put(KeyStroke.getKeyStroke("control E"), "add-event");
         actionMap.put("add-event", new AbstractAction() {
             @Override
@@ -261,12 +270,27 @@ public class InstructionsPanel extends JPanel {
                 instructionTables.setSelectedIndex(1);
                 break;
             case "objectives":
+                if (Application.instance.settings.shouldAutoGenerateObjectiveInstructions()) {
+                    createObjectiveEvents(instructionNameField.getText());
+                }
                 objectivesTable.update();
                 instructionTables.setSelectedIndex(2);
         }
         instructionNameField.requestFocus();
         instructionNameField.setText("");
         instructionField.setText("");
+    }
+
+    public void createObjectiveEvents(String objective) {
+        Map<String, String> eventsMap = Application.instance.sessionContainer.session.instructions.get("events");
+        eventsMap.put("obj_start_" + objective, "objective start " + objective);
+        eventsMap.put("obj_del_" + objective, "objective delete " + objective);
+    }
+
+    public void removeObjectiveEvents(String objective) {
+        Map<String, String> eventsMap = Application.instance.sessionContainer.session.instructions.get("events");
+        eventsMap.remove("obj_start_" + objective);
+        eventsMap.remove("obj_del_" + objective);
     }
 
     private boolean shouldOverride() {

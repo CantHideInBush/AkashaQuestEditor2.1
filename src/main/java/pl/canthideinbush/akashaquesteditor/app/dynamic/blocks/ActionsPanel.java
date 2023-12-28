@@ -123,13 +123,25 @@ public class ActionsPanel extends JPanel {
         journal = new JButton("Dziennik", new ImageIcon(journalIcon.getScaledInstance(25, 25, Image.SCALE_REPLICATE)));
         journal.setFont(font);
 
+        journal.addActionListener(e -> {
+            Application.instance.sessionContainer.setSelectedIndex(2);
+        });
+        journal.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != 1) return;
+                Application.instance.sessionContainer.setSelectedIndex(2);
+            }
+        });
+
         add(journal);
 
 
-        custom = new JButton("Akcje");
+        custom = new JButton("");
         custom.setFont(font);
         add(custom);
 
+        /*
         custom.addActionListener(e -> showMenu()
         );
         custom.addMouseListener(new MouseAdapter() {
@@ -138,6 +150,7 @@ public class ActionsPanel extends JPanel {
                 showMenu();
             }
         });
+         */
 
 
 

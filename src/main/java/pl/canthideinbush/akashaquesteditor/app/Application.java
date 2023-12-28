@@ -1,7 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
 import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntriesContainer;
-import pl.canthideinbush.akashaquesteditor.app.settings.Settings;
 import pl.canthideinbush.akashaquesteditor.io.IO;
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.Serialization;

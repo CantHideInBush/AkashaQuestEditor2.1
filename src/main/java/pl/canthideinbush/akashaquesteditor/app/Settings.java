@@ -1,4 +1,4 @@
-package pl.canthideinbush.akashaquesteditor.app.settings;
+package pl.canthideinbush.akashaquesteditor.app;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -28,6 +28,7 @@ public class Settings {
     private YamlConfiguration createDefaults() {
         YamlConfiguration defaults = new YamlConfiguration();
         defaults.set("autoGenerateJournalInstructions", true);
+        defaults.set("autoGenerateObjectiveInstructions", true);
         return defaults;
     }
 
@@ -43,6 +44,10 @@ public class Settings {
 
     public boolean shouldAutoGenerateJournalInstructions() {
         return settingsConfiguration.getBoolean("autoGenerateJournalInstructions");
+    }
+
+    public boolean shouldAutoGenerateObjectiveInstructions() {
+        return settingsConfiguration.getBoolean("autoGenerateObjectiveInstructions");
     }
 
 

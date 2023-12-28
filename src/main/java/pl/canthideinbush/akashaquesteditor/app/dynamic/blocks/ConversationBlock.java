@@ -23,6 +23,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,11 +76,7 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    String newName = Popups.createShortTextPopup("Zmiana nazwy komponentu", "Nowa nazwa", getName());
-                    if (newName != null) {
-                        setName(newName);
-                        updateNameLabel();
-                    }
+                    showRenamePopup();
                 }
             }
         });
@@ -88,13 +85,23 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    Popups.createLongTextPopup("Edytor wypowiedzi", text.getText(), (string) -> {
-                        setText(string);
-                    });
+                    showTextEditPopup();
                 }
             }
         });
 
+    }
+
+    private void showTextEditPopup() {
+        Popups.createLongTextPopup("Edytor wypowiedzi", text.getText(), this::setText);
+    }
+
+    public void showRenamePopup() {
+        String newName = Popups.createShortTextPopup("Zmiana nazwy komponentu", "Nowa nazwa", getName());
+        if (newName != null) {
+            setName(newName);
+            updateNameLabel();
+        }
     }
 
     private void addHoverEffects() {
@@ -326,6 +333,13 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
     public JPopupMenu getMenu() {
         JPopupMenu menu = new JPopupMenu();
 
+
+        JMenuItem renameItem = new JMenuItem("Zmień nazwę");
+        renameItem.addActionListener(e -> {
+            showRenamePopup();
+        });
+        menu.add(renameItem);
+
         JMenuItem linkItem = new JMenuItem("Połącz z");
         linkItem.addActionListener(e -> {
             ConversationBlock.lastPressedAction = this;
@@ -476,10 +490,17 @@ public abstract class ConversationBlock extends WorkspaceBlock<ConversationOptio
             g2d.setColor(Color.WHITE);
             g2d.fillRect(7, 7, getWidth() - 7 * 2 - 1, getHeight() - 7 * 2 - 1);
             g2d.setColor(defaultBorderColor());
-            float fontSize = 35f;
+            float fontSize = (float) (30f * (2 - zoom - 0.5));
             g2d.setFont(getFont().deriveFont(Font.BOLD, fontSize));
-            Rectangle stringBounds = getStringBounds(g2d, getName(), fontSize, fontSize);
-            g2d.drawString(getName(), getWidth() / 2 - stringBounds.width, getHeight() / 2 + stringBounds.height / 2);
+            Rectangle2D rectangle = g2d.getFont().createGlyphVector(g2d.getFontRenderContext(), getName()).getLogicalBounds();
+            Insets insets = getBorder().getBorderInsets(this);
+            while (fontSize >= 1 && rectangle.getWidth() >= getWidth() + insets.left + insets.right) {
+                fontSize -= 2;
+                g2d.setFont(getFont().deriveFont(Font.BOLD, fontSize));
+                rectangle = g2d.getFont().createGlyphVector(g2d.getFontRenderContext(), getName()).getLogicalBounds();
+            }
+            g2d.drawString(getName(), (int) (getWidth() / 2 - rectangle.getWidth() / 2), (int) (getHeight() / 2 + rectangle.getHeight() + rectangle.getY()));
+
         }
     }
 
