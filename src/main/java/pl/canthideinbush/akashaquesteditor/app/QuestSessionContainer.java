@@ -1,5 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
+import pl.canthideinbush.akashaquesteditor.app.components.ItemEditorTab;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsPanel;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntriesContainer;
 import pl.canthideinbush.akashaquesteditor.app.components.compose.ComposerInfoBar;
@@ -19,6 +20,9 @@ public class QuestSessionContainer extends JTabbedPane {
     public ComposerInfoBar composerInfoBar;
     public InstructionsPanel instructionsPanel;
     public JournalEntriesContainer journalEntriesContainer;
+
+    public ItemEditorTab itemEditorTab;
+
 
 
     public QuestSessionContainer(QuestSession session) {
@@ -71,6 +75,9 @@ public class QuestSessionContainer extends JTabbedPane {
 
         addTab("Dziennik", journalEntriesContainer = new JournalEntriesContainer());
         setMnemonicAt(2, KeyEvent.VK_D);
+
+        addTab("Przedmioty", itemEditorTab = new ItemEditorTab());
+        setMnemonicAt(3, KeyEvent.VK_P);
 
     }
 

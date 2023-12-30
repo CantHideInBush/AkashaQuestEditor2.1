@@ -6,10 +6,7 @@ import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntryPane
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
 import pl.canthideinbush.akashaquesteditor.io.SF;
 import pl.canthideinbush.akashaquesteditor.io.SelfAttach;
-import pl.canthideinbush.akashaquesteditor.quest.objects.Conversation;
-import pl.canthideinbush.akashaquesteditor.quest.objects.Instruction;
-import pl.canthideinbush.akashaquesteditor.quest.objects.JournalEntry;
-import pl.canthideinbush.akashaquesteditor.quest.objects.PackageFile;
+import pl.canthideinbush.akashaquesteditor.quest.objects.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,6 +20,9 @@ public class QuestSession implements SelfAttach {
 
     @SF
     public Map<String, LinkedHashMap<String, String>> instructions = new HashMap<>();
+
+    @SF
+    public ArrayList<Item> questItems = new ArrayList<>();
 
     @SF
     public String recentExportPath = "/";

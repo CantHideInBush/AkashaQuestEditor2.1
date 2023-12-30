@@ -1,5 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
+import org.bukkit.Material;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntriesContainer;
 import pl.canthideinbush.akashaquesteditor.io.IO;
 import pl.canthideinbush.akashaquesteditor.io.ISerialization;
@@ -61,7 +62,6 @@ public class Application extends JPanel {
                     instance.repaint();
                 }
             });
-
 
             new Serialization();
         });
