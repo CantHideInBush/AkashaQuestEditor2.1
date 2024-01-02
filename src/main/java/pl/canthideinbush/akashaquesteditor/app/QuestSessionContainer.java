@@ -1,6 +1,6 @@
 package pl.canthideinbush.akashaquesteditor.app;
 
-import pl.canthideinbush.akashaquesteditor.app.components.ItemEditorTab;
+import pl.canthideinbush.akashaquesteditor.app.components.quest.items.ItemEditorTab;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.InstructionsPanel;
 import pl.canthideinbush.akashaquesteditor.app.components.quest.JournalEntriesContainer;
 import pl.canthideinbush.akashaquesteditor.app.components.compose.ComposerInfoBar;
@@ -76,7 +76,24 @@ public class QuestSessionContainer extends JTabbedPane {
         addTab("Dziennik", journalEntriesContainer = new JournalEntriesContainer());
         setMnemonicAt(2, KeyEvent.VK_D);
 
-        addTab("Przedmioty", itemEditorTab = new ItemEditorTab());
+
+        itemEditorTab = new ItemEditorTab();
+        JPanel itemTabContainer = new JPanel();
+        itemTabContainer.setBackground(ConversationComposer.background);
+        itemTabContainer.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JScrollPane itemEditorScrollPane = new JScrollPane(itemEditorTab) {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(400 + (getVerticalScrollBar().isVisible() ? getVerticalScrollBar().getWidth() : 0), getParent().getHeight());
+            }
+        };
+
+        itemEditorScrollPane.getVerticalScrollBar().setUnitIncrement(25);
+
+        itemEditorScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        itemEditorScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        itemTabContainer.add(itemEditorScrollPane);
+        addTab("Przedmioty", itemTabContainer);
         setMnemonicAt(3, KeyEvent.VK_P);
 
     }

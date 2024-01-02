@@ -31,6 +31,11 @@ public class Application extends JPanel {
         ISerialization.scan();
         ISerialization.registerSerialization(new Serialization());
         SwingUtilities.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            }
+
             instance = new Application();
 
             JFrame frame = new JFrame("AkashaQuestEditor 2.1");

@@ -29,6 +29,7 @@ public class Settings {
         YamlConfiguration defaults = new YamlConfiguration();
         defaults.set("autoGenerateJournalInstructions", true);
         defaults.set("autoGenerateObjectiveInstructions", true);
+        defaults.set("questItemNote", "&2Quest_Item");
         return defaults;
     }
 
@@ -48,6 +49,10 @@ public class Settings {
 
     public boolean shouldAutoGenerateObjectiveInstructions() {
         return settingsConfiguration.getBoolean("autoGenerateObjectiveInstructions");
+    }
+
+    public String getQuestItemNote() {
+        return settingsConfiguration.getString("questItemNote");
     }
 
 

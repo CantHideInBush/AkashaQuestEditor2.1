@@ -8,6 +8,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
+import pl.canthideinbush.akashaquesteditor.app.Application;
 
 import java.util.*;
 
@@ -71,6 +72,9 @@ public class Item implements QuestObject, ConfigurationSerializable {
 
         instructionBuilder.append(material);
 
+        if (isQuestItem) {
+            lore.add(Application.instance.settings.getQuestItemNote());
+        }
         if (!lore.isEmpty()) {
             instructionBuilder.append(" lore:");
             Iterator<String> loreIterator = lore.iterator();
@@ -206,6 +210,9 @@ public class Item implements QuestObject, ConfigurationSerializable {
             }
         }
 
+        if (firework_power != null) instructionBuilder.append(" power:").append(firework_power);
+
+
 
 
         return instructionBuilder.toString();
@@ -238,9 +245,6 @@ public class Item implements QuestObject, ConfigurationSerializable {
 
     }
 
-    public enum Flags {
-        HIDE_ENCHANTS,HIDE_ATTRIBUTES,HIDE_UNBREAKABLE,HIDE_DESTROYS,HIDE_PLACED_ON,HIDE_POTION_EFFECTS,HIDE_DYE;
-    }
 
     public enum PotionExtended {
         TRUE("extended:true"),
