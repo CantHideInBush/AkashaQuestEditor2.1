@@ -1,7 +1,9 @@
 package pl.canthideinbush.akashaquesteditor.app.components.quest.items;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionEffectTypeWrapper;
 import pl.canthideinbush.akashaquesteditor.app.components.Popups;
 import pl.canthideinbush.akashaquesteditor.app.components.compose.ConversationComposer;
 import pl.canthideinbush.akashaquesteditor.quest.objects.Item;
@@ -440,13 +442,17 @@ public class ItemEditorTab extends JPanel {
     private List<String> extractPotionEffectTypes() {
         ArrayList<String> potionEffectTypes = new ArrayList<>();
         try {
-        for (Field field : PotionEffectType.class.getFields()) {
+            Field key = PotionEffectType.class.getDeclaredField("key");
+            key.setAccessible(true);
+        for (Field field : PotionEffectType.class.getDeclaredFields()) {
             if (PotionEffectType.class.isAssignableFrom(field.getType())) {
-                potionEffectTypes.add(((PotionEffectType) field.get(null)).getKey().getKey());
+                PotionEffectType potionEffectType = (PotionEffectType) field.get(null);
+                potionEffectTypes.add(((NamespacedKey) key.get(potionEffectType)).getKey());
             }
         }
         } catch (
-                IllegalAccessException e) {
+                IllegalAccessException |
+                NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
         return potionEffectTypes.stream().sorted().toList();
